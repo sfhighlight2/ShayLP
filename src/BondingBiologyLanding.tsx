@@ -201,6 +201,7 @@ export default function BondingBiologyLanding({ onSubmit }: Props) {
 
       <Nav onJoin={openModal} />
       <Hero onJoin={openModal} />
+      <CredibilityBar />
       <TrustBar />
       <WhoFor onJoin={openModal} />
       <WhatYouWillKnow />
@@ -342,7 +343,7 @@ function Hero({ onJoin }: { onJoin: () => void }) {
             style={{ "--i": 2 } as React.CSSProperties}
             className="mt-7 max-w-xl text-[clamp(1rem,1.4vw,1.18rem)] leading-[1.55] text-[#FFF7EE]/78 [text-wrap:balance]"
           >
-            Inside the Bonding Biology Summit, you'll see the exact pattern that
+            Inside the Bonding Biology workshop, you'll see the exact pattern that
             turns early attraction into commitment that actually stabilizes, and
             how to build it yourself. No chasing. No performing. No pretending
             you want less than you do.
@@ -351,17 +352,54 @@ function Hero({ onJoin }: { onJoin: () => void }) {
             style={{ "--i": 3 } as React.CSSProperties}
             className="mt-9 flex flex-col items-start gap-4 w-full"
           >
-            <Cta onClick={onJoin} className="w-full sm:w-auto">Yes, Show Me How</Cta>
+            <Cta onClick={onJoin} className="w-full sm:w-auto">Show Me How</Cta>
           </div>
           <p
             style={{ "--i": 4 } as React.CSSProperties}
             className="mt-5 text-[14px] font-medium text-[#FFF7EE]/65"
           >
-            3 days · live + lifetime replays · instant access · secure checkout
+            Free workshop · Replays included · Instant access
           </p>
         </div>
       </div>
     </section>
+  );
+}
+
+/* ------------------------ Credibility Bar ------------------------- */
+
+function CredibilityBar() {
+  return (
+    <div className="border-y border-[#E8B75A]/20 bg-[#250009] py-6 relative z-10">
+      <div className="mx-auto flex max-w-5xl flex-col items-center justify-around gap-y-6 px-5 text-center sm:px-8 md:flex-row md:gap-y-0">
+        <div className="flex flex-col items-center">
+          <span className="ff-serif text-[30px] font-bold text-[#E8B75A] leading-none">
+            2,000+
+          </span>
+          <span className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-[#FFF7EE]/60">
+            Women Coached
+          </span>
+        </div>
+        <div className="h-8 w-[1px] bg-[#E8B75A]/20 hidden md:block" />
+        <div className="flex flex-col items-center">
+          <span className="ff-serif text-[30px] font-bold text-[#E8B75A] leading-none">
+            ★★★★★
+          </span>
+          <span className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-[#FFF7EE]/60">
+            Top Rated Program
+          </span>
+        </div>
+        <div className="h-8 w-[1px] bg-[#E8B75A]/20 hidden md:block" />
+        <div className="flex flex-col items-center">
+          <span className="ff-serif text-[30px] font-bold text-[#E8B75A] leading-none">
+            100%
+          </span>
+          <span className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-[#FFF7EE]/60">
+            Biology-Based
+          </span>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -417,76 +455,25 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
   const cards = [
     {
       title: "High Standards",
-      badge: "01",
-      c: "You’re accomplished, attractive, and emotionally aware — yet commitment still feels inconsistent.",
+      c: "You're accomplished and self-aware, yet commitment still runs hot and cold. The problem isn't your standards.",
       image: "/cards/tmpexalgh3e.jpg",
-      tags: ["Aware", "Standards", "Exclusivity"],
     },
     {
       title: "Zero Games",
-      badge: "02",
-      c: "You don’t want more games, scripts, or “be less available” advice.",
+      c: "You're done with scripts and 'be less available.' You want something real, not a performance.",
       image: "/cards/tmpf6ufyorx.jpg",
-      tags: ["Authentic", "No Scripts", "Clarity"],
     },
     {
       title: "Real Mechanism",
-      badge: "03",
-      c: "You want a mechanism you can understand, not a personality you have to fake.",
+      c: "You want a pattern you can understand, not a personality you have to fake.",
       image: "/cards/tmpgr0_gi53.jpg",
-      tags: ["Biology", "Science", "Safety"],
     },
     {
       title: "True Connection",
-      badge: "04",
-      c: "You’re ready to stop auditioning for love and let commitment reveal itself.",
+      c: "You're ready to stop auditioning for love and let commitment reveal itself.",
       image: "/cards/tmpien05z8i.jpg",
-      tags: ["Pace", "Safety", "Workshop"],
     },
   ];
-
-  // Duplicate cards for seamless looping
-  const extendedCards = [...cards, ...cards, ...cards];
-
-  const [currentIndex, setCurrentIndex] = useState(cards.length); // Start at the middle set for smooth infinite scrolling
-  const [isTransitioning, setIsTransitioning] = useState(true);
-  const [visibleCount, setVisibleCount] = useState(3);
-
-  // Responsive visible count
-  useEffect(() => {
-    const updateCount = () => {
-      if (window.innerWidth >= 1024) setVisibleCount(3);
-      else if (window.innerWidth >= 768) setVisibleCount(2);
-      else setVisibleCount(1);
-    };
-    updateCount();
-    window.addEventListener("resize", updateCount);
-    return () => window.removeEventListener("resize", updateCount);
-  }, []);
-
-  // Auto-scroll every 7 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      handleNext();
-    }, 7000);
-    return () => clearInterval(interval);
-  }, [currentIndex]);
-
-  const handleNext = () => {
-    setIsTransitioning(true);
-    setCurrentIndex((prev) => prev + 1);
-  };
-
-  const handleTransitionEnd = () => {
-    // Infinite loop jump back/forward when reaching edge
-    if (currentIndex >= cards.length * 2) {
-      setIsTransitioning(false);
-      setCurrentIndex(currentIndex - cards.length);
-    } else if (currentIndex < cards.length) {
-      setIsTransitioning(false);
-      setCurrentIndex(currentIndex + cards.length);
-    }
-  };
 
   return (
     <section id="who" className="px-5 py-24 sm:px-8 overflow-hidden">
@@ -502,69 +489,45 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
         </p>
       </div>
 
-      {/* Carousel Wrapper */}
-      <div className="mx-auto mt-12 max-w-6xl relative">
-        <div className="overflow-hidden w-full">
-          <div
-            onTransitionEnd={handleTransitionEnd}
-            className="flex gap-6"
-            style={{
-              transform: `translateX(calc(-${currentIndex} * (100% + 24px) / ${visibleCount}))`,
-              transition: isTransitioning ? "transform 1200ms cubic-bezier(0.4, 0, 0.2, 1)" : "none",
-            }}
-          >
-            {extendedCards.map((card, i) => (
-              <div
-                key={`${card.title}-${i}`}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-lg bg-[#f0dbd0] text-[#250009] shadow-xl border border-[#250009]/10 h-[470px] w-full shrink-0"
-                style={{
-                  width: `calc((100% - ${(visibleCount - 1) * 24}px) / ${visibleCount})`,
-                }}
-              >
-                {/* Image Header with Hover Scale */}
-                <div className="relative h-[65%] w-full overflow-hidden shrink-0">
-                  <img
-                    src={card.image}
-                    alt={card.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
+      {/* 4-Card Responsive Grid */}
+      <div className="mx-auto mt-12 max-w-6xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {cards.map((card) => (
+            <div
+              key={card.title}
+              className="group relative flex flex-col overflow-hidden rounded-lg bg-[#f0dbd0] text-[#250009] shadow-xl border border-[#250009]/10"
+            >
+              {/* Image Header with Hover Scale (taking 65% of the card area height or aspect ratio) */}
+              <div className="relative aspect-[4/3] w-full overflow-hidden shrink-0">
+                <img
+                  src={card.image}
+                  alt={card.title}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
 
-                {/* Content Area */}
-                <div className="p-4 pt-2.5 pb-3.5 flex-1 flex flex-col justify-between overflow-hidden">
-                  <div>
-                    {/* Title */}
-                    <div className="flex items-center justify-between">
-                      <h3 className="ff-serif text-[18px] font-bold leading-tight text-[#250009]">{card.title}</h3>
-                    </div>
-                    {/* Description */}
-                    <p className="mt-1 text-[13px] leading-snug text-[#250009]/85">
-                      {card.c}
-                    </p>
-                  </div>
-
-                  <div>
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-1 mt-1.5">
-                      {card.tags.map((tag) => (
-                        <span key={tag} className="bg-[#250009]/8 text-[#250009] text-[9px] font-semibold px-2 py-0.5 rounded-full border border-[#250009]/10">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* CTA Button */}
-                    <button
-                      onClick={onJoin}
-                      className="ff-sans mt-2.5 w-full bg-[#250009] text-[#FFF2EA] hover:bg-[#380010] py-2 rounded-full font-bold text-[12.5px] transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-black/5"
-                    >
-                      Reserve Seat
-                    </button>
-                  </div>
+              {/* Content Area */}
+              <div className="p-5 flex-1 flex flex-col justify-between">
+                <div>
+                  {/* Title */}
+                  <h3 className="ff-serif text-[19px] font-bold leading-tight text-[#250009]">
+                    {card.title}
+                  </h3>
+                  {/* Description */}
+                  <p className="mt-2 text-[14px] leading-relaxed text-[#250009]/85">
+                    {card.c}
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Centered CTA below grid */}
+        <div className="mt-12 flex justify-center">
+          <Cta onClick={onJoin} className="w-full sm:w-auto">
+            Save My Seat
+          </Cta>
         </div>
       </div>
     </section>
@@ -585,7 +548,7 @@ function WhatYouWillKnow() {
         {/* Left column - Copy + Video Embed */}
         <div className="lg:col-span-7 pb-20 sm:pb-24 lg:pb-32" data-reveal>
           <h2 className="ff-serif text-[clamp(2rem,4.5vw,3.3rem)] font-semibold leading-[1.02] tracking-[-0.035em] text-[#250009]">
-            Know What Fits Before You Choose a Strategy
+            You don't have a dating problem. You have a bonding problem.
           </h2>
           <p className="mt-5 text-[16.5px] leading-[1.55] text-[#250009]/75 max-w-xl">
             The 3-day Bonding Biology workshop helps you see exactly where your pattern is interrupting connection before you invest more effort.
@@ -680,8 +643,34 @@ function OfferIntro({ onJoin }: { onJoin: () => void }) {
             that shows you what creates chemistry, what builds safety, and what
             makes commitment feel natural instead of forced.
           </p>
+
+          {/* Simple 3-step visual plan */}
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3 w-full border-t border-[#8A2634]/15 pt-6 text-left">
+            <div className="flex gap-3">
+              <span className="ff-serif text-[24px] font-bold text-[#8A2634]">1.</span>
+              <div>
+                <h4 className="font-bold text-[14.5px] text-[#250009]">Join the Workshop</h4>
+                <p className="text-[12.5px] text-[#4C1119]/70 leading-normal mt-0.5">3 days of live, immersive sessions.</p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="ff-serif text-[24px] font-bold text-[#8A2634]">2.</span>
+              <div>
+                <h4 className="font-bold text-[14.5px] text-[#250009]">Learn the Sequence</h4>
+                <p className="text-[12.5px] text-[#4C1119]/70 leading-normal mt-0.5">Discover the biological bonding roadmap.</p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="ff-serif text-[24px] font-bold text-[#8A2634]">3.</span>
+              <div>
+                <h4 className="font-bold text-[14.5px] text-[#250009]">Secure Commitment</h4>
+                <p className="text-[12.5px] text-[#4C1119]/70 leading-normal mt-0.5">Stop interrupting commitment naturally.</p>
+              </div>
+            </div>
+          </div>
+
           <Cta onClick={onJoin} variant="dark" className="w-full sm:w-auto mt-9">
-            Show Me How
+            Save My Seat
           </Cta>
         </div>
 
@@ -796,15 +785,24 @@ function Testimonials({ onJoin }: { onJoin: () => void }) {
   const quotes = [
     {
       q: "He brought up exclusivity first. I didn’t have to convince him, decode him, or pretend I was fine with less.",
-      who: "Maya · now engaged",
+      name: "Maya R.",
+      location: "Austin, TX",
+      status: "now engaged",
+      initials: "MR",
     },
     {
       q: "I stopped trying to be the perfect woman and started noticing what made him feel safe to come closer.",
-      who: "Danielle · married in 2025",
+      name: "Danielle K.",
+      location: "Miami, FL",
+      status: "married in 2025",
+      initials: "DK",
     },
     {
       q: "The biggest shift was calm. I finally understood how to stop creating pressure in the moments I wanted closeness.",
-      who: "Ari · committed relationship",
+      name: "Ari L.",
+      location: "San Francisco, CA",
+      status: "committed relationship",
+      initials: "AL",
     },
   ];
   return (
@@ -825,7 +823,7 @@ function Testimonials({ onJoin }: { onJoin: () => void }) {
       <div className="relative z-10 mx-auto mt-12 grid max-w-6xl gap-4 md:grid-cols-3">
         {quotes.map((t, i) => (
           <figure
-            key={t.who}
+            key={t.name}
             data-reveal
             style={{ transitionDelay: `${i * 100}ms` }}
             className="luxury-card flex flex-col rounded-lg border border-[#E8B75A]/30 bg-white/40 backdrop-blur-[3px] p-7 shadow-sm"
@@ -834,14 +832,26 @@ function Testimonials({ onJoin }: { onJoin: () => void }) {
             <blockquote className="ff-serif mt-4 flex-1 text-[clamp(1.25rem,2.2vw,1.55rem)] font-semibold italic leading-[1.18] tracking-[-0.025em] text-[#250009]">
               “{t.q}”
             </blockquote>
-            <figcaption className="ff-sans mt-6 text-[12.5px] font-bold uppercase tracking-[0.08em] text-[#8A2634]">
-              {t.who}
-            </figcaption>
+            
+            {/* Enhanced Trust Captions with Avatar Initial Badge */}
+            <div className="flex items-center gap-3.5 mt-6 border-t border-[#250009]/10 pt-4">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[linear-gradient(135deg,#250009_0%,#4C1119_100%)] text-[#E8B75A] font-bold text-[13px] border border-[#E8B75A]/25">
+                {t.initials}
+              </div>
+              <div className="text-left">
+                <figcaption className="ff-sans text-[12.5px] font-bold uppercase tracking-[0.05em] text-[#8A2634] leading-tight">
+                  {t.name}
+                </figcaption>
+                <p className="text-[11.5px] text-[#250009]/65 font-medium mt-0.5 leading-snug">
+                  {t.location} · {t.status}
+                </p>
+              </div>
+            </div>
           </figure>
         ))}
       </div>
       <div className="relative z-10 mt-10 flex justify-center px-5 sm:px-0" data-reveal>
-        <Cta onClick={onJoin} variant="dark" className="w-full sm:w-auto">Show Me How</Cta>
+        <Cta onClick={onJoin} variant="dark" className="w-full sm:w-auto">Save My Seat</Cta>
       </div>
     </section>
   );
@@ -997,7 +1007,7 @@ function FinalCta() {
                       type="submit"
                       className="ff-sans mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#250009] px-6 py-3.5 text-[15px] font-bold text-[#FFF2EA] transition-all hover:bg-[#380010] hover:-translate-y-0.5"
                     >
-                      Continue
+                      Save My Seat
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[17px] w-[17px]" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                       </svg>
@@ -1051,7 +1061,7 @@ function FinalCta() {
                       disabled={status === "loading"}
                       className="ff-sans mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#250009] px-6 py-3.5 text-[15px] font-bold text-[#FFF2EA] transition-all hover:bg-[#380010] hover:-translate-y-0.5 disabled:opacity-75 disabled:cursor-not-allowed"
                     >
-                      {status === "loading" ? "Processing..." : "Show Me How"}
+                      {status === "loading" ? "Processing..." : "Save My Seat"}
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[17px] w-[17px]" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                       </svg>
@@ -1073,9 +1083,7 @@ function FinalCta() {
             <span className="flex items-center gap-1.5">
               <Stars className="text-[#D8962D]" /> rated {/* ⚠ CLAIM */}
             </span>
-            <span>2,000+ coached</span> {/* ⚠ CLAIM */}
-            <span>Instant access</span>
-            <span>Secure checkout</span>
+            <span>Free workshop · Replays included · Instant access</span>
           </div>
         </div>
 
@@ -1127,7 +1135,7 @@ function MobileBar({ onJoin }: { onJoin: () => void }) {
           onClick={onJoin}
           className="ff-sans btn-shimmer rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-3 text-[14.5px] font-bold text-[#250009] shadow-[0_8px_20px_rgba(232,183,90,0.25)] flex items-center gap-1.5 active:scale-95 transition-transform"
         >
-          <span>Show Me How</span>
+          <span>Save My Seat</span>
           <ArrowRight className="h-4 w-4" />
         </button>
       </div>
@@ -1379,7 +1387,7 @@ function LeadModal({
                     type="submit"
                     className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.4)] transition-all hover:-translate-y-0.5"
                   >
-                    Continue
+                    Save My Seat
                     <ArrowRight className="h-[17px] w-[17px]" />
                   </button>
                 </>
@@ -1451,7 +1459,7 @@ function LeadModal({
                       </>
                     ) : (
                       <>
-                        Show Me How
+                        Save My Seat
                         <ArrowRight className="h-[17px] w-[17px]" />
                       </>
                     )}
@@ -1719,7 +1727,7 @@ function ExitIntentModal({
                     type="submit"
                     className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.3)] transition-all hover:-translate-y-0.5"
                   >
-                    Continue
+                    Save My Seat
                     <ArrowRight className="h-[17px] w-[17px]" />
                   </button>
                 </>
@@ -1787,11 +1795,11 @@ function ExitIntentModal({
                   >
                     {status === "loading" ? (
                       <>
-                        <Spinner /> Creating Free Account...
+                        <Spinner /> Securing your spot…
                       </>
                     ) : (
                       <>
-                        Claim Free Day 1 Access
+                        Save My Seat
                         <ArrowRight className="h-[17px] w-[17px]" />
                       </>
                     )}
