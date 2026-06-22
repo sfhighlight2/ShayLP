@@ -520,7 +520,7 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
                 }}
               >
                 {/* Image Header with Hover Scale */}
-                <div className="relative h-[190px] w-full overflow-hidden shrink-0">
+                <div className="relative h-1/2 w-full overflow-hidden shrink-0">
                   <img
                     src={card.image}
                     alt={card.title}
