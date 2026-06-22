@@ -22,7 +22,6 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Component as AvatarGroup } from "@/components/ui/demo";
 import starIcon from "@/assets/1.png";
 
 type LeadData = {
@@ -351,7 +350,6 @@ function Hero({ onJoin }: { onJoin: () => void }) {
             className="mt-9 flex flex-col items-start gap-4 w-full"
           >
             <Cta onClick={onJoin} className="w-full sm:w-auto">Yes, Show Me How</Cta>
-            <AvatarGroup />
           </div>
           <p
             style={{ "--i": 4 } as React.CSSProperties}
@@ -441,8 +439,10 @@ function WhoFor() {
             style={{ transitionDelay: `${i * 90}ms` }}
             className="luxury-card group rounded-lg border border-[#E8B75A]/25 bg-[#FFF2EA]/[0.06] p-6"
           >
-            <Spark className="h-7 w-7 text-[#E8B75A]" />
-            <p className="mt-6 text-[17px] font-medium leading-[1.35] text-[#FFF7EE]">
+            <span className="ff-serif text-[36px] font-light text-[#E8B75A]/60 italic block leading-none">
+              0{i + 1}
+            </span>
+            <p className="mt-5 text-[16.5px] font-medium leading-[1.4] text-[#FFF7EE]">
               {c}
             </p>
           </div>
