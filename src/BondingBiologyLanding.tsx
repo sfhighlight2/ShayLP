@@ -24,6 +24,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import starIcon from "@/assets/1.png";
 
+const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/7820fcb5-229d-4a7f-820a-f3be4cac67a7";
+
 type LeadData = {
   name: string;
   email: string;
@@ -874,7 +876,7 @@ function FinalCta() {
       setEmailError("");
       if (formData.name && formData.email && formData.phone) {
         // Send step 1 data to GHL webhook
-        fetch("https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/6ac6155c-af07-48e5-9419-d8a286457272", {
+        fetch(GHL_WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -893,7 +895,7 @@ function FinalCta() {
     if (formData.name && formData.email && formData.phone && formData.occupation && formData.city && formData.ageRange) {
       setStatus("loading");
       try {
-        await fetch("https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/6ac6155c-af07-48e5-9419-d8a286457272", {
+        await fetch(GHL_WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -1212,7 +1214,7 @@ function LeadModal({
       setEmailError("");
       if (name && email && phone) {
         // Send step 1 data to GHL webhook
-        fetch("https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/6ac6155c-af07-48e5-9419-d8a286457272", {
+        fetch(GHL_WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -1232,7 +1234,7 @@ function LeadModal({
     setStatus("loading");
     try {
       // Send step 2 data to GHL webhook
-      await fetch("https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/6ac6155c-af07-48e5-9419-d8a286457272", {
+      await fetch(GHL_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1550,7 +1552,7 @@ function ExitIntentModal({
       setEmailError("");
       if (name && email && phone) {
         // Send step 1 data to GHL webhook
-        fetch("https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/6ac6155c-af07-48e5-9419-d8a286457272", {
+        fetch(GHL_WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -1570,7 +1572,7 @@ function ExitIntentModal({
     setStatus("loading");
     try {
       // Send step 2 data to GHL webhook
-      await fetch("https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/6ac6155c-af07-48e5-9419-d8a286457272", {
+      await fetch(GHL_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
