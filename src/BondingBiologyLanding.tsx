@@ -732,6 +732,7 @@ function FinalCta() {
     email: "",
     phone: "",
   });
+  const [step, setStep] = useState(1);
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const [emailError, setEmailError] = useState("");
 
@@ -741,11 +742,15 @@ function FinalCta() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.email.includes("@")) {
-      setEmailError("Please enter a valid email address containing '@'.");
+    if (step === 1) {
+      if (!formData.email.includes("@")) {
+        setEmailError("Please enter a valid email address containing '@'.");
+        return;
+      }
+      setEmailError("");
+      setStep(2);
       return;
     }
-    setEmailError("");
     if (formData.name && formData.email && formData.phone) {
       setStatus("loading");
       await new Promise((r) => setTimeout(r, 1200));
@@ -787,57 +792,80 @@ function FinalCta() {
           ) : (
             <div className="mt-8 w-full max-w-md text-left">
               <form onSubmit={handleSubmit} className="mt-6 space-y-3.5">
-                <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Full Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="e.g. Sarah Jenkins"
-                    className="w-full rounded-xl border border-[#250009]/15 bg-white/60 px-4 py-3 text-[14.5px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/30 focus:border-[#B9842F] focus:ring-1 focus:ring-[#B9842F]/50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Email Address</label>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="sarah@example.com"
-                    className="w-full rounded-xl border border-[#250009]/15 bg-white/60 px-4 py-3 text-[14.5px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/30 focus:border-[#B9842F] focus:ring-1 focus:ring-[#B9842F]/50"
-                  />
-                  {emailError && (
-                    <p className="mt-1.5 text-[13px] font-semibold text-[#9B1B2B]">
-                      {emailError}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Phone Number</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    required
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="+1 (555) 000-0000"
-                    className="w-full rounded-xl border border-[#250009]/15 bg-white/60 px-4 py-3 text-[14.5px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/30 focus:border-[#B9842F] focus:ring-1 focus:ring-[#B9842F]/50"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={status === "loading"}
-                  className="ff-sans mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#250009] px-6 py-3.5 text-[15px] font-bold text-[#FFF2EA] transition-all hover:bg-[#380010] hover:-translate-y-0.5 disabled:opacity-75 disabled:cursor-not-allowed"
-                >
-                  {status === "loading" ? "Processing..." : "Show Me How"}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[17px] w-[17px]" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                  </svg>
-                </button>
+                {step === 1 ? (
+                  <>
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Full Name</label>
+                      <input
+                        type="text"
+                        name="name"
+                        required
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="e.g. Sarah Jenkins"
+                        className="w-full rounded-xl border border-[#250009]/15 bg-white/60 px-4 py-3 text-[14.5px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/30 focus:border-[#B9842F] focus:ring-1 focus:ring-[#B9842F]/50"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Email Address</label>
+                      <input
+                        type="email"
+                        name="email"
+                        required
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="sarah@example.com"
+                        className="w-full rounded-xl border border-[#250009]/15 bg-white/60 px-4 py-3 text-[14.5px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/30 focus:border-[#B9842F] focus:ring-1 focus:ring-[#B9842F]/50"
+                      />
+                      {emailError && (
+                        <p className="mt-1.5 text-[13px] font-semibold text-[#9B1B2B]">
+                          {emailError}
+                        </p>
+                      )}
+                    </div>
+                    <button
+                      type="submit"
+                      className="ff-sans mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#250009] px-6 py-3.5 text-[15px] font-bold text-[#FFF2EA] transition-all hover:bg-[#380010] hover:-translate-y-0.5"
+                    >
+                      Continue
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[17px] w-[17px]" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                      </svg>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Phone Number</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        required
+                        value={formData.phone}
+                        onChange={handleChange}
+                        placeholder="+1 (555) 000-0000"
+                        className="w-full rounded-xl border border-[#250009]/15 bg-white/60 px-4 py-3 text-[14.5px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/30 focus:border-[#B9842F] focus:ring-1 focus:ring-[#B9842F]/50"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={status === "loading"}
+                      className="ff-sans mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#250009] px-6 py-3.5 text-[15px] font-bold text-[#FFF2EA] transition-all hover:bg-[#380010] hover:-translate-y-0.5 disabled:opacity-75 disabled:cursor-not-allowed"
+                    >
+                      {status === "loading" ? "Processing..." : "Show Me How"}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[17px] w-[17px]" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setStep(1)}
+                      className="text-[13px] font-semibold text-[#8A2634] hover:underline block mx-auto mt-2"
+                    >
+                      ← Back to details
+                    </button>
+                  </>
+                )}
               </form>
             </div>
           )}
@@ -922,6 +950,7 @@ function LeadModal({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [step, setStep] = useState(1);
   const [emailError, setEmailError] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
     "idle"
@@ -938,6 +967,7 @@ function LeadModal({
         setEmail("");
         setPhone("");
         setEmailError("");
+        setStep(1);
       }, 250);
       return () => clearTimeout(t);
     }
@@ -971,11 +1001,15 @@ function LeadModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.includes("@")) {
-      setEmailError("Please enter a valid email address containing '@'.");
+    if (step === 1) {
+      if (!email.includes("@")) {
+        setEmailError("Please enter a valid email address containing '@'.");
+        return;
+      }
+      setEmailError("");
+      setStep(2);
       return;
     }
-    setEmailError("");
     if (status === "loading") return;
     setStatus("loading");
     try {
@@ -1051,77 +1085,99 @@ function LeadModal({
             </p>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-3.5">
-              <div>
-                <label htmlFor="lead-name" className="sr-only">
-                  Full name
-                </label>
-                <input
-                  ref={firstFieldRef}
-                  id="lead-name"
-                  type="text"
-                  required
-                  placeholder="Full name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-2xl border border-[#250009]/15 bg-white px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/40 focus:border-[#D8962D] focus:ring-2 focus:ring-[#E8B75A]/40"
-                />
-              </div>
-              <div>
-                <label htmlFor="lead-email" className="sr-only">
-                  Email address
-                </label>
-                <input
-                  id="lead-email"
-                  type="email"
-                  required
-                  placeholder="Email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-2xl border border-[#250009]/15 bg-white px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/40 focus:border-[#D8962D] focus:ring-2 focus:ring-[#E8B75A]/40"
-                />
-                {emailError && (
-                  <p className="mt-1.5 text-[13px] font-semibold text-[#9B1B2B]">
-                    {emailError}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label htmlFor="lead-phone" className="sr-only">
-                  Phone number
-                </label>
-                <input
-                  id="lead-phone"
-                  type="tel"
-                  required
-                  placeholder="Phone number"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-2xl border border-[#250009]/15 bg-white px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/40 focus:border-[#D8962D] focus:ring-2 focus:ring-[#E8B75A]/40"
-                />
-              </div>
-
-              {status === "error" && (
-                <p className="text-[13.5px] font-semibold text-[#9B1B2B]">
-                  Something went wrong. Please try again.
-                </p>
-              )}
-
-              <button
-                type="submit"
-                disabled={status === "loading"}
-                className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.4)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
-              >
-                {status === "loading" ? (
-                  <>
-                    <Spinner /> Securing your spot…
-                  </>
-                ) : (
-                  <>
-                    Show Me How
+              {step === 1 ? (
+                <>
+                  <div>
+                    <label htmlFor="lead-name" className="sr-only">
+                      Full name
+                    </label>
+                    <input
+                      ref={firstFieldRef}
+                      id="lead-name"
+                      type="text"
+                      required
+                      placeholder="Full name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full rounded-lg border border-[#250009]/15 bg-white px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/40 focus:border-[#D8962D] focus:ring-2 focus:ring-[#E8B75A]/40"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="lead-email" className="sr-only">
+                      Email address
+                    </label>
+                    <input
+                      id="lead-email"
+                      type="email"
+                      required
+                      placeholder="Email address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full rounded-lg border border-[#250009]/15 bg-white px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/40 focus:border-[#D8962D] focus:ring-2 focus:ring-[#E8B75A]/40"
+                    />
+                    {emailError && (
+                      <p className="mt-1.5 text-[13px] font-semibold text-[#9B1B2B]">
+                        {emailError}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    type="submit"
+                    className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.4)] transition-all hover:-translate-y-0.5"
+                  >
+                    Continue
                     <ArrowRight className="h-[17px] w-[17px]" />
-                  </>
-                )}
-              </button>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <label htmlFor="lead-phone" className="sr-only">
+                      Phone number
+                    </label>
+                    <input
+                      ref={firstFieldRef}
+                      id="lead-phone"
+                      type="tel"
+                      required
+                      placeholder="Phone number"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full rounded-lg border border-[#250009]/15 bg-white px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/40 focus:border-[#D8962D] focus:ring-2 focus:ring-[#E8B75A]/40"
+                    />
+                  </div>
+
+                  {status === "error" && (
+                    <p className="text-[13.5px] font-semibold text-[#9B1B2B]">
+                      Something went wrong. Please try again.
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={status === "loading"}
+                    className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.4)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    {status === "loading" ? (
+                      <>
+                        <Spinner /> Securing your spot…
+                      </>
+                    ) : (
+                      <>
+                        Show Me How
+                        <ArrowRight className="h-[17px] w-[17px]" />
+                      </>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="text-[13px] font-semibold text-[#8A2634] hover:underline block mx-auto mt-2"
+                  >
+                    ← Back to details
+                  </button>
+                </>
+              )}
             </form>
 
             <p className="mt-4 flex items-center justify-center gap-2 text-center text-[12.5px] font-medium text-[#6E1622]/80">
@@ -1147,6 +1203,7 @@ function ExitIntentModal({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [step, setStep] = useState(1);
   const [emailError, setEmailError] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
     "idle"
@@ -1163,6 +1220,7 @@ function ExitIntentModal({
         setEmail("");
         setPhone("");
         setEmailError("");
+        setStep(1);
       }, 250);
       return () => clearTimeout(t);
     }
@@ -1196,11 +1254,15 @@ function ExitIntentModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.includes("@")) {
-      setEmailError("Please enter a valid email address containing '@'.");
+    if (step === 1) {
+      if (!email.includes("@")) {
+        setEmailError("Please enter a valid email address containing '@'.");
+        return;
+      }
+      setEmailError("");
+      setStep(2);
       return;
     }
-    setEmailError("");
     if (status === "loading") return;
     setStatus("loading");
     try {
@@ -1276,79 +1338,100 @@ function ExitIntentModal({
             </p>
 
             <form onSubmit={handleSubmit} className="mt-7 space-y-4">
-              <div>
-                <label htmlFor="exit-name" className="sr-only">
-                  Full name
-                </label>
-                <input
-                  ref={firstFieldRef}
-                  id="exit-name"
-                  type="text"
-                  required
-                  placeholder="Your Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-xl border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="exit-email" className="sr-only">
-                  Email address
-                </label>
-                <input
-                  id="exit-email"
-                  type="email"
-                  required
-                  placeholder="Email Address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
-                />
-                {emailError && (
-                  <p className="mt-1.5 text-[13px] font-medium text-[#FF5D73]">
-                    {emailError}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="exit-phone" className="sr-only">
-                  Phone number
-                </label>
-                <input
-                  id="exit-phone"
-                  type="tel"
-                  required
-                  placeholder="Phone Number"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-xl border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
-                />
-              </div>
-
-              {status === "error" && (
-                <p className="text-[13.5px] font-semibold text-[#FF5D73]">
-                  Something went wrong. Please try again.
-                </p>
-              )}
-
-              <button
-                type="submit"
-                disabled={status === "loading"}
-                className="ff-sans mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15.5px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.3)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
-              >
-                {status === "loading" ? (
-                  <>
-                    <Spinner /> Creating Free Account...
-                  </>
-                ) : (
-                  <>
-                    Claim Free Day 1 Access
+              {step === 1 ? (
+                <>
+                  <div>
+                    <label htmlFor="exit-name" className="sr-only">
+                      Full name
+                    </label>
+                    <input
+                      ref={firstFieldRef}
+                      id="exit-name"
+                      type="text"
+                      required
+                      placeholder="Your Name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full rounded-xl border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="exit-email" className="sr-only">
+                      Email address
+                    </label>
+                    <input
+                      id="exit-email"
+                      type="email"
+                      required
+                      placeholder="Email Address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full rounded-xl border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
+                    />
+                    {emailError && (
+                      <p className="mt-1.5 text-[13px] font-medium text-[#FF5D73]">
+                        {emailError}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    type="submit"
+                    className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.3)] transition-all hover:-translate-y-0.5"
+                  >
+                    Continue
                     <ArrowRight className="h-[17px] w-[17px]" />
-                  </>
-                )}
-              </button>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <label htmlFor="exit-phone" className="sr-only">
+                      Phone number
+                    </label>
+                    <input
+                      ref={firstFieldRef}
+                      id="exit-phone"
+                      type="tel"
+                      required
+                      placeholder="Phone Number"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full rounded-xl border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
+                    />
+                  </div>
+
+                  {status === "error" && (
+                    <p className="text-[13.5px] font-semibold text-[#FF5D73]">
+                      Something went wrong. Please try again.
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={status === "loading"}
+                    className="ff-sans mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15.5px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.3)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    {status === "loading" ? (
+                      <>
+                        <Spinner /> Creating Free Account...
+                      </>
+                    ) : (
+                      <>
+                        Claim Free Day 1 Access
+                        <ArrowRight className="h-[17px] w-[17px]" />
+                      </>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="text-[13px] font-semibold text-[#E8B75A] hover:underline block mx-auto mt-2 bg-transparent border-0 cursor-pointer"
+                  >
+                    ← Back to details
+                  </button>
+                </>
+              )}
             </form>
 
             <p className="mt-5 flex items-center justify-center gap-2 text-center text-[12.5px] font-medium text-[#FFF7EE]/60">
