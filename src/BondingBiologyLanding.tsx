@@ -951,15 +951,23 @@ function LeadModal({
       if (e.key === "Tab") trapFocus(e, dialogRef.current);
     };
     document.addEventListener("keydown", onKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     const t = setTimeout(() => firstFieldRef.current?.focus(), 60);
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevOverflow;
       clearTimeout(t);
     };
   }, [open, onClose]);
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1017,7 +1025,7 @@ function LeadModal({
               You’re on the list.
             </h3>
             <p className="mt-3 text-[15.5px] leading-[1.5] text-[#4C1119]">
-              Check your inbox for your $27 access details and the live workshop
+              Check your inbox for your access details and the live workshop
               schedule. (Look in promotions if you don’t see it.)
             </p>
             <button
@@ -1030,7 +1038,7 @@ function LeadModal({
         ) : (
           <>
             <span className="ff-sans text-[12px] font-bold uppercase tracking-[0.16em] text-[#8A2634]">
-              $27 · Instant access
+              Instant access
             </span>
             <h3
               id="lead-modal-title"
@@ -1168,15 +1176,23 @@ function ExitIntentModal({
       if (e.key === "Tab") trapFocus(e, dialogRef.current);
     };
     document.addEventListener("keydown", onKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     const t = setTimeout(() => firstFieldRef.current?.focus(), 60);
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevOverflow;
       clearTimeout(t);
     };
   }, [open, onClose]);
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1256,7 +1272,7 @@ function ExitIntentModal({
               Get Day 1 of the Bonding Biology Workshop <span className="text-[#E8B75A] underline decoration-wavy decoration-[#E8B75A]/40 decoration-1">Free</span>.
             </h3>
             <p className="mt-3 text-[15.5px] leading-[1.55] text-[#FFF7EE]/75">
-              Don't leave empty-handed. Experience the first day of our flagship $27 workshop (usually paid) at zero cost. Discover the exact chemistry sequence.
+              Don't leave empty-handed. Experience the first day of our flagship workshop (usually paid) at zero cost. Discover the exact chemistry sequence.
             </p>
 
             <form onSubmit={handleSubmit} className="mt-7 space-y-4">
@@ -1585,7 +1601,7 @@ function CustomCursor() {
     <>
       {/* Inner Dot */}
       <div
-        className="fixed pointer-events-none z-50 h-1.5 w-1.5 rounded-full bg-[#E8B75A] -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 ease-out"
+        className="fixed pointer-events-none z-[9999] h-1.5 w-1.5 rounded-full bg-[#E8B75A] -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 ease-out"
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
@@ -1594,7 +1610,7 @@ function CustomCursor() {
       />
       {/* Outer Follower Ring */}
       <div
-        className="fixed pointer-events-none z-50 h-8 w-8 rounded-full border border-[#E8B75A]/60 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-out"
+        className="fixed pointer-events-none z-[9999] h-8 w-8 rounded-full border border-[#E8B75A]/60 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-out"
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
