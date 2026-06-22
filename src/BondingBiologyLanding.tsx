@@ -24,7 +24,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import starIcon from "@/assets/1.png";
 
-const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/7820fcb5-229d-4a7f-820a-f3be4cac67a7";
+const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/597d218e-6d54-401a-8e31-996d527e270d";
 
 type LeadData = {
   name: string;
