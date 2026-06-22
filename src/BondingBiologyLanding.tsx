@@ -431,18 +431,18 @@ function WhoFor() {
           your nervous system, your standards, and your pace.
         </p>
       </div>
-      <div className="mx-auto mt-12 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto mt-12 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c, i) => (
           <div
             key={c}
             data-reveal
             style={{ transitionDelay: `${i * 90}ms` }}
-            className="luxury-card group rounded-lg border border-[#E8B75A]/25 bg-[#FFF2EA]/[0.06] p-6"
+            className="group rounded-xl bg-[#F8F9FA] p-8 text-[#250009] border border-black/5 shadow-[0_4px_20px_rgba(0,0,0,0.08)] flex flex-col items-start min-h-[220px]"
           >
-            <span className="ff-serif text-[36px] font-light text-[#E8B75A]/60 italic block leading-none">
-              0{i + 1}
+            <span className="ff-sans inline-block bg-black text-white text-[10px] font-extrabold uppercase tracking-widest px-3 py-1.5 mb-6 rounded-none">
+              Step 0{i + 1}
             </span>
-            <p className="mt-5 text-[16.5px] font-medium leading-[1.4] text-[#FFF7EE]">
+            <p className="text-[15.5px] font-semibold leading-[1.5] text-[#250009]">
               {c}
             </p>
           </div>
