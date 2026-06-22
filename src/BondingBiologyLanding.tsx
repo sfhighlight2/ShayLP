@@ -432,7 +432,7 @@ function WhoFor() {
             key={c}
             data-reveal
             style={{ transitionDelay: `${i * 90}ms` }}
-            className="luxury-card group rounded-2xl border border-[#E8B75A]/25 bg-[#FFF2EA]/[0.06] p-6"
+            className="luxury-card group rounded-lg border border-[#E8B75A]/25 bg-[#FFF2EA]/[0.06] p-6"
           >
             <Spark className="h-7 w-7 text-[#E8B75A]" />
             <p className="mt-6 text-[17px] font-medium leading-[1.35] text-[#FFF7EE]">
@@ -615,7 +615,7 @@ function WhyItWorks() {
             key={s.n}
             data-reveal
             style={{ transitionDelay: `${i * 110}ms` }}
-            className={`luxury-card rounded-2xl border p-7 ${
+            className={`luxury-card rounded-lg border p-7 ${
               s.featured
                 ? "border-[#E8B75A]/75 bg-[linear-gradient(145deg,rgba(232,183,90,0.24)_0%,rgba(255,242,234,0.1)_100%)]"
                 : "border-[#E8B75A]/30 bg-[#FFF2EA]/[0.06]"
@@ -705,7 +705,7 @@ function Testimonials({ onJoin }: { onJoin: () => void }) {
             key={t.who}
             data-reveal
             style={{ transitionDelay: `${i * 100}ms` }}
-            className="luxury-card flex flex-col rounded-2xl border border-[#E8B75A]/30 bg-white/40 backdrop-blur-[3px] p-7 shadow-sm"
+            className="luxury-card flex flex-col rounded-lg border border-[#E8B75A]/30 bg-white/40 backdrop-blur-[3px] p-7 shadow-sm"
           >
             <Stars className="text-[15px] text-[#D8962D]" />
             <blockquote className="ff-serif mt-4 flex-1 text-[clamp(1.25rem,2.2vw,1.55rem)] font-semibold italic leading-[1.18] tracking-[-0.025em] text-[#250009]">
@@ -1006,7 +1006,7 @@ function LeadModal({
       />
       <div
         ref={dialogRef}
-        className="modal-card relative w-full max-w-md overflow-hidden rounded-2xl border border-[#E8B75A]/55 bg-[linear-gradient(180deg,#FFF7EE_0%,#FFE9DD_100%)] p-7 text-[#250009] shadow-[0_40px_120px_rgba(0,0,0,0.55)] sm:p-8"
+        className="modal-card relative w-full max-w-md overflow-hidden rounded-lg border border-[#E8B75A]/55 bg-[linear-gradient(180deg,#FFF7EE_0%,#FFE9DD_100%)] p-7 text-[#250009] shadow-[0_40px_120px_rgba(0,0,0,0.55)] sm:p-8"
       >
         <button
           onClick={onClose}
@@ -1230,7 +1230,7 @@ function ExitIntentModal({
       />
       <div
         ref={dialogRef}
-        className="modal-card relative w-full max-w-lg overflow-hidden rounded-2xl border border-[#E8B75A]/60 bg-[linear-gradient(135deg,#1D0008_0%,#3C0816_100%)] p-7 text-[#FFF7EE] shadow-[0_40px_120px_rgba(0,0,0,0.85)] sm:p-9"
+        className="modal-card relative w-full max-w-lg overflow-hidden rounded-lg border border-[#E8B75A]/60 bg-[linear-gradient(135deg,#1D0008_0%,#3C0816_100%)] p-7 text-[#FFF7EE] shadow-[0_40px_120px_rgba(0,0,0,0.85)] sm:p-9"
       >
         <button
           onClick={onClose}
