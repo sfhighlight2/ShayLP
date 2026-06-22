@@ -745,10 +745,7 @@ function WhyItWorks() {
                 : "border-[#E8B75A]/30 bg-[#FFF2EA]/[0.06]"
             }`}
           >
-            <span className="ff-sans text-[13px] font-bold tracking-[0.12em] text-[#E8B75A]">
-              {s.n}
-            </span>
-            <h3 className="ff-serif mt-3 text-[clamp(1.5rem,2.6vw,1.9rem)] font-semibold tracking-[-0.03em]">
+            <h3 className="ff-serif text-[clamp(1.5rem,2.6vw,1.9rem)] font-semibold tracking-[-0.03em]">
               {s.title}
             </h3>
             <p className="mt-3 text-[16px] leading-[1.5] text-[#FFF7EE]/72">
