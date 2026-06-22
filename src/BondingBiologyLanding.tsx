@@ -417,28 +417,28 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
       title: "High Standards",
       badge: "01",
       c: "You’re accomplished, attractive, and emotionally aware — yet commitment still feels inconsistent.",
-      image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&h=450&q=80",
+      image: "/Cards/tmpexalgh3e.jpg",
       tags: ["Aware", "Standards", "Exclusivity"],
     },
     {
       title: "Zero Games",
       badge: "02",
       c: "You don’t want more games, scripts, or “be less available” advice.",
-      image: "https://images.unsplash.com/photo-1464746133101-a2c3f88e0dd9?auto=format&fit=crop&w=600&h=450&q=80",
+      image: "/Cards/tmpf6ufyorx.jpg",
       tags: ["Authentic", "No Scripts", "Clarity"],
     },
     {
       title: "Real Mechanism",
       badge: "03",
       c: "You want a mechanism you can understand, not a personality you have to fake.",
-      image: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?auto=format&fit=crop&w=600&h=450&q=80",
+      image: "/Cards/tmpgr0_gi53.jpg",
       tags: ["Biology", "Science", "Safety"],
     },
     {
       title: "True Connection",
       badge: "04",
       c: "You’re ready to stop auditioning for love and let commitment reveal itself.",
-      image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&h=450&q=80",
+      image: "/Cards/tmpien05z8i.jpg",
       tags: ["Pace", "Safety", "Workshop"],
     },
   ];
@@ -533,7 +533,7 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
                   <div>
                     {/* Title */}
                     <div className="flex items-center justify-between">
-                      <h3 className="text-[16px] font-extrabold tracking-tight text-[#250009]">{card.title}</h3>
+                      <h3 className="ff-serif text-[19px] font-bold text-[#250009]">{card.title}</h3>
                     </div>
                     {/* Description */}
                     <p className="mt-2 text-[13.5px] leading-relaxed text-[#250009]/85">
