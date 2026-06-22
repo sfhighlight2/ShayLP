@@ -25,7 +25,14 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Component as AvatarGroup } from "@/components/ui/demo";
 import starIcon from "@/assets/1.png";
 
-type LeadData = { name: string; email: string; phone: string };
+type LeadData = {
+  name: string;
+  email: string;
+  phone: string;
+  occupation: string;
+  city: string;
+  ageRange: string;
+};
 
 type Props = {
   onSubmit?: (data: LeadData) => Promise<void> | void;
@@ -731,12 +738,15 @@ function FinalCta() {
     name: "",
     email: "",
     phone: "",
+    occupation: "",
+    city: "",
+    ageRange: "",
   });
   const [step, setStep] = useState(1);
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const [emailError, setEmailError] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -748,10 +758,12 @@ function FinalCta() {
         return;
       }
       setEmailError("");
-      setStep(2);
+      if (formData.name && formData.email && formData.phone) {
+        setStep(2);
+      }
       return;
     }
-    if (formData.name && formData.email && formData.phone) {
+    if (formData.name && formData.email && formData.phone && formData.occupation && formData.city && formData.ageRange) {
       setStatus("loading");
       await new Promise((r) => setTimeout(r, 1200));
       setStatus("success");
@@ -823,6 +835,18 @@ function FinalCta() {
                         </p>
                       )}
                     </div>
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Phone Number</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        required
+                        value={formData.phone}
+                        onChange={handleChange}
+                        placeholder="+1 (555) 000-0000"
+                        className="w-full rounded-xl border border-[#250009]/15 bg-white/60 px-4 py-3 text-[14.5px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/30 focus:border-[#B9842F] focus:ring-1 focus:ring-[#B9842F]/50"
+                      />
+                    </div>
                     <button
                       type="submit"
                       className="ff-sans mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#250009] px-6 py-3.5 text-[15px] font-bold text-[#FFF2EA] transition-all hover:bg-[#380010] hover:-translate-y-0.5"
@@ -836,16 +860,45 @@ function FinalCta() {
                 ) : (
                   <>
                     <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Phone Number</label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Occupation</label>
                       <input
-                        type="tel"
-                        name="phone"
+                        type="text"
+                        name="occupation"
                         required
-                        value={formData.phone}
+                        value={formData.occupation}
                         onChange={handleChange}
-                        placeholder="+1 (555) 000-0000"
+                        placeholder="e.g. Software Engineer"
                         className="w-full rounded-xl border border-[#250009]/15 bg-white/60 px-4 py-3 text-[14.5px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/30 focus:border-[#B9842F] focus:ring-1 focus:ring-[#B9842F]/50"
                       />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">City</label>
+                      <input
+                        type="text"
+                        name="city"
+                        required
+                        value={formData.city}
+                        onChange={handleChange}
+                        placeholder="e.g. New York"
+                        className="w-full rounded-xl border border-[#250009]/15 bg-white/60 px-4 py-3 text-[14.5px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/30 focus:border-[#B9842F] focus:ring-1 focus:ring-[#B9842F]/50"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Age Range</label>
+                      <select
+                        name="ageRange"
+                        required
+                        value={formData.ageRange}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-[#250009]/15 bg-white/60 px-4 py-3 text-[14.5px] text-[#250009] outline-none transition-shadow focus:border-[#B9842F] focus:ring-1 focus:ring-[#B9842F]/50 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%20fill%3D%22none%22%20stroke%3D%22%23250009%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:16px_16px] bg-[right_16px_center] bg-no-repeat pr-10"
+                      >
+                        <option value="" disabled>Select your age range</option>
+                        <option value="Under 25">Under 25</option>
+                        <option value="25 - 34">25 - 34</option>
+                        <option value="35 - 44">35 - 44</option>
+                        <option value="45 - 54">45 - 54</option>
+                        <option value="55+">55+</option>
+                      </select>
                     </div>
                     <button
                       type="submit"
@@ -950,6 +1003,9 @@ function LeadModal({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [occupation, setOccupation] = useState("");
+  const [city, setCity] = useState("");
+  const [ageRange, setAgeRange] = useState("");
   const [step, setStep] = useState(1);
   const [emailError, setEmailError] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
@@ -966,6 +1022,9 @@ function LeadModal({
         setName("");
         setEmail("");
         setPhone("");
+        setOccupation("");
+        setCity("");
+        setAgeRange("");
         setEmailError("");
         setStep(1);
       }, 250);
@@ -1007,14 +1066,23 @@ function LeadModal({
         return;
       }
       setEmailError("");
-      setStep(2);
+      if (name && email && phone) {
+        setStep(2);
+      }
       return;
     }
     if (status === "loading") return;
     setStatus("loading");
     try {
       if (onSubmit) {
-        await onSubmit({ name: name.trim(), email: email.trim(), phone: phone.trim() });
+        await onSubmit({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          occupation: occupation.trim(),
+          city: city.trim(),
+          ageRange: ageRange,
+        });
       } else {
         // Stubbed success so the page is demoable with no backend.
         await new Promise((r) => setTimeout(r, 900));
@@ -1121,6 +1189,20 @@ function LeadModal({
                       </p>
                     )}
                   </div>
+                  <div>
+                    <label htmlFor="lead-phone" className="sr-only">
+                      Phone number
+                    </label>
+                    <input
+                      id="lead-phone"
+                      type="tel"
+                      required
+                      placeholder="Phone number"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full rounded-lg border border-[#250009]/15 bg-white px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/40 focus:border-[#D8962D] focus:ring-2 focus:ring-[#E8B75A]/40"
+                    />
+                  </div>
                   <button
                     type="submit"
                     className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.4)] transition-all hover:-translate-y-0.5"
@@ -1132,19 +1214,52 @@ function LeadModal({
               ) : (
                 <>
                   <div>
-                    <label htmlFor="lead-phone" className="sr-only">
-                      Phone number
+                    <label htmlFor="lead-occupation" className="sr-only">
+                      Occupation
                     </label>
                     <input
                       ref={firstFieldRef}
-                      id="lead-phone"
-                      type="tel"
+                      id="lead-occupation"
+                      type="text"
                       required
-                      placeholder="Phone number"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Occupation"
+                      value={occupation}
+                      onChange={(e) => setOccupation(e.target.value)}
                       className="w-full rounded-lg border border-[#250009]/15 bg-white px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/40 focus:border-[#D8962D] focus:ring-2 focus:ring-[#E8B75A]/40"
                     />
+                  </div>
+                  <div>
+                    <label htmlFor="lead-city" className="sr-only">
+                      City
+                    </label>
+                    <input
+                      id="lead-city"
+                      type="text"
+                      required
+                      placeholder="City"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      className="w-full rounded-lg border border-[#250009]/15 bg-white px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/40 focus:border-[#D8962D] focus:ring-2 focus:ring-[#E8B75A]/40"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="lead-ageRange" className="sr-only">
+                      Age Range
+                    </label>
+                    <select
+                      id="lead-ageRange"
+                      required
+                      value={ageRange}
+                      onChange={(e) => setAgeRange(e.target.value)}
+                      className="w-full rounded-lg border border-[#250009]/15 bg-white px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow focus:border-[#D8962D] focus:ring-2 focus:ring-[#E8B75A]/40 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%20fill%3D%22none%22%20stroke%3D%22%23250009%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:16px_16px] bg-[right_16px_center] bg-no-repeat pr-10 text-[#250009]/70"
+                    >
+                      <option value="" disabled>Select your age range</option>
+                      <option value="Under 25">Under 25</option>
+                      <option value="25 - 34">25 - 34</option>
+                      <option value="35 - 44">35 - 44</option>
+                      <option value="45 - 54">45 - 54</option>
+                      <option value="55+">55+</option>
+                    </select>
                   </div>
 
                   {status === "error" && (
@@ -1203,6 +1318,9 @@ function ExitIntentModal({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [occupation, setOccupation] = useState("");
+  const [city, setCity] = useState("");
+  const [ageRange, setAgeRange] = useState("");
   const [step, setStep] = useState(1);
   const [emailError, setEmailError] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
@@ -1260,14 +1378,23 @@ function ExitIntentModal({
         return;
       }
       setEmailError("");
-      setStep(2);
+      if (name && email && phone) {
+        setStep(2);
+      }
       return;
     }
     if (status === "loading") return;
     setStatus("loading");
     try {
       if (onSubmit) {
-        await onSubmit({ name: name.trim(), email: email.trim(), phone: phone.trim() });
+        await onSubmit({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          occupation: occupation.trim(),
+          city: city.trim(),
+          ageRange: ageRange,
+        });
       } else {
         await new Promise((r) => setTimeout(r, 900));
       }
@@ -1375,6 +1502,20 @@ function ExitIntentModal({
                       </p>
                     )}
                   </div>
+                  <div>
+                    <label htmlFor="exit-phone" className="sr-only">
+                      Phone number
+                    </label>
+                    <input
+                      id="exit-phone"
+                      type="tel"
+                      required
+                      placeholder="Phone Number"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full rounded-xl border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
+                    />
+                  </div>
                   <button
                     type="submit"
                     className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.3)] transition-all hover:-translate-y-0.5"
@@ -1386,19 +1527,52 @@ function ExitIntentModal({
               ) : (
                 <>
                   <div>
-                    <label htmlFor="exit-phone" className="sr-only">
-                      Phone number
+                    <label htmlFor="exit-occupation" className="sr-only">
+                      Occupation
                     </label>
                     <input
                       ref={firstFieldRef}
-                      id="exit-phone"
-                      type="tel"
+                      id="exit-occupation"
+                      type="text"
                       required
-                      placeholder="Phone Number"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Occupation"
+                      value={occupation}
+                      onChange={(e) => setOccupation(e.target.value)}
                       className="w-full rounded-xl border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
                     />
+                  </div>
+                  <div>
+                    <label htmlFor="exit-city" className="sr-only">
+                      City
+                    </label>
+                    <input
+                      id="exit-city"
+                      type="text"
+                      required
+                      placeholder="City"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      className="w-full rounded-xl border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="exit-ageRange" className="sr-only">
+                      Age Range
+                    </label>
+                    <select
+                      id="exit-ageRange"
+                      required
+                      value={ageRange}
+                      onChange={(e) => setAgeRange(e.target.value)}
+                      className="w-full rounded-xl border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%20fill%3D%22none%22%20stroke%3D%22%23FFF7EE%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:16px_16px] bg-[right_16px_center] bg-no-repeat pr-10 text-[#FFF7EE]/70"
+                    >
+                      <option value="" disabled>Select your age range</option>
+                      <option value="Under 25">Under 25</option>
+                      <option value="25 - 34">25 - 34</option>
+                      <option value="35 - 44">35 - 44</option>
+                      <option value="45 - 54">45 - 54</option>
+                      <option value="55+">55+</option>
+                    </select>
                   </div>
 
                   {status === "error" && (
