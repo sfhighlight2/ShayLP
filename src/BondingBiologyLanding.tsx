@@ -417,33 +417,77 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
       title: "High Standards",
       badge: "01",
       c: "You’re accomplished, attractive, and emotionally aware — yet commitment still feels inconsistent.",
-      image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=400&h=300&q=80",
+      image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&h=450&q=80",
       tags: ["Aware", "Standards", "Exclusivity"],
     },
     {
       title: "Zero Games",
       badge: "02",
       c: "You don’t want more games, scripts, or “be less available” advice.",
-      image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&h=300&q=80",
+      image: "https://images.unsplash.com/photo-1464746133101-a2c3f88e0dd9?auto=format&fit=crop&w=600&h=450&q=80",
       tags: ["Authentic", "No Scripts", "Clarity"],
     },
     {
       title: "Real Mechanism",
       badge: "03",
       c: "You want a mechanism you can understand, not a personality you have to fake.",
-      image: "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=400&h=300&q=80",
+      image: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?auto=format&fit=crop&w=600&h=450&q=80",
       tags: ["Biology", "Science", "Safety"],
     },
     {
       title: "True Connection",
       badge: "04",
       c: "You’re ready to stop auditioning for love and let commitment reveal itself.",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&h=300&q=80",
+      image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&h=450&q=80",
       tags: ["Pace", "Safety", "Workshop"],
     },
   ];
+
+  // Duplicate cards for seamless looping
+  const extendedCards = [...cards, ...cards, ...cards];
+
+  const [currentIndex, setCurrentIndex] = useState(cards.length); // Start at the middle set for smooth infinite scrolling
+  const [isTransitioning, setIsTransitioning] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(3);
+
+  // Responsive visible count
+  useEffect(() => {
+    const updateCount = () => {
+      if (window.innerWidth >= 1024) setVisibleCount(3);
+      else if (window.innerWidth >= 768) setVisibleCount(2);
+      else setVisibleCount(1);
+    };
+    updateCount();
+    window.addEventListener("resize", updateCount);
+    return () => window.removeEventListener("resize", updateCount);
+  }, []);
+
+  // Auto-scroll every 7 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 7000);
+    return () => clearInterval(interval);
+  }, [currentIndex]);
+
+  const handleNext = () => {
+    setIsTransitioning(true);
+    setCurrentIndex((prev) => prev + 1);
+  };
+
+  const handleTransitionEnd = () => {
+    // Infinite loop jump back/forward when reaching edge
+    if (currentIndex >= cards.length * 2) {
+      setIsTransitioning(false);
+      setCurrentIndex(currentIndex - cards.length);
+    } else if (currentIndex < cards.length) {
+      setIsTransitioning(false);
+      setCurrentIndex(currentIndex + cards.length);
+    }
+  };
+
   return (
-    <section id="who" className="px-5 py-24 sm:px-8">
+    <section id="who" className="px-5 py-24 sm:px-8 overflow-hidden">
       <div className="mx-auto max-w-3xl text-center" data-reveal>
         <Eyebrow>Who this is for</Eyebrow>
         <h2 className="ff-serif mt-5 text-[clamp(2rem,4.5vw,3.3rem)] font-semibold leading-[1.02] tracking-[-0.035em] [text-wrap:balance]">
@@ -455,70 +499,84 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
           your nervous system, your standards, and your pace.
         </p>
       </div>
-      <div className="mx-auto mt-12 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {cards.map((card, i) => (
+
+      {/* Carousel Wrapper */}
+      <div className="mx-auto mt-12 max-w-6xl relative">
+        <div className="overflow-hidden w-full">
           <div
-            key={card.title}
-            data-reveal
-            style={{ transitionDelay: `${i * 90}ms` }}
-            className="group relative flex flex-col justify-between overflow-hidden rounded-lg bg-[#1e2530] text-white shadow-2xl border border-white/[0.05] h-[480px]"
+            onTransitionEnd={handleTransitionEnd}
+            className="flex gap-6"
+            style={{
+              transform: `translateX(calc(-${currentIndex} * (100% + 24px) / ${visibleCount}))`,
+              transition: isTransitioning ? "transform 700ms cubic-bezier(0.4, 0, 0.2, 1)" : "none",
+            }}
           >
-            {/* Image Header with Hover Scale */}
-            <div className="relative h-[190px] w-full overflow-hidden shrink-0">
-              <img
-                src={card.image}
-                alt={card.title}
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              {/* Translucent Glass Bookmark Icon */}
-              <button 
-                onClick={onJoin}
-                className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white/90 hover:bg-black/60 transition-colors"
-                aria-label="Bookmark"
+            {extendedCards.map((card, i) => (
+              <div
+                key={`${card.title}-${i}`}
+                className="group relative flex flex-col justify-between overflow-hidden rounded-lg bg-[#250009] text-white shadow-2xl border border-[#E8B75A]/20 h-[480px] w-full shrink-0"
+                style={{
+                  width: `calc((100% - ${(visibleCount - 1) * 24}px) / ${visibleCount})`,
+                }}
               >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-4.5 w-4.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Content Area */}
-            <div className="p-5 flex-1 flex flex-col justify-between">
-              <div>
-                {/* Title & Badge */}
-                <div className="flex items-center justify-between">
-                  <h3 className="text-[17px] font-bold tracking-tight text-white">{card.title}</h3>
-                  <span className="bg-white/10 text-white/95 text-[12px] font-bold px-2.5 py-0.5 rounded-full">
-                    {card.badge}
-                  </span>
-                </div>
-                {/* Description */}
-                <p className="mt-2.5 text-[13.5px] leading-relaxed text-white/70">
-                  {card.c}
-                </p>
-              </div>
-
-              <div>
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 mt-3">
-                  {card.tags.map((tag) => (
-                    <span key={tag} className="bg-white/[0.06] text-white/80 text-[10px] font-semibold px-2.5 py-1 rounded-full">
-                      {tag}
-                    </span>
-                  ))}
+                {/* Image Header with Hover Scale */}
+                <div className="relative h-[190px] w-full overflow-hidden shrink-0">
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  {/* Translucent Glass Bookmark Icon */}
+                  <button 
+                    onClick={onJoin}
+                    className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white/90 hover:bg-black/60 transition-colors"
+                    aria-label="Bookmark"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-4.5 w-4.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                    </svg>
+                  </button>
                 </div>
 
-                {/* CTA Button */}
-                <button
-                  onClick={onJoin}
-                  className="ff-sans mt-5 w-full bg-white text-[#1e2530] hover:bg-white/90 py-3 rounded-full font-bold text-[13.5px] transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-black/10"
-                >
-                  Reserve Seat
-                </button>
+                {/* Content Area */}
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    {/* Title & Badge */}
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-[17px] font-bold tracking-tight text-white">{card.title}</h3>
+                      <span className="bg-[#E8B75A] text-[#250009] text-[12px] font-bold px-2.5 py-0.5 rounded-full">
+                        {card.badge}
+                      </span>
+                    </div>
+                    {/* Description */}
+                    <p className="mt-2.5 text-[13.5px] leading-relaxed text-white/75">
+                      {card.c}
+                    </p>
+                  </div>
+
+                  <div>
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-1.5 mt-3">
+                      {card.tags.map((tag) => (
+                        <span key={tag} className="bg-white/[0.06] text-[#E8B75A] text-[10px] font-semibold px-2.5 py-1 rounded-full border border-[#E8B75A]/10">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* CTA Button */}
+                    <button
+                      onClick={onJoin}
+                      className="ff-sans mt-5 w-full bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] text-[#250009] hover:opacity-90 py-3 rounded-full font-bold text-[13.5px] transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-black/10"
+                    >
+                      Reserve Seat
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </section>
   );
