@@ -461,7 +461,7 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
             key={card.title}
             data-reveal
             style={{ transitionDelay: `${i * 90}ms` }}
-            className="group relative flex flex-col justify-between overflow-hidden rounded-[2.2rem] bg-[#1e2530] text-white shadow-2xl border border-white/[0.05] h-[480px]"
+            className="group relative flex flex-col justify-between overflow-hidden rounded-lg bg-[#1e2530] text-white shadow-2xl border border-white/[0.05] h-[480px]"
           >
             {/* Image Header with Hover Scale */}
             <div className="relative h-[190px] w-full overflow-hidden shrink-0">
