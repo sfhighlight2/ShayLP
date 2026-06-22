@@ -315,7 +315,7 @@ function Hero({ onJoin }: { onJoin: () => void }) {
   return (
     <section
       id="top"
-      className="relative isolate overflow-hidden bg-[#170006] bg-[url('/hero-bg.png')] bg-cover bg-left bg-no-repeat px-5 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24"
+      className="relative isolate overflow-hidden bg-[#170006] bg-[url('/hero-bg.png')] bg-cover bg-left-top bg-no-repeat px-5 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24"
     >
       {/* Dark overlay for mobile readability */}
       <div className="absolute inset-0 bg-[#170006]/90 lg:hidden z-0 pointer-events-none" />
