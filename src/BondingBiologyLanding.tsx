@@ -873,13 +873,43 @@ function FinalCta() {
       }
       setEmailError("");
       if (formData.name && formData.email && formData.phone) {
+        // Send step 1 data to GHL webhook
+        fetch("https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/6ac6155c-af07-48e5-9419-d8a286457272", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone.trim(),
+            step: 1,
+            formSource: "final_cta"
+          }),
+        }).catch((err) => console.error("Webhook error:", err));
+
         setStep(2);
       }
       return;
     }
     if (formData.name && formData.email && formData.phone && formData.occupation && formData.city && formData.ageRange) {
       setStatus("loading");
-      await new Promise((r) => setTimeout(r, 1200));
+      try {
+        await fetch("https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/6ac6155c-af07-48e5-9419-d8a286457272", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone.trim(),
+            occupation: formData.occupation.trim(),
+            city: formData.city.trim(),
+            ageRange: formData.ageRange,
+            step: 2,
+            formSource: "final_cta"
+          }),
+        });
+      } catch (err) {
+        console.error("Webhook error:", err);
+      }
       setStatus("success");
     }
   };
@@ -1181,6 +1211,19 @@ function LeadModal({
       }
       setEmailError("");
       if (name && email && phone) {
+        // Send step 1 data to GHL webhook
+        fetch("https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/6ac6155c-af07-48e5-9419-d8a286457272", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            step: 1,
+            formSource: "lead_modal"
+          }),
+        }).catch((err) => console.error("Webhook error:", err));
+
         setStep(2);
       }
       return;
@@ -1188,6 +1231,22 @@ function LeadModal({
     if (status === "loading") return;
     setStatus("loading");
     try {
+      // Send step 2 data to GHL webhook
+      await fetch("https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/6ac6155c-af07-48e5-9419-d8a286457272", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          occupation: occupation.trim(),
+          city: city.trim(),
+          ageRange: ageRange,
+          step: 2,
+          formSource: "lead_modal"
+        }),
+      });
+
       if (onSubmit) {
         await onSubmit({
           name: name.trim(),
@@ -1197,9 +1256,6 @@ function LeadModal({
           city: city.trim(),
           ageRange: ageRange,
         });
-      } else {
-        // Stubbed success so the page is demoable with no backend.
-        await new Promise((r) => setTimeout(r, 900));
       }
       setStatus("success");
     } catch {
@@ -1493,6 +1549,19 @@ function ExitIntentModal({
       }
       setEmailError("");
       if (name && email && phone) {
+        // Send step 1 data to GHL webhook
+        fetch("https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/6ac6155c-af07-48e5-9419-d8a286457272", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            step: 1,
+            formSource: "exit_intent_modal"
+          }),
+        }).catch((err) => console.error("Webhook error:", err));
+
         setStep(2);
       }
       return;
@@ -1500,6 +1569,22 @@ function ExitIntentModal({
     if (status === "loading") return;
     setStatus("loading");
     try {
+      // Send step 2 data to GHL webhook
+      await fetch("https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/6ac6155c-af07-48e5-9419-d8a286457272", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          occupation: occupation.trim(),
+          city: city.trim(),
+          ageRange: ageRange,
+          step: 2,
+          formSource: "exit_intent_modal"
+        }),
+      });
+
       if (onSubmit) {
         await onSubmit({
           name: name.trim(),
@@ -1509,8 +1594,6 @@ function ExitIntentModal({
           city: city.trim(),
           ageRange: ageRange,
         });
-      } else {
-        await new Promise((r) => setTimeout(r, 900));
       }
       setStatus("success");
     } catch {
