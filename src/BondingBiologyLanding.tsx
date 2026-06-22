@@ -508,57 +508,44 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
             className="flex gap-6"
             style={{
               transform: `translateX(calc(-${currentIndex} * (100% + 24px) / ${visibleCount}))`,
-              transition: isTransitioning ? "transform 700ms cubic-bezier(0.4, 0, 0.2, 1)" : "none",
+              transition: isTransitioning ? "transform 1200ms cubic-bezier(0.4, 0, 0.2, 1)" : "none",
             }}
           >
             {extendedCards.map((card, i) => (
               <div
                 key={`${card.title}-${i}`}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-lg bg-[#250009] text-white shadow-2xl border border-[#E8B75A]/20 h-[480px] w-full shrink-0"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-lg bg-[#f0dbd0] text-[#250009] shadow-xl border border-[#250009]/10 h-[400px] w-full shrink-0"
                 style={{
                   width: `calc((100% - ${(visibleCount - 1) * 24}px) / ${visibleCount})`,
                 }}
               >
                 {/* Image Header with Hover Scale */}
-                <div className="relative h-[190px] w-full overflow-hidden shrink-0">
+                <div className="relative h-[150px] w-full overflow-hidden shrink-0">
                   <img
                     src={card.image}
                     alt={card.title}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  {/* Translucent Glass Bookmark Icon */}
-                  <button 
-                    onClick={onJoin}
-                    className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white/90 hover:bg-black/60 transition-colors"
-                    aria-label="Bookmark"
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-4.5 w-4.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                    </svg>
-                  </button>
                 </div>
 
                 {/* Content Area */}
                 <div className="p-5 flex-1 flex flex-col justify-between">
                   <div>
-                    {/* Title & Badge */}
+                    {/* Title */}
                     <div className="flex items-center justify-between">
-                      <h3 className="text-[17px] font-bold tracking-tight text-white">{card.title}</h3>
-                      <span className="bg-[#E8B75A] text-[#250009] text-[12px] font-bold px-2.5 py-0.5 rounded-full">
-                        {card.badge}
-                      </span>
+                      <h3 className="text-[16px] font-extrabold tracking-tight text-[#250009]">{card.title}</h3>
                     </div>
                     {/* Description */}
-                    <p className="mt-2.5 text-[13.5px] leading-relaxed text-white/75">
+                    <p className="mt-2 text-[13.5px] leading-relaxed text-[#250009]/85">
                       {card.c}
                     </p>
                   </div>
 
                   <div>
                     {/* Tags */}
-                    <div className="flex flex-wrap gap-1.5 mt-3">
+                    <div className="flex flex-wrap gap-1.5 mt-2.5">
                       {card.tags.map((tag) => (
-                        <span key={tag} className="bg-white/[0.06] text-[#E8B75A] text-[10px] font-semibold px-2.5 py-1 rounded-full border border-[#E8B75A]/10">
+                        <span key={tag} className="bg-[#250009]/8 text-[#250009] text-[9.5px] font-semibold px-2.5 py-1 rounded-full border border-[#250009]/10">
                           {tag}
                         </span>
                       ))}
@@ -567,7 +554,7 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
                     {/* CTA Button */}
                     <button
                       onClick={onJoin}
-                      className="ff-sans mt-5 w-full bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] text-[#250009] hover:opacity-90 py-3 rounded-full font-bold text-[13.5px] transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-black/10"
+                      className="ff-sans mt-4 w-full bg-[#250009] text-[#FFF2EA] hover:bg-[#380010] py-2.5 rounded-full font-bold text-[13px] transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-black/5"
                     >
                       Reserve Seat
                     </button>
