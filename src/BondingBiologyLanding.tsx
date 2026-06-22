@@ -23,6 +23,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Component as AvatarGroup } from "@/components/ui/demo";
+import starIcon from "@/assets/1.png";
 
 type LeadData = { name: string; email: string; phone: string };
 
@@ -57,14 +58,7 @@ const Check = ({ className = "" }: { className?: string }) => (
 );
 
 const Spark = ({ className = "" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-    <path
-      d="M12 2.5c.4 4.6 2.9 7.1 7.5 7.5-4.6.4-7.1 2.9-7.5 7.5-.4-4.6-2.9-7.1-7.5-7.5 4.6-.4 7.1-2.9 7.5-7.5Z"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinejoin="round"
-    />
-  </svg>
+  <img src={starIcon} alt="" className={`${className} object-contain`} aria-hidden="true" />
 );
 
 const Shield = ({ className = "" }: { className?: string }) => (
