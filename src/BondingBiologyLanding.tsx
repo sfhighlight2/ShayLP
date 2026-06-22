@@ -520,7 +520,7 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
                 }}
               >
                 {/* Image Header with Hover Scale */}
-                <div className="relative h-1/2 w-full overflow-hidden shrink-0">
+                <div className="relative h-[65%] w-full overflow-hidden shrink-0">
                   <img
                     src={card.image}
                     alt={card.title}
@@ -529,23 +529,23 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
                 </div>
 
                 {/* Content Area */}
-                <div className="p-5 flex-1 flex flex-col justify-between">
+                <div className="p-4 pt-2.5 pb-3.5 flex-1 flex flex-col justify-between overflow-hidden">
                   <div>
                     {/* Title */}
                     <div className="flex items-center justify-between">
-                      <h3 className="ff-serif text-[19px] font-bold text-[#250009]">{card.title}</h3>
+                      <h3 className="ff-serif text-[18px] font-bold leading-tight text-[#250009]">{card.title}</h3>
                     </div>
                     {/* Description */}
-                    <p className="mt-2 text-[13.5px] leading-relaxed text-[#250009]/85">
+                    <p className="mt-1 text-[13px] leading-snug text-[#250009]/85">
                       {card.c}
                     </p>
                   </div>
 
                   <div>
                     {/* Tags */}
-                    <div className="flex flex-wrap gap-1.5 mt-2.5">
+                    <div className="flex flex-wrap gap-1 mt-1.5">
                       {card.tags.map((tag) => (
-                        <span key={tag} className="bg-[#250009]/8 text-[#250009] text-[9.5px] font-semibold px-2.5 py-1 rounded-full border border-[#250009]/10">
+                        <span key={tag} className="bg-[#250009]/8 text-[#250009] text-[9px] font-semibold px-2 py-0.5 rounded-full border border-[#250009]/10">
                           {tag}
                         </span>
                       ))}
@@ -554,7 +554,7 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
                     {/* CTA Button */}
                     <button
                       onClick={onJoin}
-                      className="ff-sans mt-4 w-full bg-[#250009] text-[#FFF2EA] hover:bg-[#380010] py-2.5 rounded-full font-bold text-[13px] transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-black/5"
+                      className="ff-sans mt-2.5 w-full bg-[#250009] text-[#FFF2EA] hover:bg-[#380010] py-2 rounded-full font-bold text-[12.5px] transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-black/5"
                     >
                       Reserve Seat
                     </button>
