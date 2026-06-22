@@ -514,13 +514,13 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
             {extendedCards.map((card, i) => (
               <div
                 key={`${card.title}-${i}`}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-lg bg-[#f0dbd0] text-[#250009] shadow-xl border border-[#250009]/10 h-[400px] w-full shrink-0"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-lg bg-[#f0dbd0] text-[#250009] shadow-xl border border-[#250009]/10 h-[470px] w-full shrink-0"
                 style={{
                   width: `calc((100% - ${(visibleCount - 1) * 24}px) / ${visibleCount})`,
                 }}
               >
                 {/* Image Header with Hover Scale */}
-                <div className="relative h-[150px] w-full overflow-hidden shrink-0">
+                <div className="relative h-[190px] w-full overflow-hidden shrink-0">
                   <img
                     src={card.image}
                     alt={card.title}
