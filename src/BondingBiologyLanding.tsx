@@ -14,7 +14,7 @@
  * backend. If omitted, it resolves a stubbed success so the page is
  * demoable immediately.
  *
- * NOTE ON CLAIMS: "2,000+ women coached", "★★★★★ rated", and the named
+ * NOTE ON CLAIMS: "8,000+ women coached", "★★★★★ rated", and the named
  * testimonials are carried over from the source. Substantiate or soften
  * these before running paid traffic (FTC / ad-platform compliance).
  * Search for  // ⚠ CLAIM  to find each spot.
@@ -383,7 +383,7 @@ function CredibilityBar() {
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-around gap-y-6 px-5 text-center sm:px-8 md:flex-row md:gap-y-0">
         <div className="flex flex-col items-center">
           <span className="ff-serif text-[30px] font-bold text-[#E8B75A] leading-none">
-            2,000+
+            8,000+
           </span>
           <span className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-[#FFF7EE]/60">
             Women Coached
@@ -765,7 +765,7 @@ function WhyItWorks() {
             Founder credibility
           </span>
           <h3 className="ff-serif mt-3 text-[clamp(1.5rem,3vw,2.1rem)] font-bold leading-[1.05] tracking-[-0.04em]">
-            Built from coaching patterns observed across 2,000+ high-achieving
+            Built from coaching patterns observed across 8,000+ high-achieving
             women. {/* ⚠ CLAIM */}
           </h3>
           <p className="mt-4 text-[16px] leading-[1.45] text-[#4C1119]">
@@ -776,7 +776,7 @@ function WhyItWorks() {
         </div>
         <div className="flex w-full shrink-0 flex-col items-center justify-center rounded-2xl bg-[#250009] px-8 py-7 text-center sm:w-56">
           <span className="ff-serif text-[clamp(2.6rem,5vw,3rem)] font-bold leading-[0.95] tracking-[-0.05em] text-[#F8D896]">
-            2,000+
+            8,000+
           </span>
           <span className="ff-sans mt-1 text-[13px] font-bold text-[#FFF7EE]/72">
             women coached {/* ⚠ CLAIM */}
@@ -1141,7 +1141,7 @@ function MobileBar({ onJoin }: { onJoin: () => void }) {
           </span>
           <div className="flex items-center gap-1 mt-0.5">
             <Stars className="text-[12px] text-[#E8B75A]" />
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#E8B75A]/80">2k+ Coached</span>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#E8B75A]/80">8k+ Coached</span>
           </div>
         </div>
         <button

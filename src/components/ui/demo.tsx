@@ -33,7 +33,7 @@ function Component() {
         />
       </div>
       <p className="px-2.5 text-[12px] text-[#FFF7EE]/70">
-        Trusted by <strong className="font-semibold text-[#E8B75A]">2,000+</strong> coached women.
+        Trusted by <strong className="font-semibold text-[#E8B75A]">8,000+</strong> coached women.
       </p>
     </div>
   );
