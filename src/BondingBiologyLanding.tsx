@@ -37,6 +37,7 @@ type LeadData = {
 
 type Props = {
   onSubmit?: (data: LeadData) => Promise<void> | void;
+  onStartQuiz: () => void;
 };
 
 /* ----------------------------- Icons ----------------------------- */
@@ -170,11 +171,11 @@ const Cta = ({
 
 /* ============================ Component =========================== */
 
-export default function BondingBiologyLanding({ onSubmit }: Props) {
+export default function BondingBiologyLanding({ onSubmit, onStartQuiz }: Props) {
   useReveal();
 
   const [open, setOpen] = useState(false);
-  const openModal = useCallback(() => setOpen(true), []);
+  const openModal = useCallback(() => onStartQuiz(), [onStartQuiz]);
   const [exitIntentOpen, setExitIntentOpen] = useState(false);
 
   useEffect(() => {
@@ -214,7 +215,7 @@ export default function BondingBiologyLanding({ onSubmit }: Props) {
 
       <MobileBar onJoin={openModal} />
       <LeadModal open={open} onClose={() => setOpen(false)} onSubmit={onSubmit} />
-      <ExitIntentModal open={exitIntentOpen} onClose={() => setExitIntentOpen(false)} onSubmit={onSubmit} />
+      <ExitIntentModal open={exitIntentOpen} onClose={() => setExitIntentOpen(false)} onSubmit={onSubmit} onStartQuiz={onStartQuiz} />
     </div>
   );
 }
@@ -1490,10 +1491,12 @@ function ExitIntentModal({
   open,
   onClose,
   onSubmit,
+  onStartQuiz,
 }: {
   open: boolean;
   onClose: () => void;
   onSubmit?: (data: LeadData) => Promise<void> | void;
+  onStartQuiz: () => void;
 }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -1814,6 +1817,20 @@ function ExitIntentModal({
                 </>
               )}
             </form>
+
+            <div className="mt-4 border-t border-[#E8B75A]/20 pt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onStartQuiz();
+                }}
+                className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl border border-[#E8B75A]/45 bg-transparent px-6 py-3.5 text-[15px] font-bold text-[#E8B75A] transition-all hover:bg-[#E8B75A]/10 active:scale-95 cursor-pointer"
+              >
+                Take the 90-Sec Quiz Instead
+                <ArrowRight className="h-[17px] w-[17px]" />
+              </button>
+            </div>
 
             <p className="mt-5 flex items-center justify-center gap-2 text-center text-[12.5px] font-medium text-[#FFF7EE]/60">
               <Shield className="h-4 w-4 text-[#E8B75A]" />
