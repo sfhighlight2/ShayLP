@@ -294,7 +294,7 @@ function Nav({ onJoin }: { onJoin: () => void }) {
       {/* Mobile Drawer Overlay */}
       {menuOpen && (
         <div 
-          className="fixed inset-0 z-30 md:hidden flex flex-col bg-[#170006]/98 backdrop-blur-2xl animate-fadeIn"
+          className="fixed inset-0 z-40 md:hidden flex flex-col bg-black animate-fadeIn"
           onClick={() => setMenuOpen(false)}
         >
           <div 
