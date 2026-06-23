@@ -4,6 +4,17 @@ import { useNavigate } from "react-router-dom";
 // Webhook endpoint
 const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/597d218e-6d54-401a-8e31-996d527e270d";
 
+const formatPhoneNumber = (value: string): string => {
+  if (!value) return value;
+  const phoneNumber = value.replace(/[^\d]/g, "");
+  const phoneNumberLength = phoneNumber.length;
+  if (phoneNumberLength < 4) return phoneNumber;
+  if (phoneNumberLength < 7) {
+    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+  }
+  return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+};
+
 type Archetype = "Pressure" | "Pulling-Back" | "Proving" | "Guarded";
 
 interface QuizAnswer {
@@ -401,7 +412,7 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
                   required
                   placeholder="+1 (555) 000-0000"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
                   className="w-full rounded-xl border border-[#250009]/15 bg-[#FFFDFB]/60 px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/30 focus:border-[#D8962D] focus:ring-1 focus:ring-[#D8962D]/50"
                 />
               </div>
