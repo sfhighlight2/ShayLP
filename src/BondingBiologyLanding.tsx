@@ -258,7 +258,7 @@ function Nav({ onJoin }: { onJoin: () => void }) {
             onClick={onJoin}
             className="ff-sans inline-flex items-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F6D089_0%,#D99A35_100%)] px-5 py-2.5 text-[14px] font-bold text-[#250009] shadow-[0_10px_30px_rgba(232,183,90,0.25)] transition-transform hover:-translate-y-0.5"
           >
-            <span>Show Me How</span>
+            <span>Get Started Free</span>
           </button>
 
           {/* Mobile hamburger menu toggle */}
@@ -301,7 +301,7 @@ function Nav({ onJoin }: { onJoin: () => void }) {
               }}
               className="ff-sans mt-4 inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-8 py-4 text-[16px] font-bold text-[#250009] shadow-[0_16px_40px_rgba(232,183,90,0.25)] w-full max-w-xs"
             >
-              <span>Show Me How</span>
+              <span>Get Started Free</span>
               <ArrowRight className="h-[18px] w-[18px]" />
             </button>
           </div>
@@ -344,16 +344,13 @@ function Hero({ onJoin }: { onJoin: () => void }) {
             style={{ "--i": 2 } as React.CSSProperties}
             className="mt-7 max-w-xl text-[clamp(1rem,1.4vw,1.18rem)] leading-[1.55] text-[#FFF7EE]/78 [text-wrap:balance]"
           >
-            Inside the Bonding Biology workshop, you'll see the exact pattern that
-            turns early attraction into commitment that actually stabilizes, and
-            how to build it yourself. No chasing. No performing. No pretending
-            you want less than you do.
+            Take the free Bonding Biology Quiz to discover the hidden relationship pattern influencing who you attract, how connection develops, and why commitment may not be stabilizing. No chasing. No performing. No pretending you want less than you do.
           </p>
           <div
             style={{ "--i": 3 } as React.CSSProperties}
             className="mt-9 flex flex-col items-start gap-4 w-full"
           >
-            <Cta onClick={onJoin} className="w-full sm:w-auto">Show Me How</Cta>
+            <Cta onClick={onJoin} className="w-full sm:w-auto">Get Started Free</Cta>
           </div>
           <p
             style={{ "--i": 4 } as React.CSSProperties}
