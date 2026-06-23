@@ -37,6 +37,12 @@ const formatPhoneNumber = (value: string): string => {
   return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
 };
 
+const trackFacebookEvent = (eventName: string, params?: any) => {
+  if (typeof window !== "undefined" && (window as any).fbq) {
+    (window as any).fbq('track', eventName, params);
+  }
+};
+
 type LeadData = {
   name: string;
   email: string;
@@ -896,7 +902,6 @@ function FinalCta() {
         setEmailError("Please enter a valid email address containing '@'.");
         return;
       }
-      setEmailError("");
       if (formData.name && formData.email && formData.phone) {
         // Send step 1 data to GHL webhook
         fetch(GHL_WEBHOOK_URL, {
@@ -911,6 +916,7 @@ function FinalCta() {
           }),
         }).catch((err) => console.error("Webhook error:", err));
 
+        trackFacebookEvent('Lead', { content_category: 'Workshop Registration Step 1' });
         setStep(2);
       }
       return;
@@ -932,6 +938,7 @@ function FinalCta() {
             formSource: "final_cta"
           }),
         });
+        trackFacebookEvent('CompleteRegistration', { content_name: 'Workshop Registration Complete' });
       } catch (err) {
         console.error("Webhook error:", err);
       }
@@ -1247,6 +1254,7 @@ function LeadModal({
           }),
         }).catch((err) => console.error("Webhook error:", err));
 
+        trackFacebookEvent('Lead', { content_category: 'Workshop Registration Step 1' });
         setStep(2);
       }
       return;
@@ -1269,6 +1277,8 @@ function LeadModal({
           formSource: "lead_modal"
         }),
       });
+
+      trackFacebookEvent('CompleteRegistration', { content_name: 'Workshop Registration Complete' });
 
       if (onSubmit) {
         await onSubmit({
@@ -1587,6 +1597,7 @@ function ExitIntentModal({
           }),
         }).catch((err) => console.error("Webhook error:", err));
 
+        trackFacebookEvent('Lead', { content_category: 'Workshop Registration Step 1' });
         setStep(2);
       }
       return;
@@ -1609,6 +1620,8 @@ function ExitIntentModal({
           formSource: "exit_intent_modal"
         }),
       });
+
+      trackFacebookEvent('CompleteRegistration', { content_name: 'Workshop Registration Complete' });
 
       if (onSubmit) {
         await onSubmit({

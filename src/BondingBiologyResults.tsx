@@ -1,11 +1,27 @@
+import { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
 type Archetype = "Pressure" | "Pulling-Back" | "Proving" | "Guarded";
+
+const trackFacebookEvent = (eventName: string, params?: any) => {
+  if (typeof window !== "undefined" && (window as any).fbq) {
+    (window as any).fbq('track', eventName, params);
+  }
+};
 
 export default function BondingBiologyResults() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const archetypeResult = searchParams.get("archetype") as Archetype | null;
+
+  useEffect(() => {
+    if (archetypeResult) {
+      trackFacebookEvent('ViewContent', {
+        content_name: 'Quiz Results',
+        content_category: archetypeResult
+      });
+    }
+  }, [archetypeResult]);
 
   const archetypeDetails: Record<Archetype, {
     title: string;

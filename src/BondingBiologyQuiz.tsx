@@ -15,6 +15,12 @@ const formatPhoneNumber = (value: string): string => {
   return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
 };
 
+const trackFacebookEvent = (eventName: string, params?: any) => {
+  if (typeof window !== "undefined" && (window as any).fbq) {
+    (window as any).fbq('track', eventName, params);
+  }
+};
+
 type Archetype = "Pressure" | "Pulling-Back" | "Proving" | "Guarded";
 
 interface QuizAnswer {
@@ -203,10 +209,12 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
         }),
       });
       setStatus("success");
+      trackFacebookEvent('Lead', { content_category: 'Quiz Lead Capture' });
       navigate(`/results?archetype=${resolvedArchetype}`);
     } catch (err) {
       console.error("Quiz submission error:", err);
       setStatus("success"); // Fall forward to results page regardless
+      trackFacebookEvent('Lead', { content_category: 'Quiz Lead Capture' });
       navigate(`/results?archetype=${resolvedArchetype}`);
     }
   };
@@ -294,7 +302,10 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
 
             <div className="pt-2">
               <button
-                onClick={() => setStarted(true)}
+                onClick={() => {
+                  setStarted(true);
+                  trackFacebookEvent('SubmitApplication', { content_name: 'Quiz Started' });
+                }}
                 className="ff-sans inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#250009] px-10 py-4.5 text-[16px] font-bold text-[#FFF2EA] shadow-[0_16px_40px_rgba(37,0,9,0.15)] hover:bg-[#3d0010] active:scale-[0.98] transition-all w-full sm:w-auto cursor-pointer"
               >
                 <span>Reveal My Love Pattern</span>
