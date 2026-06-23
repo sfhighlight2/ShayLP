@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Webhook endpoint
 const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/597d218e-6d54-401a-8e31-996d527e270d";
@@ -12,6 +13,7 @@ interface QuizAnswer {
 }
 
 export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () => void }) {
+  const navigate = useNavigate();
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(1); // 1 to 7 for questions, 8 for lead capture
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
@@ -22,6 +24,7 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [emailError, setEmailError] = useState("");
   const [archetypeResult, setArchetypeResult] = useState<Archetype | null>(null);
+
 
   const questions = [
     {
@@ -182,9 +185,11 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
         }),
       });
       setStatus("success");
+      navigate(`/results?archetype=${resolvedArchetype}`);
     } catch (err) {
       console.error("Quiz submission error:", err);
       setStatus("success"); // Fall forward to results page regardless
+      navigate(`/results?archetype=${resolvedArchetype}`);
     }
   };
 
@@ -450,7 +455,7 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
           </div>
         ) : (
           /* Diagnostic Questions */
-          <div className="w-full space-y-6 py-6 text-center animate-slideIn">
+          <div key={step} className="w-full space-y-6 py-6 text-center animate-slideIn">
             <div>
               <span className="ff-sans text-[11.5px] font-bold uppercase tracking-[0.2em] text-[#8A2634] bg-[#8A2634]/10 rounded-full px-3 py-1">
                 Question {step} of 7
@@ -459,12 +464,12 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
                 {questions[step - 1].q}
               </h2>
             </div>
-
+ 
             {/* Answer Options */}
             <div className="space-y-3.5 mt-8 max-w-xl mx-auto">
               {questions[step - 1].options.map((option, i) => (
                 <button
-                  key={i}
+                  key={`${step}-${i}`}
                   onClick={() => handleSelectOption(i)}
                   className="w-full text-left px-5 py-4 sm:py-4.5 rounded-2xl border border-[#250009]/10 bg-white hover:bg-[#F0DBD0]/35 hover:border-[#250009]/30 transition-all duration-300 text-[14.5px] sm:text-[15.5px] leading-snug font-medium focus:outline-none focus:ring-2 focus:ring-[#250009]/30 flex justify-between items-center group active:scale-[0.99] cursor-pointer shadow-sm"
                 >

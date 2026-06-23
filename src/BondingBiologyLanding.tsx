@@ -328,7 +328,7 @@ function Hero({ onJoin }: { onJoin: () => void }) {
         {/* Copy */}
         <div className="hero-stagger relative z-10 lg:pl-6">
           <div style={{ "--i": 0 } as React.CSSProperties}>
-            <Eyebrow>3-day live workshop · replays included</Eyebrow>
+            <Eyebrow>5-day live workshop · replays included</Eyebrow>
           </div>
           <h1
             style={{ "--i": 1 } as React.CSSProperties}
@@ -527,7 +527,7 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
         {/* Centered CTA below grid */}
         <div className="mt-12 flex justify-center">
           <Cta onClick={onJoin} className="w-full sm:w-auto">
-            Save My Seat
+            Get Started Free
           </Cta>
         </div>
       </div>
@@ -552,7 +552,7 @@ function WhatYouWillKnow() {
             You don't have a dating problem. You have a bonding problem.
           </h2>
           <p className="mt-5 text-[16.5px] leading-[1.55] text-[#250009]/75 max-w-xl">
-            The 3-day Bonding Biology workshop helps you see exactly where your pattern is interrupting connection before you invest more effort.
+            The 5-day Bonding Biology workshop helps you see exactly where your pattern is interrupting connection before you invest more effort.
           </p>
 
           <div className="relative mt-8 w-full aspect-video rounded-2xl overflow-hidden border border-[#E8B75A]/25 bg-black shadow-2xl z-10">
@@ -640,7 +640,7 @@ function OfferIntro({ onJoin }: { onJoin: () => void }) {
             Make love feel less like luck — and more like a pattern.
           </h2>
           <p className="mt-6 max-w-xl text-[16.5px] leading-[1.55] text-[#4C1119]/80">
-            Not theory. Not slogans. Not affirmations. A practical three-day reset
+            Not theory. Not slogans. Not affirmations. A practical five-day reset
             that shows you what creates chemistry, what builds safety, and what
             makes commitment feel natural instead of forced.
           </p>
@@ -651,7 +651,7 @@ function OfferIntro({ onJoin }: { onJoin: () => void }) {
               <span className="ff-serif text-[24px] font-bold text-[#8A2634]">1.</span>
               <div>
                 <h4 className="font-bold text-[14.5px] text-[#250009]">Join the Workshop</h4>
-                <p className="text-[12.5px] text-[#4C1119]/70 leading-normal mt-0.5">3 days of live, immersive sessions.</p>
+                <p className="text-[12.5px] text-[#4C1119]/70 leading-normal mt-0.5">5 days of live, immersive sessions.</p>
               </div>
             </div>
             <div className="flex gap-3">
@@ -671,7 +671,7 @@ function OfferIntro({ onJoin }: { onJoin: () => void }) {
           </div>
 
           <Cta onClick={onJoin} variant="dark" className="w-full sm:w-auto mt-9">
-            Save My Seat
+            Get Started Free
           </Cta>
         </div>
 
@@ -852,7 +852,7 @@ function Testimonials({ onJoin }: { onJoin: () => void }) {
         ))}
       </div>
       <div className="relative z-10 mt-10 flex justify-center px-5 sm:px-0" data-reveal>
-        <Cta onClick={onJoin} variant="dark" className="w-full sm:w-auto">Save My Seat</Cta>
+        <Cta onClick={onJoin} variant="dark" className="w-full sm:w-auto">Get Started Free</Cta>
       </div>
     </section>
   );
@@ -1008,7 +1008,7 @@ function FinalCta() {
                       type="submit"
                       className="ff-sans mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#250009] px-6 py-3.5 text-[15px] font-bold text-[#FFF2EA] transition-all hover:bg-[#380010] hover:-translate-y-0.5"
                     >
-                      Save My Seat
+                      Get Started Free
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[17px] w-[17px]" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                       </svg>
@@ -1062,7 +1062,7 @@ function FinalCta() {
                       disabled={status === "loading"}
                       className="ff-sans mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#250009] px-6 py-3.5 text-[15px] font-bold text-[#FFF2EA] transition-all hover:bg-[#380010] hover:-translate-y-0.5 disabled:opacity-75 disabled:cursor-not-allowed"
                     >
-                      {status === "loading" ? "Processing..." : "Save My Seat"}
+                      {status === "loading" ? "Processing..." : "Get Started Free"}
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[17px] w-[17px]" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                       </svg>
@@ -1136,7 +1136,7 @@ function MobileBar({ onJoin }: { onJoin: () => void }) {
           onClick={onJoin}
           className="ff-sans btn-shimmer rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-3 text-[14.5px] font-bold text-[#250009] shadow-[0_8px_20px_rgba(232,183,90,0.25)] flex items-center gap-1.5 active:scale-95 transition-transform"
         >
-          <span>Save My Seat</span>
+          <span>Get Started Free</span>
           <ArrowRight className="h-4 w-4" />
         </button>
       </div>
@@ -1327,7 +1327,7 @@ function LeadModal({
               id="lead-modal-title"
               className="ff-serif mt-3 text-[clamp(1.7rem,5vw,2rem)] font-bold leading-[1.05] tracking-[-0.04em]"
             >
-              Reserve your seat in the workshop.
+              Get started free in the workshop.
             </h3>
             <p className="mt-2 text-[15px] leading-[1.45] text-[#4C1119]">
               Enter your details and we’ll send your access link right away.
@@ -1388,7 +1388,7 @@ function LeadModal({
                     type="submit"
                     className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.4)] transition-all hover:-translate-y-0.5"
                   >
-                    Save My Seat
+                    Get Started Free
                     <ArrowRight className="h-[17px] w-[17px]" />
                   </button>
                 </>
@@ -1456,11 +1456,11 @@ function LeadModal({
                   >
                     {status === "loading" ? (
                       <>
-                        <Spinner /> Securing your spot…
+                        <Spinner /> Getting started…
                       </>
                     ) : (
                       <>
-                        Save My Seat
+                        Get Started Free
                         <ArrowRight className="h-[17px] w-[17px]" />
                       </>
                     )}
@@ -1730,7 +1730,7 @@ function ExitIntentModal({
                     type="submit"
                     className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.3)] transition-all hover:-translate-y-0.5"
                   >
-                    Save My Seat
+                    Get Started Free
                     <ArrowRight className="h-[17px] w-[17px]" />
                   </button>
                 </>
@@ -1798,11 +1798,11 @@ function ExitIntentModal({
                   >
                     {status === "loading" ? (
                       <>
-                        <Spinner /> Securing your spot…
+                        <Spinner /> Getting started…
                       </>
                     ) : (
                       <>
-                        Save My Seat
+                        Get Started Free
                         <ArrowRight className="h-[17px] w-[17px]" />
                       </>
                     )}
