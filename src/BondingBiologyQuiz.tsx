@@ -12,7 +12,8 @@ interface QuizAnswer {
 }
 
 export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () => void }) {
-  const [step, setStep] = useState(1); // 1 to 6
+  const [started, setStarted] = useState(false);
+  const [step, setStep] = useState(1); // 1 to 5 for questions, 6 for lead capture
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -80,7 +81,6 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
     };
     setAnswers(newAnswers);
 
-    // Smooth transition to next step
     if (step < 5) {
       setStep(step + 1);
     } else {
@@ -92,14 +92,13 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
     if (step > 1) {
       setStep(step - 1);
     } else {
-      onBackToHome();
+      setStarted(false);
     }
   };
 
   const calculateArchetype = (selectedAnswers: QuizAnswer[]): Archetype => {
-    // We score based on answers to Q2 (index 1), Q3 (index 2), and Q4 (index 3)
-    const indices = [1, 2, 3];
-    const counts = [0, 0, 0, 0]; // Pressure, Pulling-Back, Proving, Guarded
+    const indices = [1, 2, 3]; // Q2, Q3, Q4
+    const counts = [0, 0, 0, 0];
 
     indices.forEach((qIdx) => {
       const ans = selectedAnswers[qIdx];
@@ -108,7 +107,6 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
       }
     });
 
-    // Find the max count
     let maxCount = -1;
     let maxIdx = 0;
     let hasTie = false;
@@ -123,7 +121,6 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
       }
     });
 
-    // Tie-breaker: Use Q2 (index 1) option as the primary diagnostic indicator
     if (hasTie && selectedAnswers[1]) {
       maxIdx = selectedAnswers[1].index;
     }
@@ -153,7 +150,7 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
           email: email.trim(),
           phone: phone.trim(),
           consent,
-          step: 2, // Marks complete diagnostic capture submission
+          step: 2,
           formSource: "quiz",
           archetype: resolvedArchetype,
           q1_answer: answers[0]?.answer,
@@ -166,101 +163,169 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
       setStatus("success");
     } catch (err) {
       console.error("Quiz submission error:", err);
-      // Still display result to user even if webhook drops
-      setStatus("success");
+      setStatus("success"); // Gracefully fall forward to show results regardless
     }
   };
 
-  const archetypeDescriptions: Record<Archetype, { title: string; subtitle: string; desc: string }> = {
+  const archetypeDetails: Record<Archetype, {
+    title: string;
+    subtitle: string;
+    why: string;
+    blindSpot: string;
+    recommendation: string;
+  }> = {
     "Pressure": {
       title: "The Pressure Pattern",
       subtitle: "Moving towards closeness with urgency.",
-      desc: "Your system is highly sensitive to distance. When you feel a partner pulling away, your natural instinct is to try and resolve the distance immediately. While built out of a desire for connection, this can inadvertently signal pressure to the other person, triggering their avoidant behaviors."
+      why: "When a partner creates distance, your biological system interprets it as a threat to safety. This triggers an urgent impulse to text, clarify, or over-give in an attempt to re-establish connection.",
+      blindSpot: "By trying to resolve the distance immediately, your actions can feel like pressure to a partner, causing them to pull back even further to regain space.",
+      recommendation: "Practice a '24-hour pause' when you feel the urge to push for closeness. Let the initial spike of anxiety settle before choosing how to respond."
     },
     "Pulling-Back": {
       title: "The Pulling-Back Pattern",
-      subtitle: "Withdrawing to maintain control.",
-      desc: "When things get vulnerable or uncertain, your system signals danger. To protect yourself from rejection, you pull back, go silent, or match their distance. This shields you in the short term, but it often interrupts connection before it has a chance to stabilize."
+      subtitle: "Withdrawing to maintain emotional control.",
+      why: "Your nervous system associates vulnerability with risk. When you feel a partner pulling away, your protective instinct is to go quiet, act unbothered, and withdraw before they can reject you.",
+      blindSpot: "While this keeps you safe in the short term, it signals to a partner that you are emotionally unavailable or indifferent, causing the connection to cool down permanently.",
+      recommendation: "Try speaking one small, vulnerable truth instead of withdrawing (e.g. 'I really enjoyed our time and get a bit nervous when things go quiet.')."
     },
     "Proving": {
       title: "The Proving Pattern",
-      subtitle: "Auditioning for love by being perfect.",
-      desc: "You operate under the belief that you must perform, be perfect, or prove your worth to keep someone interested. You are highly attuned to what they want, often at the expense of your own needs, leading to exhaustion and uneven commitment."
+      subtitle: "Auditioning for commitment by being perfect.",
+      why: "You default to acting as the 'ideal' partner — highly accommodating, effortless, and always available. Your system seeks safety by making yourself indispensable.",
+      blindSpot: "You end up doing all the relationship planning and emotional labor, which makes commitment feel like an audition rather than a natural, shared choice.",
+      recommendation: "Allow a partner space to initiate plans, reach out first, and show up. Clues of real commitment only appear when you stop carrying the interaction."
     },
     "Guarded": {
       title: "The Guarded Pattern",
-      subtitle: "Keeping your guard up to stay safe.",
-      desc: "You keep your walls high and stay extremely cautious, waiting for him to make the first move or prove himself entirely. While this keeps you safe from immediate pain, it can prevent deep emotional safety from forming."
+      subtitle: "Keeping your walls high to prevent pain.",
+      why: "Past disappointment has taught your system to protect itself at all costs. You keep a strict filter and stay alert for red flags, waiting for absolute certainty before opening up.",
+      blindSpot: "Your caution can be misread as lack of interest. A good partner seeking safety will sense the barrier and eventually move on, leaving you with unavailable candidates.",
+      recommendation: "Experiment with low-stakes openness. Share a personal story or request support in a small area to see how they handle your trust."
     }
   };
 
-  const progressPercent = Math.round(((step - 1) / 6) * 100);
+  const progressPercent = started ? Math.round(((step - 1) / 5) * 100) : 0;
 
   return (
-    <div className="ff-sans min-h-screen bg-[#170006] text-[#FFF7EE] antialiased flex flex-col justify-between relative overflow-x-hidden selection:bg-[#E8B75A]/30">
-      {/* Background Subtle Glows */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] aspect-square rounded-full bg-[#8A2634]/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] aspect-square rounded-full bg-[#E8B75A]/5 blur-[120px] pointer-events-none" />
-
-      {/* Header */}
-      <header className="border-b border-[#E8B75A]/10 bg-[#170006]/85 backdrop-blur-md sticky top-0 z-40 py-4 px-5">
+    <div className="ff-sans min-h-screen bg-[linear-gradient(180deg,#FFFDFB_0%,#F9E9E3_100%)] text-[#250009] antialiased flex flex-col justify-between relative selection:bg-[#E8B75A]/45">
+      {/* Header Logo */}
+      <header className="border-b border-[#250009]/10 bg-white/70 backdrop-blur-md sticky top-0 z-40 py-3.5 px-5">
         <div className="mx-auto max-w-4xl flex items-center justify-between">
           <button
             onClick={handleBack}
-            className="flex items-center gap-2 text-[14px] font-bold text-[#FFF7EE]/70 hover:text-[#E8B75A] transition-colors"
+            className="flex items-center gap-1.5 text-[14px] font-bold text-[#8A2634] hover:underline"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
             </svg>
-            <span>Back</span>
+            <span>{started ? "Back" : "Home"}</span>
           </button>
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#E8B75A] animate-pulse" />
-            <span className="text-[12px] font-bold uppercase tracking-wider text-[#E8B75A]">Bonding Quiz</span>
-          </div>
+          <a href="#top" onClick={(e) => { e.preventDefault(); onBackToHome(); }}>
+            <img src="/Mainlogo.png" alt="Logo" className="h-8 w-auto object-contain" />
+          </a>
         </div>
       </header>
 
-      {/* Progress Bar */}
-      {status !== "success" && (
-        <div className="w-full bg-[#250009] h-1.5 overflow-hidden">
+      {/* Progress Bar (Only during active questions) */}
+      {started && status !== "success" && step <= 5 && (
+        <div className="w-full bg-[#250009]/5 h-1.5 overflow-hidden">
           <div
-            className="bg-[linear-gradient(90deg,#F8D896_0%,#D8962D_100%)] h-full transition-all duration-500 ease-out"
+            className="bg-[linear-gradient(90deg,#D8962D_0%,#8A2634_100%)] h-full transition-all duration-300 ease-out"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
       )}
 
-      {/* Main Content Area */}
+      {/* Main Container */}
       <main className="flex-1 flex items-center justify-center p-5 max-w-2xl mx-auto w-full">
-        {status === "success" && archetypeResult ? (
-          /* Results Page Screen */
-          <div className="w-full text-center space-y-7 py-8 animate-fadeIn">
-            <span className="ff-sans text-[12.5px] font-bold uppercase tracking-[0.25em] text-[#E8B75A]">
-              Diagnostic Results
+        {!started ? (
+          /* Start Screen */
+          <div className="w-full text-center space-y-7 py-6 animate-fadeIn">
+            <span className="ff-sans inline-block text-[11px] font-bold uppercase tracking-[0.25em] text-[#8A2634] bg-[#8A2634]/10 rounded-full px-4 py-1.5">
+              90-Second Diagnostic Quiz
             </span>
-            <div className="bg-[#250009]/60 border border-[#E8B75A]/25 rounded-3xl p-8 sm:p-10 shadow-2xl backdrop-blur-md">
-              <h2 className="ff-serif text-[clamp(2rem,5vw,3rem)] font-bold text-[#FFF7EE] leading-tight">
-                {archetypeDescriptions[archetypeResult].title}
-              </h2>
-              <p className="text-[#E8B75A] text-[15px] font-bold uppercase tracking-wide mt-2">
-                {archetypeDescriptions[archetypeResult].subtitle}
-              </p>
-              <p className="mt-6 text-[15.5px] leading-relaxed text-[#FFF7EE]/85 text-left border-t border-[#E8B75A]/15 pt-6">
-                {archetypeDescriptions[archetypeResult].desc}
+            <h1 className="ff-serif text-[clamp(2.2rem,5.5vw,3.2rem)] font-bold leading-[1.05] tracking-[-0.035em] text-[#250009] max-w-xl mx-auto">
+              What’s Blocking You From Lasting Love?
+            </h1>
+            <p className="text-[16px] leading-[1.6] text-[#250009]/80 max-w-lg mx-auto">
+              Answer 5 biology-based questions to reveal your primary bonding pattern, your biggest relationship blind spot, and the immediate shift to unlock commitment.
+            </p>
+
+            {/* Social Proof near Start */}
+            <div className="bg-white/60 border border-[#250009]/10 rounded-2xl p-5 shadow-sm max-w-md mx-auto flex items-center gap-4 text-left">
+              <div className="flex -space-x-2 shrink-0">
+                <div className="h-9 w-9 rounded-full bg-[#8A2634] text-white flex items-center justify-center font-bold text-[11.5px] border-2 border-[#FFFDFB]">MR</div>
+                <div className="h-9 w-9 rounded-full bg-[#E8B75A] text-[#250009] flex items-center justify-center font-bold text-[11.5px] border-2 border-[#FFFDFB]">DK</div>
+                <div className="h-9 w-9 rounded-full bg-[#250009] text-white flex items-center justify-center font-bold text-[11.5px] border-2 border-[#FFFDFB]">AL</div>
+              </div>
+              <p className="text-[13px] font-semibold text-[#250009]/75 leading-snug">
+                Join <span className="font-extrabold text-[#8A2634]">2,000+ women</span> who have uncovered their patterns this month.
               </p>
             </div>
 
-            {/* Results CTA Flow */}
-            <div className="space-y-4">
-              <h3 className="text-[17px] font-bold text-[#FFF7EE]">Next Step: Secure your seat to shift this pattern</h3>
-              <p className="text-[14px] text-[#FFF7EE]/70 max-w-md mx-auto">
-                Your pattern is highly responsive to safety. The 3-day workshop shows you how to establish the sequence that stabilizes commitment naturally.
+            <div className="pt-2">
+              <button
+                onClick={() => setStarted(true)}
+                className="ff-sans inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#250009] px-10 py-4.5 text-[16px] font-bold text-[#FFF2EA] shadow-[0_16px_40px_rgba(37,0,9,0.15)] hover:bg-[#3d0010] active:scale-[0.98] transition-all w-full sm:w-auto cursor-pointer"
+              >
+                <span>Reveal My Love Pattern</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-5 w-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
+              </button>
+            </div>
+            <p className="text-[12px] font-bold text-[#250009]/45 uppercase tracking-wider">
+              Takes under 90 seconds · Free diagnostic
+            </p>
+          </div>
+        ) : status === "success" && archetypeResult ? (
+          /* Results Screen */
+          <div className="w-full space-y-7 py-6 animate-fadeIn text-left">
+            <div className="text-center">
+              <span className="ff-sans inline-block text-[11px] font-bold uppercase tracking-[0.25em] text-[#8A2634] bg-[#8A2634]/10 rounded-full px-4 py-1.5">
+                Your Relationship Blueprint
+              </span>
+              <h2 className="ff-serif mt-3 text-[clamp(2.1rem,5vw,2.8rem)] font-bold leading-tight">
+                {archetypeDetails[archetypeResult].title}
+              </h2>
+              <p className="text-[#8A2634] text-[15px] font-bold uppercase tracking-wider mt-1.5">
+                {archetypeDetails[archetypeResult].subtitle}
+              </p>
+            </div>
+
+            <div className="bg-white border border-[#250009]/10 rounded-3xl p-7 sm:p-9 shadow-lg space-y-6">
+              <div>
+                <h3 className="text-[14px] font-bold uppercase tracking-wider text-[#8A2634]">Why It Happens</h3>
+                <p className="mt-1.5 text-[15px] leading-relaxed text-[#250009]/85">
+                  {archetypeDetails[archetypeResult].why}
+                </p>
+              </div>
+
+              <div className="border-t border-[#250009]/10 pt-5">
+                <h3 className="text-[14px] font-bold uppercase tracking-wider text-[#8A2634]">Your Biggest Blind Spot</h3>
+                <p className="mt-1.5 text-[15px] leading-relaxed text-[#250009]/85">
+                  {archetypeDetails[archetypeResult].blindSpot}
+                </p>
+              </div>
+
+              <div className="border-t border-[#250009]/10 pt-5">
+                <h3 className="text-[14px] font-bold uppercase tracking-wider text-[#8A2634]">Immediate Recommendation</h3>
+                <p className="mt-1.5 text-[15px] leading-relaxed text-[#250009]/85 font-medium">
+                  {archetypeDetails[archetypeResult].recommendation}
+                </p>
+              </div>
+            </div>
+
+            {/* Results Call to Action */}
+            <div className="text-center space-y-4 pt-4 border-t border-[#250009]/10">
+              <h3 className="text-[17px] font-bold">Next Step: Shift this pattern in our live workshop</h3>
+              <p className="text-[14.5px] text-[#250009]/75 max-w-md mx-auto leading-relaxed">
+                The 3-day Bonding Biology workshop shows you how to stop triggering this response sequence, letting commitment reveal itself naturally.
               </p>
               <div className="pt-2">
                 <button
                   onClick={onBackToHome}
-                  className="ff-sans inline-flex items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-10 py-4.5 text-[16px] font-bold text-[#250009] shadow-[0_16px_40px_rgba(232,183,90,0.3)] hover:-translate-y-0.5 transition-all w-full sm:w-auto"
+                  className="ff-sans inline-flex items-center justify-center gap-2 rounded-2xl bg-[#250009] px-10 py-4.5 text-[16px] font-bold text-[#FFF2EA] shadow-[0_16px_40px_rgba(37,0,9,0.15)] hover:bg-[#3d0010] active:scale-[0.98] transition-all w-full sm:w-auto cursor-pointer"
                 >
                   <span>Save My Seat in the Workshop</span>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-[18px] w-[18px]">
@@ -268,98 +333,96 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
                   </svg>
                 </button>
               </div>
-              <p className="text-[12px] text-[#FFF7EE]/50">
+              <p className="text-[12px] text-[#250009]/45 font-bold uppercase tracking-wider">
                 Free workshop · Replays included · Instant access
               </p>
             </div>
           </div>
         ) : step === 6 ? (
-          /* Lead Capture Screen */
+          /* Lead Capture Screen (Before Results) */
           <div className="w-full space-y-6 py-6 animate-fadeIn text-left">
             <div className="text-center">
-              <span className="ff-sans text-[12px] font-bold uppercase tracking-[0.2em] text-[#E8B75A]">
-                Step 6 of 6
+              <span className="ff-sans inline-block text-[11px] font-bold uppercase tracking-[0.25em] text-[#8A2634] bg-[#8A2634]/10 rounded-full px-4 py-1.5">
+                Your Pattern is Ready
               </span>
-              <h2 className="ff-serif mt-3 text-[clamp(1.8rem,4vw,2.5rem)] font-bold leading-tight">
-                Where should we send your Bonding Pattern results?
+              <h2 className="ff-serif mt-4 text-[clamp(1.9rem,4vw,2.5rem)] font-bold leading-[1.1] tracking-tight">
+                Your Love Pattern Result Is Ready.
               </h2>
-              <p className="mt-2 text-[14.5px] text-[#FFF7EE]/70">
-                We'll prepare your full report along with personalized next steps.
+              <p className="mt-2.5 text-[14.5px] text-[#250009]/75 max-w-md mx-auto">
+                Based on your answers, one pattern is affecting your relationships more than the others. Tell us where to email your blueprint.
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="bg-[#250009]/60 border border-[#E8B75A]/25 rounded-3xl p-7 sm:p-8 space-y-4 shadow-xl backdrop-blur-md">
+            <form onSubmit={handleSubmit} className="bg-white border border-[#250009]/10 rounded-3xl p-7 sm:p-8 space-y-4.5 shadow-lg">
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#E8B75A] mb-1.5">First & Last Name</label>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">First & Last Name</label>
                 <input
                   type="text"
                   required
                   placeholder="Your Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-xl border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
+                  className="w-full rounded-xl border border-[#250009]/15 bg-[#FFFDFB]/60 px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/30 focus:border-[#D8962D] focus:ring-1 focus:ring-[#D8962D]/50"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#E8B75A] mb-1.5">Email Address</label>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Email Address</label>
                 <input
                   type="email"
                   required
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
+                  className="w-full rounded-xl border border-[#250009]/15 bg-[#FFFDFB]/60 px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/30 focus:border-[#D8962D] focus:ring-1 focus:ring-[#D8962D]/50"
                 />
                 {emailError && (
-                  <p className="mt-1.5 text-[13px] font-semibold text-[#FF5D73]">
+                  <p className="mt-1.5 text-[13px] font-semibold text-[#9B1B2B]">
                     {emailError}
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#E8B75A] mb-1.5">Mobile Phone Number</label>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Mobile Phone Number (Optional)</label>
                 <input
                   type="tel"
-                  required
                   placeholder="+1 (555) 000-0000"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-xl border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
+                  className="w-full rounded-xl border border-[#250009]/15 bg-[#FFFDFB]/60 px-4 py-3.5 text-[15px] text-[#250009] outline-none transition-shadow placeholder:text-[#250009]/30 focus:border-[#D8962D] focus:ring-1 focus:ring-[#D8962D]/50"
                 />
               </div>
 
-              <div className="flex items-start gap-3 pt-2">
+              <div className="flex items-start gap-3 pt-1.5">
                 <input
                   id="sms-consent"
                   type="checkbox"
-                  required
                   checked={consent}
                   onChange={(e) => setConsent(e.target.checked)}
-                  className="mt-1.5 h-4.5 w-4.5 rounded border-[#E8B75A]/30 text-[#D8962D] focus:ring-[#E8B75A]"
+                  className="mt-1.5 h-4.5 w-4.5 rounded border-[#250009]/20 text-[#250009] focus:ring-[#E8B75A]"
                 />
-                <label htmlFor="sms-consent" className="text-[12px] leading-relaxed text-[#FFF7EE]/60 cursor-pointer">
-                  I consent to receive text updates, results, and support from Bonding Biology Institute. Msg & data rates may apply.
+                <label htmlFor="sms-consent" className="text-[12px] leading-relaxed text-[#250009]/60 cursor-pointer">
+                  Yes, text me updates, results and tips from Bonding Biology. Msg & data rates may apply.
                 </label>
               </div>
 
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="ff-sans mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15.5px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.3)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-75"
+                className="ff-sans mt-3 flex w-full items-center justify-center gap-2.5 rounded-2xl bg-[#250009] px-6 py-4 text-[15.5px] font-bold text-[#FFF2EA] shadow-[0_14px_34px_rgba(37,0,9,0.15)] hover:bg-[#3d0010] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-75 cursor-pointer"
               >
                 {status === "loading" ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-[#250009]" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-[#FFF2EA]" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
-                    Analyzing your pattern...
+                    Generating blueprint...
                   </>
                 ) : (
                   <>
-                    Show My Bonding Pattern
+                    Get My Relationship Blueprint
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-[18px] w-[18px]">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                     </svg>
@@ -367,18 +430,26 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
                 )}
               </button>
             </form>
-            <div className="text-center text-[12px] text-[#FFF7EE]/40">
-              Free workshop · Replays included · Instant access
+
+            {/* Testimonial / Social Proof near Opt-in Form */}
+            <div className="bg-white/40 border border-[#250009]/5 rounded-2xl p-4.5 flex items-start gap-3.5 mt-2">
+              <div className="h-8 w-8 rounded-full bg-[#8A2634] text-white flex items-center justify-center font-bold text-[10.5px] shrink-0">MR</div>
+              <div>
+                <p className="text-[12.5px] text-[#250009]/75 italic">
+                  \"I was skeptical but it resolved me into Pressure immediately. The recommendation to pause 24h completely transformed how my boyfriend and I communicate.\"
+                </p>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mt-1.5">Maya R. · Austin, TX</p>
+              </div>
             </div>
           </div>
         ) : (
-          /* Diagnostic Question Screens */
+          /* Diagnostic Questions */
           <div className="w-full space-y-6 py-6 text-center animate-slideIn">
             <div>
-              <span className="ff-sans text-[12px] font-bold uppercase tracking-[0.2em] text-[#E8B75A]">
+              <span className="ff-sans text-[11.5px] font-bold uppercase tracking-[0.2em] text-[#8A2634] bg-[#8A2634]/10 rounded-full px-3 py-1">
                 Question {step} of 5
               </span>
-              <h2 className="ff-serif mt-3 text-[clamp(1.9rem,4.5vw,2.7rem)] font-semibold leading-[1.1] tracking-tight">
+              <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.5vw,2.7rem)] font-bold leading-[1.1] tracking-tight">
                 {questions[step - 1].q}
               </h2>
             </div>
@@ -389,11 +460,11 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
                 <button
                   key={i}
                   onClick={() => handleSelectOption(i)}
-                  className="w-full text-left px-5 py-4 sm:py-4.5 rounded-2xl border border-[#E8B75A]/15 bg-[#250009]/30 hover:bg-[#E8B75A]/10 hover:border-[#E8B75A]/50 transition-all duration-300 text-[14.5px] sm:text-[15.5px] leading-snug font-medium focus:outline-none focus:ring-2 focus:ring-[#E8B75A]/50 flex justify-between items-center group active:scale-[0.99]"
+                  className="w-full text-left px-5 py-4 sm:py-4.5 rounded-2xl border border-[#250009]/10 bg-white hover:bg-[#F0DBD0]/35 hover:border-[#250009]/30 transition-all duration-300 text-[14.5px] sm:text-[15.5px] leading-snug font-medium focus:outline-none focus:ring-2 focus:ring-[#250009]/30 flex justify-between items-center group active:scale-[0.99] cursor-pointer shadow-sm"
                 >
                   <span>{option}</span>
-                  <span className="h-5 w-5 rounded-full border border-[#E8B75A]/30 flex items-center justify-center shrink-0 ml-4 group-hover:border-[#E8B75A] transition-colors">
-                    <span className="h-2 w-2 rounded-full bg-[#E8B75A] scale-0 group-hover:scale-100 transition-transform duration-300" />
+                  <span className="h-5 w-5 rounded-full border border-[#250009]/15 flex items-center justify-center shrink-0 ml-4 group-hover:border-[#250009]/30 transition-colors">
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#8A2634] scale-0 group-hover:scale-100 transition-transform duration-300" />
                   </span>
                 </button>
               ))}
@@ -403,7 +474,7 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
       </main>
 
       {/* Footer */}
-      <footer className="py-6 px-5 border-t border-[#E8B75A]/10 text-center text-[12px] text-[#FFF7EE]/30">
+      <footer className="py-6 px-5 border-t border-[#250009]/5 text-center text-[12px] text-[#250009]/40">
         <p>© {new Date().getFullYear()} Bonding Biology Institute. All rights reserved.</p>
       </footer>
     </div>
