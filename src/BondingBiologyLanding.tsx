@@ -249,7 +249,7 @@ function Nav({ onJoin }: { onJoin: () => void }) {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[#E8B75A]/20 bg-[#200008]/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-[#E8B75A]/20 bg-[#200008]/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-8">
         <a href="#top" className="block focus:outline-none">
           <img
@@ -281,7 +281,7 @@ function Nav({ onJoin }: { onJoin: () => void }) {
           {/* Mobile hamburger menu toggle */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden flex flex-col justify-center items-center w-8 h-8 focus:outline-none z-50 text-[#FFF7EE] hover:text-[#E8B75A] transition-colors relative"
+            className="md:hidden flex flex-col justify-center items-center w-8 h-8 focus:outline-none z-[60] text-[#FFF7EE] hover:text-[#E8B75A] transition-colors relative"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
           >
             <span className={`w-6 h-[1.5px] bg-current transition-all duration-300 absolute ${menuOpen ? "rotate-45" : "-translate-y-1.5"}`} />
@@ -294,7 +294,7 @@ function Nav({ onJoin }: { onJoin: () => void }) {
       {/* Mobile Drawer Overlay */}
       {menuOpen && (
         <div 
-          className="fixed inset-0 z-40 md:hidden flex flex-col bg-black animate-fadeIn"
+          className="fixed inset-0 z-50 md:hidden flex flex-col bg-black animate-fadeIn"
           onClick={() => setMenuOpen(false)}
         >
           <div 
