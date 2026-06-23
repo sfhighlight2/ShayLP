@@ -22,6 +22,7 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import starIcon from "@/assets/1.png";
 
 const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/597d218e-6d54-401a-8e31-996d527e270d";
@@ -249,54 +250,66 @@ function Nav({ onJoin }: { onJoin: () => void }) {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#E8B75A]/20 bg-[#200008]/85 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-8">
-        <a href="#top" className="block focus:outline-none">
-          <img
-            src="/Mainlogo.png"
-            alt="Bonding Biology Institute Logo"
-            className="h-8 md:h-10 w-auto object-contain"
-          />
-        </a>
-        <nav className="hidden items-center gap-8 md:flex">
-          {links.map(([label, href]) => (
-            <a
-              key={href}
-              href={href}
-              className="nav-link-reveal text-[14px] font-medium text-[#FFF7EE]/70 transition-colors hover:text-[#E8B75A]"
+    <>
+      <header className="sticky top-0 z-50 border-b border-[#E8B75A]/20 bg-[#200008]/85 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-8">
+          <a href="#top" className="block focus:outline-none">
+            <img
+              src="/Mainlogo.png"
+              alt="Bonding Biology Institute Logo"
+              className="h-8 md:h-10 w-auto object-contain"
+            />
+          </a>
+          <nav className="hidden items-center gap-8 md:flex">
+            {links.map(([label, href]) => (
+              <a
+                key={href}
+                href={href}
+                className="nav-link-reveal text-[14px] font-medium text-[#FFF7EE]/70 transition-colors hover:text-[#E8B75A]"
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+          
+          <div className="flex items-center gap-4">
+            <button
+              onClick={onJoin}
+              className="ff-sans inline-flex items-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F6D089_0%,#D99A35_100%)] px-5 py-2.5 text-[14px] font-bold text-[#250009] shadow-[0_10px_30px_rgba(232,183,90,0.25)] transition-transform hover:-translate-y-0.5"
             >
-              {label}
-            </a>
-          ))}
-        </nav>
-        
-        <div className="flex items-center gap-4">
-          <button
-            onClick={onJoin}
-            className="ff-sans inline-flex items-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F6D089_0%,#D99A35_100%)] px-5 py-2.5 text-[14px] font-bold text-[#250009] shadow-[0_10px_30px_rgba(232,183,90,0.25)] transition-transform hover:-translate-y-0.5"
-          >
-            <span>Get Started Free</span>
-          </button>
-
-          {/* Mobile hamburger menu toggle */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden flex flex-col justify-center items-center w-8 h-8 focus:outline-none z-[60] text-[#FFF7EE] hover:text-[#E8B75A] transition-colors relative"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-          >
-            <span className={`w-6 h-[1.5px] bg-current transition-all duration-300 absolute ${menuOpen ? "rotate-45" : "-translate-y-1.5"}`} />
-            <span className={`w-6 h-[1.5px] bg-current transition-all duration-300 absolute ${menuOpen ? "opacity-0" : ""}`} />
-            <span className={`w-6 h-[1.5px] bg-current transition-all duration-300 absolute ${menuOpen ? "-rotate-45" : "translate-y-1.5"}`} />
-          </button>
+              <span>Get Started Free</span>
+            </button>
+  
+            {/* Mobile hamburger menu toggle */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden flex flex-col justify-center items-center w-8 h-8 focus:outline-none z-[60] text-[#FFF7EE] hover:text-[#E8B75A] transition-colors relative"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+            >
+              <span className={`w-6 h-[1.5px] bg-current transition-all duration-300 absolute ${menuOpen ? "rotate-45" : "-translate-y-1.5"}`} />
+              <span className={`w-6 h-[1.5px] bg-current transition-all duration-300 absolute ${menuOpen ? "opacity-0" : ""}`} />
+              <span className={`w-6 h-[1.5px] bg-current transition-all duration-300 absolute ${menuOpen ? "-rotate-45" : "translate-y-1.5"}`} />
+            </button>
+          </div>
         </div>
-      </div>
-
+      </header>
+  
       {/* Mobile Drawer Overlay */}
-      {menuOpen && (
+      {menuOpen && createPortal(
         <div 
           className="fixed inset-0 z-50 md:hidden flex flex-col bg-black animate-fadeIn"
           onClick={() => setMenuOpen(false)}
         >
+          {/* Close button in top-right */}
+          <button 
+            onClick={() => setMenuOpen(false)}
+            className="absolute top-5 right-5 text-[#FFF7EE] hover:text-[#E8B75A] transition-colors p-2 focus:outline-none"
+            aria-label="Close menu"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-7 w-7">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
           <div 
             className="flex-1 flex flex-col items-center justify-center gap-8 px-6 py-20"
             onClick={(e) => e.stopPropagation()}
@@ -322,9 +335,10 @@ function Nav({ onJoin }: { onJoin: () => void }) {
               <ArrowRight className="h-[18px] w-[18px]" />
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
-    </header>
+    </>
   );
 }
 
