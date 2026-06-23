@@ -1158,7 +1158,7 @@ function MobileBar({ onJoin }: { onJoin: () => void }) {
       <div className="flex items-center justify-between gap-4">
         <div className="flex flex-col">
           <span className="ff-sans text-[15px] font-bold text-[#FFF7EE] tracking-tight">
-            $27 Workshop Access
+            Reveal My Love Pattern
           </span>
           <div className="flex items-center gap-1 mt-0.5">
             <Stars className="text-[12px] text-[#E8B75A]" />
