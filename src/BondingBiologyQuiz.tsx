@@ -13,7 +13,7 @@ interface QuizAnswer {
 
 export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () => void }) {
   const [started, setStarted] = useState(false);
-  const [step, setStep] = useState(1); // 1 to 5 for questions, 6 for lead capture
+  const [step, setStep] = useState(1); // 1 to 7 for questions, 8 for lead capture
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -61,6 +61,24 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
       ]
     },
     {
+      q: "How do you usually handle conflict or tension in dating?",
+      options: [
+        "I try to talk it out immediately to make sure we're okay",
+        "I shut down or go cold until the tension blows over",
+        "I quickly apologize or adjust my behavior to keep the peace",
+        "I view it as proof that the relationship won't work and start preparing to leave"
+      ]
+    },
+    {
+      q: "If he takes several hours to reply to a text, you tend to...",
+      options: [
+        "Feel anxious, check my phone constantly, or send a follow-up",
+        "Purposely delay my reply to him when he finally texts back",
+        "Re-read my last message to see if I said something wrong",
+        "Tell myself he's losing interest and mentally write him off"
+      ]
+    },
+    {
       q: "What do you most want to feel in a relationship?",
       options: [
         "Secure, without having to manage it",
@@ -81,10 +99,10 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
     };
     setAnswers(newAnswers);
 
-    if (step < 5) {
+    if (step < 7) {
       setStep(step + 1);
     } else {
-      setStep(6);
+      setStep(8);
     }
   };
 
@@ -97,7 +115,8 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
   };
 
   const calculateArchetype = (selectedAnswers: QuizAnswer[]): Archetype => {
-    const indices = [1, 2, 3]; // Q2, Q3, Q4
+    // We score based on answers to Q2 (index 1), Q3 (index 2), Q4 (index 3), Q5 (index 4), and Q6 (index 5)
+    const indices = [1, 2, 3, 4, 5];
     const counts = [0, 0, 0, 0];
 
     indices.forEach((qIdx) => {
@@ -158,12 +177,14 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
           q3_answer: answers[2]?.answer,
           q4_answer: answers[3]?.answer,
           q5_answer: answers[4]?.answer,
+          q6_answer: answers[5]?.answer,
+          q7_answer: answers[6]?.answer,
         }),
       });
       setStatus("success");
     } catch (err) {
       console.error("Quiz submission error:", err);
-      setStatus("success"); // Gracefully fall forward to show results regardless
+      setStatus("success"); // Fall forward to results page regardless
     }
   };
 
@@ -204,10 +225,10 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
     }
   };
 
-  const progressPercent = started ? Math.round(((step - 1) / 5) * 100) : 0;
+  const progressPercent = started ? Math.round(((step - 1) / 7) * 100) : 0;
 
   return (
-    <div className="ff-sans min-h-screen bg-[linear-gradient(180deg,#FFFDFB_0%,#F9E9E3_100%)] text-[#250009] antialiased flex flex-col justify-between relative selection:bg-[#E8B75A]/45">
+    <div className="ff-sans min-h-screen bg-[#f9e9e3] text-[#250009] antialiased flex flex-col justify-between relative selection:bg-[#E8B75A]/45">
       {/* Header Logo */}
       <header className="border-b border-[#250009]/10 bg-white/70 backdrop-blur-md sticky top-0 z-40 py-3.5 px-5">
         <div className="mx-auto max-w-4xl flex items-center justify-between">
@@ -227,7 +248,7 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
       </header>
 
       {/* Progress Bar (Only during active questions) */}
-      {started && status !== "success" && step <= 5 && (
+      {started && status !== "success" && step <= 7 && (
         <div className="w-full bg-[#250009]/5 h-1.5 overflow-hidden">
           <div
             className="bg-[linear-gradient(90deg,#D8962D_0%,#8A2634_100%)] h-full transition-all duration-300 ease-out"
@@ -241,27 +262,12 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
         {!started ? (
           /* Start Screen */
           <div className="w-full text-center space-y-7 py-6 animate-fadeIn">
-            <span className="ff-sans inline-block text-[11px] font-bold uppercase tracking-[0.25em] text-[#8A2634] bg-[#8A2634]/10 rounded-full px-4 py-1.5">
-              90-Second Diagnostic Quiz
-            </span>
             <h1 className="ff-serif text-[clamp(2.2rem,5.5vw,3.2rem)] font-bold leading-[1.05] tracking-[-0.035em] text-[#250009] max-w-xl mx-auto">
               What’s Blocking You From Lasting Love?
             </h1>
             <p className="text-[16px] leading-[1.6] text-[#250009]/80 max-w-lg mx-auto">
-              Answer 5 biology-based questions to reveal your primary bonding pattern, your biggest relationship blind spot, and the immediate shift to unlock commitment.
+              Answer 7 biology-based questions to reveal your primary bonding pattern, your relationship blind spot, and the immediate shift to unlock commitment.
             </p>
-
-            {/* Social Proof near Start */}
-            <div className="bg-white/60 border border-[#250009]/10 rounded-2xl p-5 shadow-sm max-w-md mx-auto flex items-center gap-4 text-left">
-              <div className="flex -space-x-2 shrink-0">
-                <div className="h-9 w-9 rounded-full bg-[#8A2634] text-white flex items-center justify-center font-bold text-[11.5px] border-2 border-[#FFFDFB]">MR</div>
-                <div className="h-9 w-9 rounded-full bg-[#E8B75A] text-[#250009] flex items-center justify-center font-bold text-[11.5px] border-2 border-[#FFFDFB]">DK</div>
-                <div className="h-9 w-9 rounded-full bg-[#250009] text-white flex items-center justify-center font-bold text-[11.5px] border-2 border-[#FFFDFB]">AL</div>
-              </div>
-              <p className="text-[13px] font-semibold text-[#250009]/75 leading-snug">
-                Join <span className="font-extrabold text-[#8A2634]">2,000+ women</span> who have uncovered their patterns this month.
-              </p>
-            </div>
 
             <div className="pt-2">
               <button
@@ -275,7 +281,7 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
               </button>
             </div>
             <p className="text-[12px] font-bold text-[#250009]/45 uppercase tracking-wider">
-              Takes under 90 seconds · Free diagnostic
+              Takes under 2 minutes · Free diagnostic
             </p>
           </div>
         ) : status === "success" && archetypeResult ? (
@@ -338,7 +344,7 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
               </p>
             </div>
           </div>
-        ) : step === 6 ? (
+        ) : step === 8 ? (
           /* Lead Capture Screen (Before Results) */
           <div className="w-full space-y-6 py-6 animate-fadeIn text-left">
             <div className="text-center">
@@ -432,7 +438,7 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
             </form>
 
             {/* Testimonial / Social Proof near Opt-in Form */}
-            <div className="bg-white/40 border border-[#250009]/5 rounded-2xl p-4.5 flex items-start gap-3.5 mt-2">
+            <div className="bg-white/60 border border-[#250009]/5 rounded-2xl p-4.5 flex items-start gap-3.5 mt-2">
               <div className="h-8 w-8 rounded-full bg-[#8A2634] text-white flex items-center justify-center font-bold text-[10.5px] shrink-0">MR</div>
               <div>
                 <p className="text-[12.5px] text-[#250009]/75 italic">
@@ -447,7 +453,7 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
           <div className="w-full space-y-6 py-6 text-center animate-slideIn">
             <div>
               <span className="ff-sans text-[11.5px] font-bold uppercase tracking-[0.2em] text-[#8A2634] bg-[#8A2634]/10 rounded-full px-3 py-1">
-                Question {step} of 5
+                Question {step} of 7
               </span>
               <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.5vw,2.7rem)] font-bold leading-[1.1] tracking-tight">
                 {questions[step - 1].q}
