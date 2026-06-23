@@ -87,7 +87,7 @@ export default function BondingBiologyResults() {
             <span>Home</span>
           </button>
           <a href="/" onClick={(e) => { e.preventDefault(); handleBackToHome(); }}>
-            <img src="/Mainlogo.png" alt="Logo" className="h-8 w-auto object-contain" />
+            <img src="/Untitleddesign-13.avif" alt="Logo" className="h-8 w-auto object-contain" />
           </a>
         </div>
       </header>

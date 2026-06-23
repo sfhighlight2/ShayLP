@@ -20,7 +20,7 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [consent, setConsent] = useState(false);
+  const [consent, setConsent] = useState(true);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [emailError, setEmailError] = useState("");
   const [archetypeResult, setArchetypeResult] = useState<Archetype | null>(null);
@@ -247,7 +247,7 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
             <span>{started ? "Back" : "Home"}</span>
           </button>
           <a href="#top" onClick={(e) => { e.preventDefault(); onBackToHome(); }}>
-            <img src="/Mainlogo.png" alt="Logo" className="h-8 w-auto object-contain" />
+            <img src="/Untitleddesign-13.avif" alt="Logo" className="h-8 w-auto object-contain" />
           </a>
         </div>
       </header>
@@ -395,9 +395,10 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Mobile Phone Number (Optional)</label>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8A2634] mb-1.5">Mobile Phone Number</label>
                 <input
                   type="tel"
+                  required
                   placeholder="+1 (555) 000-0000"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
