@@ -1523,7 +1523,7 @@ function LeadModal({
 
             <p className="mt-4 flex items-center justify-center gap-2 text-center text-[12.5px] font-medium text-[#6E1622]/80">
               <Shield className="h-4 w-4" />
-              7-day money-back guarantee · No spam, unsubscribe anytime
+              No spam, unsubscribe anytime
             </p>
           </>
         )}
