@@ -24,6 +24,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import starIcon from "@/assets/1.png";
+import { getStoredUtmParams } from "./lib/utils";
 
 const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/597d218e-6d54-401a-8e31-996d527e270d";
 
@@ -934,7 +935,8 @@ function FinalCta() {
             email: formData.email.trim(),
             phone: formData.phone.trim(),
             step: 1,
-            formSource: "final_cta"
+            formSource: "final_cta",
+            ...getStoredUtmParams(),
           }),
         }).catch((err) => console.error("Webhook error:", err));
 
@@ -957,7 +959,8 @@ function FinalCta() {
             city: formData.city.trim(),
             ageRange: formData.ageRange,
             step: 2,
-            formSource: "final_cta"
+            formSource: "final_cta",
+            ...getStoredUtmParams(),
           }),
         });
         trackFacebookEvent('CompleteRegistration', { content_name: 'Workshop Registration Complete' });
@@ -1273,7 +1276,8 @@ function LeadModal({
             email: email.trim(),
             phone: phone.trim(),
             step: 1,
-            formSource: "lead_modal"
+            formSource: "lead_modal",
+            ...getStoredUtmParams(),
           }),
         }).catch((err) => console.error("Webhook error:", err));
 
@@ -1297,7 +1301,8 @@ function LeadModal({
           city: city.trim(),
           ageRange: ageRange,
           step: 2,
-          formSource: "lead_modal"
+          formSource: "lead_modal",
+          ...getStoredUtmParams(),
         }),
       });
 
@@ -1614,7 +1619,8 @@ function ExitIntentModal({
             email: email.trim(),
             phone: phone.trim(),
             step: 1,
-            formSource: "exit_intent_modal"
+            formSource: "exit_intent_modal",
+            ...getStoredUtmParams(),
           }),
         }).catch((err) => console.error("Webhook error:", err));
 
@@ -1638,7 +1644,8 @@ function ExitIntentModal({
           city: city.trim(),
           ageRange: ageRange,
           step: 2,
-          formSource: "exit_intent_modal"
+          formSource: "exit_intent_modal",
+          ...getStoredUtmParams(),
         }),
       });
 

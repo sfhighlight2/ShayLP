@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getStoredUtmParams } from "./lib/utils";
 
 // Webhook endpoint
 const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/597d218e-6d54-401a-8e31-996d527e270d";
@@ -192,6 +193,7 @@ export default function BondingBiologyQuiz({ onBackToHome }: { onBackToHome: () 
           step: 2,
           formSource: "quiz",
           archetype: resolvedArchetype,
+          ...getStoredUtmParams(),
           q1_question: answers[0]?.question,
           q1_answer: answers[0]?.answer,
           q2_question: answers[1]?.question,

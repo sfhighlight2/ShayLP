@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import BondingBiologyLanding from "./BondingBiologyLanding";
+import { captureUtmParams } from "./lib/utils";
 
 function AppRoutes() {
   return (
@@ -13,6 +15,10 @@ function AppRoutes() {
 }
 
 function App() {
+  useEffect(() => {
+    captureUtmParams();
+  }, []);
+
   return (
     <BrowserRouter>
       <AppRoutes />
