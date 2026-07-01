@@ -55,7 +55,6 @@ type LeadData = {
 
 type Props = {
   onSubmit?: (data: LeadData) => Promise<void> | void;
-  onStartQuiz: () => void;
 };
 
 /* ----------------------------- Icons ----------------------------- */
@@ -189,11 +188,11 @@ const Cta = ({
 
 /* ============================ Component =========================== */
 
-export default function BondingBiologyLanding({ onSubmit, onStartQuiz }: Props) {
+export default function BondingBiologyLanding({ onSubmit }: Props) {
   useReveal();
 
   const [open, setOpen] = useState(false);
-  const openModal = useCallback(() => onStartQuiz(), [onStartQuiz]);
+  const openModal = useCallback(() => setOpen(true), []);
   const [exitIntentOpen, setExitIntentOpen] = useState(false);
 
   useEffect(() => {
@@ -233,7 +232,7 @@ export default function BondingBiologyLanding({ onSubmit, onStartQuiz }: Props) 
 
       <MobileBar onJoin={openModal} />
       <LeadModal open={open} onClose={() => setOpen(false)} onSubmit={onSubmit} />
-      <ExitIntentModal open={exitIntentOpen} onClose={() => setExitIntentOpen(false)} onSubmit={onSubmit} onStartQuiz={onStartQuiz} />
+      <ExitIntentModal open={exitIntentOpen} onClose={() => setExitIntentOpen(false)} onSubmit={onSubmit} />
     </div>
   );
 }
@@ -277,7 +276,7 @@ function Nav({ onJoin }: { onJoin: () => void }) {
               onClick={onJoin}
               className="ff-sans inline-flex items-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F6D089_0%,#D99A35_100%)] px-5 py-2.5 text-[14px] font-bold text-[#250009] shadow-[0_10px_30px_rgba(232,183,90,0.25)] transition-transform hover:-translate-y-0.5"
             >
-              <span>Get Started Free</span>
+              <span>Get My Free Love Blueprint</span>
             </button>
   
             {/* Mobile hamburger menu toggle */}
@@ -331,7 +330,7 @@ function Nav({ onJoin }: { onJoin: () => void }) {
               }}
               className="ff-sans mt-4 inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-8 py-4 text-[16px] font-bold text-[#250009] shadow-[0_16px_40px_rgba(232,183,90,0.25)] w-full max-w-xs"
             >
-              <span>Get Started Free</span>
+              <span>Get My Free Love Blueprint</span>
               <ArrowRight className="h-[18px] w-[18px]" />
             </button>
           </div>
@@ -359,7 +358,7 @@ function Hero({ onJoin }: { onJoin: () => void }) {
         {/* Copy */}
         <div className="hero-stagger relative z-10 lg:pl-6">
           <div style={{ "--i": 0 } as React.CSSProperties}>
-            <Eyebrow>5-day live workshop · replays included</Eyebrow>
+            <Eyebrow>Free Love Blueprint · Instant Access</Eyebrow>
           </div>
           <h1
             style={{ "--i": 1 } as React.CSSProperties}
@@ -375,19 +374,19 @@ function Hero({ onJoin }: { onJoin: () => void }) {
             style={{ "--i": 2 } as React.CSSProperties}
             className="mt-7 max-w-xl text-[clamp(1rem,1.4vw,1.18rem)] leading-[1.55] text-[#FFF7EE]/78 [text-wrap:balance]"
           >
-            Take the free Bonding Biology Quiz to discover the hidden relationship pattern influencing who you attract, how connection develops, and why commitment may not be stabilizing. No chasing. No performing. No pretending you want less than you do.
+            Get your free Bonding Biology Love Blueprint to see the exact pattern that turns early attraction into commitment that actually stabilizes, and how to build it yourself. No chasing. No performing. No pretending you want less than you do.
           </p>
           <div
             style={{ "--i": 3 } as React.CSSProperties}
             className="mt-9 flex flex-col items-start gap-4 w-full"
           >
-            <Cta onClick={onJoin} className="w-full sm:w-auto">Get Started Free</Cta>
+            <Cta onClick={onJoin} className="w-full sm:w-auto">Get My Free Love Blueprint</Cta>
           </div>
           <p
             style={{ "--i": 4 } as React.CSSProperties}
             className="mt-5 text-[14px] font-medium text-[#FFF7EE]/65"
           >
-            Free workshop · Replays included · Instant access
+            Free blueprint · Instant download
           </p>
         </div>
       </div>
@@ -513,7 +512,7 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
           area she can’t control.
         </h2>
         <p className="mx-auto mt-5 max-w-xl text-[17px] leading-[1.55] text-[#FFF7EE]/72">
-          If these four feel uncomfortably accurate, this workshop was built for
+          If these four feel uncomfortably accurate, this blueprint was built for
           your nervous system, your standards, and your pace.
         </p>
       </div>
@@ -555,7 +554,7 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
         {/* Centered CTA below grid */}
         <div className="mt-12 flex justify-center">
           <Cta onClick={onJoin} className="w-full sm:w-auto">
-            Get Started Free
+            Get My Free Love Blueprint
           </Cta>
         </div>
       </div>
@@ -580,7 +579,7 @@ function WhatYouWillKnow() {
             You don't have a dating problem. You have a bonding problem.
           </h2>
           <p className="mt-5 text-[16.5px] leading-[1.55] text-[#250009]/75 max-w-xl">
-            The 5-day Bonding Biology workshop helps you see exactly where your pattern is interrupting connection before you invest more effort.
+            The Bonding Biology Love Blueprint helps you see exactly where your pattern is interrupting connection before you invest more effort.
           </p>
 
           <div className="relative mt-8 w-full aspect-video rounded-2xl overflow-hidden border border-[#E8B75A]/25 bg-black shadow-2xl z-10">
@@ -668,7 +667,7 @@ function OfferIntro({ onJoin }: { onJoin: () => void }) {
             Make love feel less like luck — and more like a pattern.
           </h2>
           <p className="mt-6 max-w-xl text-[16.5px] leading-[1.55] text-[#4C1119]/80">
-            Not theory. Not slogans. Not affirmations. A practical five-day reset
+            Not theory. Not slogans. Not affirmations. A practical step-by-step blueprint
             that shows you what creates chemistry, what builds safety, and what
             makes commitment feel natural instead of forced.
           </p>
@@ -678,8 +677,8 @@ function OfferIntro({ onJoin }: { onJoin: () => void }) {
             <div className="flex gap-3">
               <span className="ff-serif text-[24px] font-bold text-[#8A2634]">1.</span>
               <div>
-                <h4 className="font-bold text-[14.5px] text-[#250009]">Join the Workshop</h4>
-                <p className="text-[12.5px] text-[#4C1119]/70 leading-normal mt-0.5">5 days of live, immersive sessions.</p>
+                <h4 className="font-bold text-[14.5px] text-[#250009]">Get the Blueprint</h4>
+                <p className="text-[12.5px] text-[#4C1119]/70 leading-normal mt-0.5">Instant PDF download containing the roadmap.</p>
               </div>
             </div>
             <div className="flex gap-3">
@@ -699,7 +698,7 @@ function OfferIntro({ onJoin }: { onJoin: () => void }) {
           </div>
 
           <Cta onClick={onJoin} variant="dark" className="w-full sm:w-auto mt-9">
-            Get Started Free
+            Get My Free Love Blueprint
           </Cta>
         </div>
 
@@ -748,7 +747,7 @@ function WhyItWorks() {
         </h2>
         <p className="mx-auto mt-5 max-w-xl text-[17px] leading-[1.55] text-[#FFF7EE]/72">
           When chemistry feels safe instead of pressured, the body moves from
-          novelty to attachment. That’s the pathway this workshop teaches you to
+          novelty to attachment. That’s the pathway this blueprint teaches you to
           stop interrupting.
         </p>
       </div>
@@ -789,7 +788,7 @@ function WhyItWorks() {
             women. {/* ⚠ CLAIM */}
           </h3>
           <p className="mt-4 text-[16px] leading-[1.45] text-[#4C1119]">
-            The workshop translates the repeatable patterns behind men
+            The blueprint translates the repeatable patterns behind men
             committing first — without turning love into manipulation or
             performance.
           </p>
@@ -880,7 +879,7 @@ function Testimonials({ onJoin }: { onJoin: () => void }) {
         ))}
       </div>
       <div className="relative z-10 mt-10 flex justify-center px-5 sm:px-0" data-reveal>
-        <Cta onClick={onJoin} variant="dark" className="w-full sm:w-auto">Get Started Free</Cta>
+        <Cta onClick={onJoin} variant="dark" className="w-full sm:w-auto">Get My Free Love Blueprint</Cta>
       </div>
     </section>
   );
@@ -972,7 +971,7 @@ function FinalCta() {
             Love isn’t luck
           </span>
           <h2 className="ff-serif mt-6 text-[clamp(2.1rem,4vw,3.3rem)] font-bold leading-[1.05] tracking-[-0.04em] text-[#250009]">
-            It follows patterns. Learn the one that makes commitment feel safe.
+            It follows patterns. Get the blueprint that makes commitment feel safe.
           </h2>
 
           {status === "success" ? (
@@ -984,9 +983,9 @@ function FinalCta() {
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-bold text-[#250009] text-[17px]">Profile Created Successfully!</h4>
+                  <h4 className="font-bold text-[#250009] text-[17px]">Blueprint Sent!</h4>
                   <p className="mt-1 text-[14.5px] text-[#4C1119]/80 leading-normal">
-                    Check your inbox for your $27 access details and portal link.
+                    Check your inbox for your Free Love Blueprint and access link.
                   </p>
                 </div>
               </div>
@@ -1041,7 +1040,7 @@ function FinalCta() {
                       type="submit"
                       className="ff-sans mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#250009] px-6 py-3.5 text-[15px] font-bold text-[#FFF2EA] transition-all hover:bg-[#380010] hover:-translate-y-0.5"
                     >
-                      Get Started Free
+                      Get My Free Love Blueprint
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[17px] w-[17px]" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                       </svg>
@@ -1095,7 +1094,7 @@ function FinalCta() {
                       disabled={status === "loading"}
                       className="ff-sans mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#250009] px-6 py-3.5 text-[15px] font-bold text-[#FFF2EA] transition-all hover:bg-[#380010] hover:-translate-y-0.5 disabled:opacity-75 disabled:cursor-not-allowed"
                     >
-                      {status === "loading" ? "Processing..." : "Get Started Free"}
+                      {status === "loading" ? "Processing..." : "Get My Free Love Blueprint"}
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[17px] w-[17px]" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                       </svg>
@@ -1117,7 +1116,7 @@ function FinalCta() {
             <span className="flex items-center gap-1.5">
               <Stars className="text-[#D8962D]" /> rated {/* ⚠ CLAIM */}
             </span>
-            <span>Free workshop · Replays included · Instant access</span>
+            <span>Free blueprint · Instant download</span>
           </div>
         </div>
 
@@ -1158,7 +1157,7 @@ function MobileBar({ onJoin }: { onJoin: () => void }) {
       <div className="flex items-center justify-between gap-4">
         <div className="flex flex-col">
           <span className="ff-sans text-[15px] font-bold text-[#FFF7EE] tracking-tight">
-            Reveal My Love Pattern
+            Free Love Blueprint
           </span>
           <div className="flex items-center gap-1 mt-0.5">
             <Stars className="text-[12px] text-[#E8B75A]" />
@@ -1169,7 +1168,7 @@ function MobileBar({ onJoin }: { onJoin: () => void }) {
           onClick={onJoin}
           className="ff-sans btn-shimmer rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-3 text-[14.5px] font-bold text-[#250009] shadow-[0_8px_20px_rgba(232,183,90,0.25)] flex items-center gap-1.5 active:scale-95 transition-transform"
         >
-          <span>Get Started Free</span>
+          <span>Get My Free Love Blueprint</span>
           <ArrowRight className="h-4 w-4" />
         </button>
       </div>
@@ -1341,11 +1340,10 @@ function LeadModal({
               <Check className="h-7 w-7 text-[#F8D896]" />
             </div>
             <h3 id="lead-modal-title" className="ff-serif mt-5 text-[28px] font-bold tracking-[-0.03em]">
-              You’re on the list.
+              Blueprint Sent!
             </h3>
             <p className="mt-3 text-[15.5px] leading-[1.5] text-[#4C1119]">
-              Check your inbox for your access details and the live workshop
-              schedule. (Look in promotions if you don’t see it.)
+              Check your inbox for your Free Love Blueprint download link. (Look in promotions if you don’t see it.)
             </p>
             <button
               onClick={onClose}
@@ -1363,10 +1361,10 @@ function LeadModal({
               id="lead-modal-title"
               className="ff-serif mt-3 text-[clamp(1.7rem,5vw,2rem)] font-bold leading-[1.05] tracking-[-0.04em]"
             >
-              Get started free in the workshop.
+              Get your Free Love Blueprint.
             </h3>
             <p className="mt-2 text-[15px] leading-[1.45] text-[#4C1119]">
-              Enter your details and we’ll send your access link right away.
+              Enter your details and we’ll send your blueprint directly to your inbox.
             </p>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-3.5">
@@ -1424,7 +1422,7 @@ function LeadModal({
                     type="submit"
                     className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.4)] transition-all hover:-translate-y-0.5"
                   >
-                    Get Started Free
+                    Get My Free Love Blueprint
                     <ArrowRight className="h-[17px] w-[17px]" />
                   </button>
                 </>
@@ -1492,11 +1490,11 @@ function LeadModal({
                   >
                     {status === "loading" ? (
                       <>
-                        <Spinner /> Getting started…
+                        <Spinner /> Processing…
                       </>
                     ) : (
                       <>
-                        Get Started Free
+                        Get My Free Love Blueprint
                         <ArrowRight className="h-[17px] w-[17px]" />
                       </>
                     )}
@@ -1527,12 +1525,10 @@ function ExitIntentModal({
   open,
   onClose,
   onSubmit,
-  onStartQuiz,
 }: {
   open: boolean;
   onClose: () => void;
   onSubmit?: (data: LeadData) => Promise<void> | void;
-  onStartQuiz: () => void;
 }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -1684,17 +1680,17 @@ function ExitIntentModal({
               <Check className="h-8 w-8 text-[#E8B75A]" />
             </div>
             <h3 id="exit-modal-title" className="ff-serif mt-6 text-[32px] font-bold tracking-[-0.03em] text-[#E8B75A]">
-              Access Granted.
+              Blueprint Sent!
             </h3>
             <p className="mt-4 text-[16px] leading-[1.6] text-[#FFF7EE]/80 max-w-md mx-auto">
-              We've sent Day 1 of the Bonding Biology Workshop directly to your inbox.
+              We've sent your Free Love Blueprint directly to your inbox.
               Begin changing your relationship patterns today.
             </p>
             <button
               onClick={onClose}
               className="ff-sans mt-8 w-full rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] transition-all hover:-translate-y-0.5 shadow-[0_10px_30px_rgba(232,183,90,0.3)]"
             >
-              Start Learning Free
+              Done
             </button>
           </div>
         ) : (
@@ -1707,10 +1703,10 @@ function ExitIntentModal({
               id="exit-modal-title"
               className="ff-serif mt-4 text-[clamp(1.8rem,5vw,2.4rem)] font-bold leading-[1.1] tracking-[-0.04em] text-[#FFF7EE]"
             >
-              Get Day 1 of the Bonding Biology Workshop <span className="text-[#E8B75A] underline decoration-wavy decoration-[#E8B75A]/40 decoration-1">Free</span>.
+              Get your Free Love Blueprint <span className="text-[#E8B75A] underline decoration-wavy decoration-[#E8B75A]/40 decoration-1">Now</span>.
             </h3>
             <p className="mt-3 text-[15.5px] leading-[1.55] text-[#FFF7EE]/75">
-              Don't leave empty-handed. Experience the first day of our flagship workshop (usually paid) at zero cost. Discover the exact chemistry sequence.
+              Don't leave empty-handed. Download the blueprint to discover the exact chemistry sequence and pattern that makes commitment feel safe.
             </p>
 
             <form onSubmit={handleSubmit} className="mt-7 space-y-4">
@@ -1769,7 +1765,7 @@ function ExitIntentModal({
                     type="submit"
                     className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] shadow-[0_14px_34px_rgba(232,183,90,0.3)] transition-all hover:-translate-y-0.5"
                   >
-                    Get Started Free
+                    Get My Free Love Blueprint
                     <ArrowRight className="h-[17px] w-[17px]" />
                   </button>
                 </>
@@ -1837,11 +1833,11 @@ function ExitIntentModal({
                   >
                     {status === "loading" ? (
                       <>
-                        <Spinner /> Getting started…
+                        <Spinner /> Processing…
                       </>
                     ) : (
                       <>
-                        Get Started Free
+                        Get My Free Love Blueprint
                         <ArrowRight className="h-[17px] w-[17px]" />
                       </>
                     )}
@@ -1856,20 +1852,6 @@ function ExitIntentModal({
                 </>
               )}
             </form>
-
-            <div className="mt-4 border-t border-[#E8B75A]/20 pt-4">
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                  onStartQuiz();
-                }}
-                className="ff-sans flex w-full items-center justify-center gap-2 rounded-2xl border border-[#E8B75A]/45 bg-transparent px-6 py-3.5 text-[15px] font-bold text-[#E8B75A] transition-all hover:bg-[#E8B75A]/10 active:scale-95 cursor-pointer"
-              >
-                Take the 90-Sec Quiz Instead
-                <ArrowRight className="h-[17px] w-[17px]" />
-              </button>
-            </div>
 
             <p className="mt-5 flex items-center justify-center gap-2 text-center text-[12.5px] font-medium text-[#FFF7EE]/60">
               <Shield className="h-4 w-4 text-[#E8B75A]" />
