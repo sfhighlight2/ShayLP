@@ -38,6 +38,15 @@ const formatPhoneNumber = (value: string): string => {
   return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
 };
 
+const triggerBlueprintDownload = () => {
+  const a = document.createElement("a");
+  a.href = "/Lovesuccess.pdf";
+  a.download = "Love-Blueprint.pdf";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+};
+
 const trackFacebookEvent = (eventName: string, params?: any) => {
   if (typeof window !== "undefined" && (window as any).fbq) {
     (window as any).fbq('track', eventName, params);
@@ -952,6 +961,7 @@ function FinalCta() {
           }),
         });
         trackFacebookEvent('CompleteRegistration', { content_name: 'Workshop Registration Complete' });
+        triggerBlueprintDownload();
       } catch (err) {
         console.error("Webhook error:", err);
       }
@@ -1292,6 +1302,7 @@ function LeadModal({
       });
 
       trackFacebookEvent('CompleteRegistration', { content_name: 'Workshop Registration Complete' });
+      triggerBlueprintDownload();
 
       if (onSubmit) {
         await onSubmit({
@@ -1632,6 +1643,7 @@ function ExitIntentModal({
       });
 
       trackFacebookEvent('CompleteRegistration', { content_name: 'Workshop Registration Complete' });
+      triggerBlueprintDownload();
 
       if (onSubmit) {
         await onSubmit({
