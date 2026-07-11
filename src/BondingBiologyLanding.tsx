@@ -23,9 +23,11 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useNavigate } from "react-router-dom";
 import starIcon from "@/assets/1.png";
 import { getStoredUtmParams } from "./lib/utils";
 import { useDeferredLeadCapture } from "./lib/useDeferredLeadCapture";
+import { SUBMITTED_LEAD_STORAGE_KEY, type SubmittedLead } from "./lib/leadCapture";
 
 const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/597d218e-6d54-401a-8e31-996d527e270d";
 
@@ -76,18 +78,6 @@ const ArrowRight = ({ className = "" }: { className?: string }) => (
       d="M5 12h14M13 6l6 6-6 6"
       stroke="currentColor"
       strokeWidth="1.75"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const Check = ({ className = "" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-    <path
-      d="M20 6.5 9.5 17 4 11.5"
-      stroke="currentColor"
-      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -899,6 +889,7 @@ function Testimonials({ onJoin }: { onJoin: () => void }) {
 /* --------------------------- Final CTA ---------------------------- */
 
 function FinalCta() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -908,7 +899,7 @@ function FinalCta() {
     ageRange: "",
   });
   const [step, setStep] = useState(1);
-  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "loading">("idle");
   const [emailError, setEmailError] = useState("");
   const { arm, disarm } = useDeferredLeadCapture();
 
@@ -966,7 +957,17 @@ function FinalCta() {
       } catch (err) {
         console.error("Webhook error:", err);
       }
-      setStatus("success");
+      const lead: SubmittedLead = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+      };
+      try {
+        sessionStorage.setItem(SUBMITTED_LEAD_STORAGE_KEY, JSON.stringify(lead));
+      } catch {
+        // sessionStorage unavailable — offer page will just show its own lead form
+      }
+      navigate("/b/offer?variant=home&source=final_cta");
     }
   };
 
@@ -985,24 +986,7 @@ function FinalCta() {
             It follows patterns. Get the blueprint that makes commitment feel safe.
           </h2>
 
-          {status === "success" ? (
-            <div className="mt-8 w-full max-w-md py-6 text-left border-t border-[#E8B75A]/20">
-              <div className="flex items-center gap-3">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-[#8D2331] text-white">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-5 w-5" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-bold text-[#250009] text-[17px]">Blueprint Sent!</h4>
-                  <p className="mt-1 text-[14.5px] text-[#4C1119]/80 leading-normal">
-                    Check your inbox for your Free Love Blueprint and access link.
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="mt-8 w-full max-w-md text-left">
+          <div className="mt-8 w-full max-w-md text-left">
               <form onSubmit={handleSubmit} className="mt-6 space-y-3.5">
                 {step === 1 ? (
                   <>
@@ -1121,7 +1105,6 @@ function FinalCta() {
                 )}
               </form>
             </div>
-          )}
 
           <div className="mt-8 flex flex-wrap items-center justify-start gap-x-6 gap-y-2 text-[13px] font-bold text-[#8A2634]/80">
             <span className="flex items-center gap-1.5">
@@ -1206,12 +1189,13 @@ function LeadModal({
   const [ageRange, setAgeRange] = useState("");
   const [step, setStep] = useState(1);
   const [emailError, setEmailError] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
+  const [status, setStatus] = useState<"idle" | "loading" | "error">(
     "idle"
   );
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstFieldRef = useRef<HTMLInputElement>(null);
   const { arm, disarm } = useDeferredLeadCapture();
+  const navigate = useNavigate();
 
   // Reset transient state whenever the modal closes.
   useEffect(() => {
@@ -1314,7 +1298,13 @@ function LeadModal({
           ageRange: ageRange,
         });
       }
-      setStatus("success");
+      const lead: SubmittedLead = { name: name.trim(), email: email.trim(), phone: phone.trim() };
+      try {
+        sessionStorage.setItem(SUBMITTED_LEAD_STORAGE_KEY, JSON.stringify(lead));
+      } catch {
+        // sessionStorage unavailable — offer page will just show its own lead form
+      }
+      navigate("/b/offer?variant=home&source=lead_modal");
     } catch {
       setStatus("error");
     }
@@ -1345,26 +1335,7 @@ function LeadModal({
           <Close className="h-5 w-5" />
         </button>
 
-        {status === "success" ? (
-          <div className="py-6 text-center">
-            <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#250009]">
-              <Check className="h-7 w-7 text-[#F8D896]" />
-            </div>
-            <h3 id="lead-modal-title" className="ff-serif mt-5 text-[28px] font-bold tracking-[-0.03em]">
-              Blueprint Sent!
-            </h3>
-            <p className="mt-3 text-[15.5px] leading-[1.5] text-[#4C1119]">
-              Check your inbox for your Free Love Blueprint download link. (Look in promotions if you don’t see it.)
-            </p>
-            <button
-              onClick={onClose}
-              className="ff-sans mt-7 w-full rounded-2xl bg-[#250009] px-6 py-3.5 text-[15px] font-bold text-[#FFF2EA] transition-colors hover:bg-[#380010]"
-            >
-              Done
-            </button>
-          </div>
-        ) : (
-          <>
+        <>
             <span className="ff-sans text-[12px] font-bold uppercase tracking-[0.16em] text-[#8A2634]">
               Instant access
             </span>
@@ -1526,7 +1497,6 @@ function LeadModal({
               No spam, unsubscribe anytime
             </p>
           </>
-        )}
       </div>
     </div>
   );
@@ -1549,12 +1519,13 @@ function ExitIntentModal({
   const [ageRange, setAgeRange] = useState("");
   const [step, setStep] = useState(1);
   const [emailError, setEmailError] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
+  const [status, setStatus] = useState<"idle" | "loading" | "error">(
     "idle"
   );
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstFieldRef = useRef<HTMLInputElement>(null);
   const { arm, disarm } = useDeferredLeadCapture();
+  const navigate = useNavigate();
 
   // Reset transient state whenever the modal closes.
   useEffect(() => {
@@ -1654,7 +1625,13 @@ function ExitIntentModal({
           ageRange: ageRange,
         });
       }
-      setStatus("success");
+      const lead: SubmittedLead = { name: name.trim(), email: email.trim(), phone: phone.trim() };
+      try {
+        sessionStorage.setItem(SUBMITTED_LEAD_STORAGE_KEY, JSON.stringify(lead));
+      } catch {
+        // sessionStorage unavailable — offer page will just show its own lead form
+      }
+      navigate("/b/offer?variant=home&source=exit_intent_modal");
     } catch {
       setStatus("error");
     }
@@ -1685,27 +1662,7 @@ function ExitIntentModal({
           <Close className="h-5 w-5" />
         </button>
 
-        {status === "success" ? (
-          <div className="py-8 text-center">
-            <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#E8B75A]/20 border border-[#E8B75A]">
-              <Check className="h-8 w-8 text-[#E8B75A]" />
-            </div>
-            <h3 id="exit-modal-title" className="ff-serif mt-6 text-[32px] font-bold tracking-[-0.03em] text-[#E8B75A]">
-              Blueprint Sent!
-            </h3>
-            <p className="mt-4 text-[16px] leading-[1.6] text-[#FFF7EE]/80 max-w-md mx-auto">
-              We've sent your Free Love Blueprint directly to your inbox.
-              Begin changing your relationship patterns today.
-            </p>
-            <button
-              onClick={onClose}
-              className="ff-sans mt-8 w-full rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[15px] font-bold text-[#250009] transition-all hover:-translate-y-0.5 shadow-[0_10px_30px_rgba(232,183,90,0.3)]"
-            >
-              Done
-            </button>
-          </div>
-        ) : (
-          <>
+        <>
             <div className="flex items-center gap-2 text-[#E8B75A] font-bold tracking-[0.18em] text-[11px] uppercase">
               <Spark className="h-4 w-4" />
               <span>Wait! Before you go...</span>
@@ -1869,7 +1826,6 @@ function ExitIntentModal({
               No credit card required · Free instant digital access
             </p>
           </>
-        )}
       </div>
     </div>
   );

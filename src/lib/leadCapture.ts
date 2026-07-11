@@ -25,3 +25,11 @@ export const trackFacebookEvent = (eventName: string, params?: Record<string, un
     (window as unknown as { fbq: (...args: unknown[]) => void }).fbq('track', eventName, params);
   }
 };
+
+export const SUBMITTED_LEAD_STORAGE_KEY = "bb_offer_submitted_lead";
+
+export type SubmittedLead = {
+  name: string;
+  email: string;
+  phone: string;
+};

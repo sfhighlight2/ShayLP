@@ -8,6 +8,8 @@ import {
   formatPhoneNumber,
   triggerBlueprintDownload,
   trackFacebookEvent,
+  SUBMITTED_LEAD_STORAGE_KEY,
+  type SubmittedLead,
 } from "./lib/leadCapture";
 import { useDeferredLeadCapture } from "./lib/useDeferredLeadCapture";
 
@@ -17,13 +19,6 @@ const GHL_FORM_EMBED_SCRIPT_SRC = "https://link.msgsndr.com/js/form_embed.js";
 const OFFER_DEADLINE_STORAGE_KEY = "bb_offer_b_deadline";
 const OFFER_DURATION_MS = 15 * 60 * 1000;
 const OFFER_RESET_AFTER_MS = 30 * 60 * 1000;
-const SUBMITTED_LEAD_STORAGE_KEY = "bb_offer_submitted_lead";
-
-type SubmittedLead = {
-  name: string;
-  email: string;
-  phone: string;
-};
 
 function formatRemaining(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000);
@@ -78,11 +73,20 @@ const OFFER_PRICE = 27;
 const SAVINGS = ORIGINAL_PRICE - OFFER_PRICE;
 const SAVINGS_PERCENT = Math.round((SAVINGS / ORIGINAL_PRICE) * 100);
 
-const BENEFITS = [
-  "A private session with a Bonding Biology specialist — not a generic call",
-  "A personalized breakdown of the pattern behind your assessment answers",
-  "A clear, specific next step for your situation, not generic advice",
-];
+type CopyOrigin = "home" | "assessment";
+
+const OFFER_BENEFIT_2: Record<CopyOrigin, string> = {
+  assessment: "A personalized breakdown of the pattern behind your assessment answers",
+  home: "A personalized breakdown of the pattern behind your Love Blueprint",
+};
+
+function getBenefits(origin: CopyOrigin): string[] {
+  return [
+    "A private session with a Bonding Biology specialist — not a generic call",
+    OFFER_BENEFIT_2[origin],
+    "A clear, specific next step for your situation, not generic advice",
+  ];
+}
 
 const CheckIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 shrink-0 text-[#8A2634]" aria-hidden="true">
@@ -115,12 +119,14 @@ function OfferContent({
   phone,
   remaining,
   expired,
+  origin,
 }: {
   firstName?: string;
   email?: string;
   phone?: string;
   remaining: number;
   expired: boolean;
+  origin: CopyOrigin;
 }) {
   const [showCalendar, setShowCalendar] = useState(false);
   const calendarSrc = buildCalendarSrc(firstName ?? "", email ?? "", phone ?? "");
@@ -198,7 +204,7 @@ function OfferContent({
               onClick={handleClaimClick}
               className="ff-sans mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-10 py-5 text-[18px] font-bold text-[#250009] shadow-[0_16px_40px_rgba(232,183,90,0.28)] transition-transform hover:-translate-y-0.5 sm:w-auto"
             >
-              Claim My ${OFFER_PRICE} Assessment
+              Claim My ${OFFER_PRICE} Evaluation
             </button>
           )}
           <p className="mt-3 text-[12px] font-medium text-[#8A2634]/80">
@@ -206,7 +212,7 @@ function OfferContent({
           </p>
 
           <ul className="mx-auto mt-6 max-w-sm space-y-2.5 border-t border-[#8A2634]/15 pt-5 text-left">
-            {BENEFITS.map((benefit) => (
+            {getBenefits(origin).map((benefit) => (
               <li key={benefit} className="flex items-start gap-2.5 text-[14px] leading-snug text-[#4C1119]">
                 <CheckIcon />
                 <span>{benefit}</span>
@@ -534,7 +540,10 @@ function LeadForm({
 
 export default function BondingBiologyOfferB() {
   const [searchParams] = useSearchParams();
-  const variant: "b" | "c" = searchParams.get("variant") === "c" ? "c" : "b";
+  const rawVariant = searchParams.get("variant");
+  const variant: "home" | "b" | "c" =
+    rawVariant === "home" ? "home" : rawVariant === "c" ? "c" : "b";
+  const copyOrigin: CopyOrigin = variant === "home" ? "home" : "assessment";
   const source = searchParams.get("source") ?? "unknown";
   const legacyName = searchParams.get("name")?.trim();
 
@@ -555,7 +564,7 @@ export default function BondingBiologyOfferB() {
     <div className="ff-sans relative min-h-screen bg-[#170006] text-[#FFF7EE] antialiased">
       <header className="sticky top-0 z-50 border-b border-[#E8B75A]/20 bg-[#200008]/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-5 py-3 sm:px-8">
-          <Link to={`/${variant}`} className="block focus:outline-none">
+          <Link to={variant === "home" ? "/" : `/${variant}`} className="block focus:outline-none">
             <img
               src="/Mainlogo.png"
               alt="Bonding Biology Institute Logo"
@@ -573,9 +582,14 @@ export default function BondingBiologyOfferB() {
             phone={submittedLead.phone}
             remaining={remaining}
             expired={expired}
+            origin={copyOrigin}
           />
         ) : (
-          <LeadForm variant={variant} source={source} onSuccess={setSubmittedLead} />
+          <LeadForm
+            variant={variant === "home" ? "b" : variant}
+            source={source}
+            onSuccess={setSubmittedLead}
+          />
         )}
       </main>
 
