@@ -9,6 +9,7 @@ import {
   triggerBlueprintDownload,
   trackFacebookEvent,
 } from "./lib/leadCapture";
+import { useDeferredLeadCapture } from "./lib/useDeferredLeadCapture";
 
 // TODO: replace with the real checkout/booking link before launch.
 const OFFER_CHECKOUT_URL = "https://example.com/REPLACE-ME-checkout-link";
@@ -213,6 +214,7 @@ function LeadForm({
   const [emailError, setEmailError] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const formSource = `${variant}_${source}`;
+  const { arm, disarm } = useDeferredLeadCapture();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -223,18 +225,14 @@ function LeadForm({
       }
       setEmailError("");
       if (name && email && phone) {
-        fetch(GHL_WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: name.trim(),
-            email: email.trim(),
-            phone: phone.trim(),
-            step: 1,
-            formSource,
-            ...getStoredUtmParams(),
-          }),
-        }).catch((err) => console.error("Webhook error:", err));
+        arm({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          step: 1,
+          formSource,
+          ...getStoredUtmParams(),
+        });
 
         trackFacebookEvent('Lead', { content_category: 'Workshop Registration Step 1' });
         setStep(2);
@@ -260,6 +258,7 @@ function LeadForm({
           ...getStoredUtmParams(),
         }),
       });
+      disarm();
       trackFacebookEvent('CompleteRegistration', { content_name: 'Workshop Registration Complete' });
       triggerBlueprintDownload();
       try {

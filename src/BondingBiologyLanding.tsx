@@ -25,6 +25,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import starIcon from "@/assets/1.png";
 import { getStoredUtmParams } from "./lib/utils";
+import { useDeferredLeadCapture } from "./lib/useDeferredLeadCapture";
 
 const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/RaF6Uj0AVUTaXjgiT7zM/webhook-trigger/597d218e-6d54-401a-8e31-996d527e270d";
 
@@ -909,6 +910,7 @@ function FinalCta() {
   const [step, setStep] = useState(1);
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const [emailError, setEmailError] = useState("");
+  const { arm, disarm } = useDeferredLeadCapture();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     let value = e.target.value;
@@ -926,19 +928,14 @@ function FinalCta() {
         return;
       }
       if (formData.name && formData.email && formData.phone) {
-        // Send step 1 data to GHL webhook
-        fetch(GHL_WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: formData.name.trim(),
-            email: formData.email.trim(),
-            phone: formData.phone.trim(),
-            step: 1,
-            formSource: "final_cta",
-            ...getStoredUtmParams(),
-          }),
-        }).catch((err) => console.error("Webhook error:", err));
+        arm({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          step: 1,
+          formSource: "final_cta",
+          ...getStoredUtmParams(),
+        });
 
         trackFacebookEvent('Lead', { content_category: 'Workshop Registration Step 1' });
         setStep(2);
@@ -963,6 +960,7 @@ function FinalCta() {
             ...getStoredUtmParams(),
           }),
         });
+        disarm();
         trackFacebookEvent('CompleteRegistration', { content_name: 'Workshop Registration Complete' });
         triggerBlueprintDownload();
       } catch (err) {
@@ -1213,6 +1211,7 @@ function LeadModal({
   );
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstFieldRef = useRef<HTMLInputElement>(null);
+  const { arm, disarm } = useDeferredLeadCapture();
 
   // Reset transient state whenever the modal closes.
   useEffect(() => {
@@ -1267,19 +1266,14 @@ function LeadModal({
       }
       setEmailError("");
       if (name && email && phone) {
-        // Send step 1 data to GHL webhook
-        fetch(GHL_WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: name.trim(),
-            email: email.trim(),
-            phone: phone.trim(),
-            step: 1,
-            formSource: "lead_modal",
-            ...getStoredUtmParams(),
-          }),
-        }).catch((err) => console.error("Webhook error:", err));
+        arm({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          step: 1,
+          formSource: "lead_modal",
+          ...getStoredUtmParams(),
+        });
 
         trackFacebookEvent('Lead', { content_category: 'Workshop Registration Step 1' });
         setStep(2);
@@ -1305,6 +1299,7 @@ function LeadModal({
           ...getStoredUtmParams(),
         }),
       });
+      disarm();
 
       trackFacebookEvent('CompleteRegistration', { content_name: 'Workshop Registration Complete' });
       triggerBlueprintDownload();
@@ -1559,6 +1554,7 @@ function ExitIntentModal({
   );
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstFieldRef = useRef<HTMLInputElement>(null);
+  const { arm, disarm } = useDeferredLeadCapture();
 
   // Reset transient state whenever the modal closes.
   useEffect(() => {
@@ -1610,19 +1606,14 @@ function ExitIntentModal({
       }
       setEmailError("");
       if (name && email && phone) {
-        // Send step 1 data to GHL webhook
-        fetch(GHL_WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: name.trim(),
-            email: email.trim(),
-            phone: phone.trim(),
-            step: 1,
-            formSource: "exit_intent_modal",
-            ...getStoredUtmParams(),
-          }),
-        }).catch((err) => console.error("Webhook error:", err));
+        arm({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          step: 1,
+          formSource: "exit_intent_modal",
+          ...getStoredUtmParams(),
+        });
 
         trackFacebookEvent('Lead', { content_category: 'Workshop Registration Step 1' });
         setStep(2);
@@ -1648,6 +1639,7 @@ function ExitIntentModal({
           ...getStoredUtmParams(),
         }),
       });
+      disarm();
 
       trackFacebookEvent('CompleteRegistration', { content_name: 'Workshop Registration Complete' });
       triggerBlueprintDownload();
