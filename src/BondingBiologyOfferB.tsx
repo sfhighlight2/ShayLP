@@ -103,6 +103,12 @@ const Spinner = () => (
   </svg>
 );
 
+const CloseIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
+    <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+  </svg>
+);
+
 function OfferContent({
   firstName,
   email,
@@ -370,7 +376,14 @@ function LeadForm({
   };
 
   return (
-    <div className="mx-auto max-w-md rounded-3xl border border-[#E8B75A]/45 bg-[linear-gradient(180deg,rgba(255,242,234,0.97)_0%,rgba(255,229,218,0.92)_100%)] p-8 text-[#250009] sm:p-10">
+    <div className="relative mx-auto max-w-md rounded-3xl border border-[#E8B75A]/45 bg-[linear-gradient(180deg,rgba(255,242,234,0.97)_0%,rgba(255,229,218,0.92)_100%)] p-8 text-[#250009] sm:p-10">
+      <Link
+        to={`/${variant}`}
+        aria-label="Close"
+        className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full text-[#6E1622] transition-colors hover:bg-[#250009]/10"
+      >
+        <CloseIcon />
+      </Link>
       <span className="ff-sans text-[12px] font-bold uppercase tracking-[0.16em] text-[#8A2634]">
         Private assessment
       </span>
