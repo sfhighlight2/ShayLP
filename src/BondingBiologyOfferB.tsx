@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getEvergreenDeadline, getStoredUtmParams } from "./lib/utils";
 import {
@@ -11,12 +11,19 @@ import {
 } from "./lib/leadCapture";
 import { useDeferredLeadCapture } from "./lib/useDeferredLeadCapture";
 
-// TODO: replace with the real checkout/booking link before launch.
-const OFFER_CHECKOUT_URL = "https://example.com/REPLACE-ME-checkout-link";
+const GHL_CALENDAR_EMBED_SRC = "https://api.leadconnectorhq.com/widget/booking/D978x1FD0iWKSoP8Pw66";
+const GHL_FORM_EMBED_SCRIPT_SRC = "https://link.msgsndr.com/js/form_embed.js";
 
 const OFFER_DEADLINE_STORAGE_KEY = "bb_offer_b_deadline";
 const OFFER_DURATION_MS = 15 * 60 * 1000;
-const SUBMITTED_NAME_STORAGE_KEY = "bb_offer_submitted_name";
+const OFFER_RESET_AFTER_MS = 30 * 60 * 1000;
+const SUBMITTED_LEAD_STORAGE_KEY = "bb_offer_submitted_lead";
+
+type SubmittedLead = {
+  name: string;
+  email: string;
+  phone: string;
+};
 
 function formatRemaining(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000);
@@ -25,15 +32,40 @@ function formatRemaining(ms: number): string {
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
+// Prefills the GHL booking widget's name/email/phone fields via query
+// params on its iframe src, so the visitor doesn't have to re-enter data
+// they already gave us in the lead form.
+function buildCalendarSrc(name: string, email: string, phone: string): string {
+  const trimmedName = name.trim();
+  const spaceIndex = trimmedName.indexOf(" ");
+  const firstName = spaceIndex === -1 ? trimmedName : trimmedName.slice(0, spaceIndex);
+  const lastName = spaceIndex === -1 ? "" : trimmedName.slice(spaceIndex + 1);
+
+  const params = new URLSearchParams();
+  if (firstName) params.set("first_name", firstName);
+  if (lastName) params.set("last_name", lastName);
+  if (email) params.set("email", email);
+  if (phone) params.set("phone", phone);
+
+  const query = params.toString();
+  return query ? `${GHL_CALENDAR_EMBED_SRC}?${query}` : GHL_CALENDAR_EMBED_SRC;
+}
+
 function useEvergreenCountdown() {
-  const [deadline] = useState(() =>
-    getEvergreenDeadline(OFFER_DEADLINE_STORAGE_KEY, OFFER_DURATION_MS)
+  const [deadline, setDeadline] = useState(() =>
+    getEvergreenDeadline(OFFER_DEADLINE_STORAGE_KEY, OFFER_DURATION_MS, OFFER_RESET_AFTER_MS)
   );
   const [remaining, setRemaining] = useState(() => Math.max(0, deadline - Date.now()));
 
   useEffect(() => {
     const id = setInterval(() => {
-      setRemaining(Math.max(0, deadline - Date.now()));
+      const nextDeadline = getEvergreenDeadline(
+        OFFER_DEADLINE_STORAGE_KEY,
+        OFFER_DURATION_MS,
+        OFFER_RESET_AFTER_MS
+      );
+      if (nextDeadline !== deadline) setDeadline(nextDeadline);
+      setRemaining(Math.max(0, nextDeadline - Date.now()));
     }, 1000);
     return () => clearInterval(id);
   }, [deadline]);
@@ -73,13 +105,42 @@ const Spinner = () => (
 
 function OfferContent({
   firstName,
+  email,
+  phone,
   remaining,
   expired,
 }: {
   firstName?: string;
+  email?: string;
+  phone?: string;
   remaining: number;
   expired: boolean;
 }) {
+  const [showCalendar, setShowCalendar] = useState(false);
+  const calendarSrc = buildCalendarSrc(firstName ?? "", email ?? "", phone ?? "");
+  const [calendarLoaded, setCalendarLoaded] = useState(false);
+  const calendarRef = useRef<HTMLDivElement>(null);
+
+  // Load the GHL embed script as soon as the offer is visible, before the
+  // visitor has even clicked, so there's no load lag at the moment they do.
+  useEffect(() => {
+    if (document.querySelector(`script[src="${GHL_FORM_EMBED_SCRIPT_SRC}"]`)) return;
+    const script = document.createElement("script");
+    script.src = GHL_FORM_EMBED_SCRIPT_SRC;
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+
+  const handleClaimClick = () => {
+    if (!showCalendar) {
+      setShowCalendar(true);
+      trackFacebookEvent('Schedule', { content_name: 'Love Success Evaluation Booking' });
+    }
+    requestAnimationFrame(() => {
+      calendarRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
+
   return (
     <>
       <div className="mx-auto max-w-2xl rounded-3xl border border-[#E8B75A]/45 bg-[linear-gradient(180deg,rgba(255,242,234,0.97)_0%,rgba(255,229,218,0.92)_100%)] p-5 pb-24 text-center text-[#250009] sm:p-8 sm:pb-8">
@@ -121,14 +182,19 @@ function OfferContent({
             </p>
           </div>
 
-          <a
-            href={OFFER_CHECKOUT_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ff-sans mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-10 py-5 text-[18px] font-bold text-[#250009] shadow-[0_16px_40px_rgba(232,183,90,0.28)] transition-transform hover:-translate-y-0.5 sm:w-auto"
-          >
-            Claim My ${OFFER_PRICE} Evaluation
-          </a>
+          {showCalendar ? (
+            <p className="ff-sans mt-5 flex items-center justify-center gap-1.5 text-[15px] font-bold text-[#15803D]">
+              <CheckIcon /> You're almost booked — pick a time below
+            </p>
+          ) : (
+            <button
+              type="button"
+              onClick={handleClaimClick}
+              className="ff-sans mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-10 py-5 text-[18px] font-bold text-[#250009] shadow-[0_16px_40px_rgba(232,183,90,0.28)] transition-transform hover:-translate-y-0.5 sm:w-auto"
+            >
+              Claim My ${OFFER_PRICE} Evaluation
+            </button>
+          )}
           <p className="mt-3 text-[12px] font-medium text-[#8A2634]/80">
             Private · Confidential · Limited spots each week
           </p>
@@ -141,6 +207,37 @@ function OfferContent({
               </li>
             ))}
           </ul>
+
+          {showCalendar && (
+            <div ref={calendarRef} className="mt-6 border-t border-[#8A2634]/15 pt-5 text-left">
+              <div className="mb-3 flex items-center justify-center gap-2 text-[12px] font-bold uppercase tracking-[0.1em] text-[#8A2634]">
+                <span>{expired ? "Offer reserved for" : "Offer expires in"}</span>
+                <span className="tabular-nums">{formatRemaining(remaining)}</span>
+              </div>
+              <p className="mb-3 text-center text-[13px] font-medium text-[#4C1119]/75">
+                Pick any time that works — takes about 2 minutes.
+              </p>
+              <div className="relative w-full rounded-xl bg-white/40">
+                {!calendarLoaded && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 overflow-hidden rounded-xl text-[#8A2634]">
+                    <Spinner />
+                    <span className="text-[13px] font-semibold">Loading your calendar…</span>
+                  </div>
+                )}
+                {/* Fixed height + internal scroll instead of relying solely on GHL's
+                    auto-resize postMessage script, so the widget is never visually
+                    clipped even if that resize doesn't fire. */}
+                <iframe
+                  src={calendarSrc}
+                  style={{ width: "100%", height: "850px", border: "none", overflow: "auto" }}
+                  id="D978x1FD0iWKSoP8Pw66_1783798733879"
+                  title="Book your Love Success Evaluation"
+                  className="w-full rounded-xl"
+                  onLoad={() => setCalendarLoaded(true)}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Credibility strip */}
@@ -181,14 +278,13 @@ function OfferContent({
             </span>
             <span className="ff-sans text-[15px] font-bold text-[#FFF7EE]">${OFFER_PRICE} Evaluation</span>
           </div>
-          <a
-            href={OFFER_CHECKOUT_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={handleClaimClick}
             className="ff-sans shrink-0 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-5 py-3 text-[14px] font-bold text-[#250009] shadow-[0_8px_20px_rgba(232,183,90,0.25)]"
           >
-            Claim Now
-          </a>
+            {showCalendar ? "View Calendar ↓" : "Claim Now"}
+          </button>
         </div>
       </div>
     </>
@@ -202,7 +298,7 @@ function LeadForm({
 }: {
   variant: "b" | "c";
   source: string;
-  onSuccess: (name: string) => void;
+  onSuccess: (lead: SubmittedLead) => void;
 }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -261,12 +357,13 @@ function LeadForm({
       disarm();
       trackFacebookEvent('CompleteRegistration', { content_name: 'Workshop Registration Complete' });
       triggerBlueprintDownload();
+      const lead: SubmittedLead = { name: name.trim(), email: email.trim(), phone: phone.trim() };
       try {
-        sessionStorage.setItem(SUBMITTED_NAME_STORAGE_KEY, name.trim());
+        sessionStorage.setItem(SUBMITTED_LEAD_STORAGE_KEY, JSON.stringify(lead));
       } catch {
         // sessionStorage unavailable — in-page reveal still works for this view
       }
-      onSuccess(name.trim());
+      onSuccess(lead);
     } catch {
       setStatus("error");
     }
@@ -428,10 +525,11 @@ export default function BondingBiologyOfferB() {
   const source = searchParams.get("source") ?? "unknown";
   const legacyName = searchParams.get("name")?.trim();
 
-  const [submittedName, setSubmittedName] = useState<string | null>(() => {
-    if (legacyName) return legacyName;
+  const [submittedLead, setSubmittedLead] = useState<SubmittedLead | null>(() => {
+    if (legacyName) return { name: legacyName, email: "", phone: "" };
     try {
-      return sessionStorage.getItem(SUBMITTED_NAME_STORAGE_KEY);
+      const raw = sessionStorage.getItem(SUBMITTED_LEAD_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
     } catch {
       return null;
     }
@@ -454,11 +552,17 @@ export default function BondingBiologyOfferB() {
         </div>
       </header>
 
-      <main className={submittedName ? "px-5 py-6 sm:px-8 sm:py-10" : "px-5 py-16 sm:px-8 sm:py-24"}>
-        {submittedName ? (
-          <OfferContent firstName={submittedName} remaining={remaining} expired={expired} />
+      <main className={submittedLead ? "px-5 py-6 sm:px-8 sm:py-10" : "px-5 py-16 sm:px-8 sm:py-24"}>
+        {submittedLead ? (
+          <OfferContent
+            firstName={submittedLead.name}
+            email={submittedLead.email}
+            phone={submittedLead.phone}
+            remaining={remaining}
+            expired={expired}
+          />
         ) : (
-          <LeadForm variant={variant} source={source} onSuccess={setSubmittedName} />
+          <LeadForm variant={variant} source={source} onSuccess={setSubmittedLead} />
         )}
       </main>
 

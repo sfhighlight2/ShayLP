@@ -170,8 +170,6 @@ export default function BondingBiologyLandingC() {
       <Testimonials onJoin={() => goToApply("testimonials")} />
       <FinalCta onJoin={() => goToApply("final_cta")} />
       <Footer />
-
-      <MobileBar onJoin={() => goToApply("mobile_bar")} />
     </div>
   );
 }
@@ -215,7 +213,7 @@ function Nav({ onJoinDesktop, onJoinMobile }: { onJoinDesktop: () => void; onJoi
               onClick={onJoinDesktop}
               className="ff-sans inline-flex items-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F6D089_0%,#D99A35_100%)] px-5 py-2.5 text-[14px] font-bold text-[#250009] shadow-[0_10px_30px_rgba(232,183,90,0.25)] transition-transform hover:-translate-y-0.5"
             >
-              <span>Start My Love Success Evaluation</span>
+              <span>Love Evaluation</span>
             </button>
 
             {/* Mobile hamburger menu toggle */}
@@ -915,33 +913,6 @@ function Footer() {
         reserved.
       </p>
     </footer>
-  );
-}
-
-/* --------------------------- Mobile bar --------------------------- */
-
-function MobileBar({ onJoin }: { onJoin: () => void }) {
-  return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#E8B75A]/45 bg-[#170006]/95 backdrop-blur-xl md:hidden px-4 py-3.5 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex flex-col">
-          <span className="ff-sans text-[15px] font-bold text-[#FFF7EE] tracking-tight">
-            Love Success Evaluation
-          </span>
-          <div className="flex items-center gap-1 mt-0.5">
-            <Stars className="text-[12px] text-[#E8B75A]" />
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#E8B75A]/80">8k+ Coached</span>
-          </div>
-        </div>
-        <button
-          onClick={onJoin}
-          className="ff-sans btn-shimmer rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-3 text-[14.5px] font-bold text-[#250009] shadow-[0_8px_20px_rgba(232,183,90,0.25)] flex items-center gap-1.5 active:scale-95 transition-transform"
-        >
-          <span>Start My Love Success Evaluation</span>
-          <ArrowRight className="h-4 w-4" />
-        </button>
-      </div>
-    </div>
   );
 }
 

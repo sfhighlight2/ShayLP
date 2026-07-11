@@ -48,14 +48,24 @@ export function getStoredUtmParams(): Record<string, string> {
 // Returns a deadline timestamp (ms) that's fixed the first time a given
 // visitor hits this storageKey and reused on every subsequent read, so an
 // "evergreen" countdown ticks toward the same deadline across refreshes
-// instead of resetting.
-export function getEvergreenDeadline(storageKey: string, durationMs: number): number {
+// instead of resetting. If resetAfterMs is given, a deadline older than
+// that (measured from when it was originally started) is treated as
+// stale and a fresh one is generated in its place.
+export function getEvergreenDeadline(
+  storageKey: string,
+  durationMs: number,
+  resetAfterMs?: number
+): number {
   if (typeof window === "undefined") return Date.now() + durationMs;
   try {
     const raw = localStorage.getItem(storageKey);
     if (raw) {
       const stored = Number(raw);
-      if (!Number.isNaN(stored)) return stored;
+      if (!Number.isNaN(stored)) {
+        const startedAt = stored - durationMs;
+        const isStale = resetAfterMs !== undefined && Date.now() - startedAt >= resetAfterMs;
+        if (!isStale) return stored;
+      }
     }
     const deadline = Date.now() + durationMs;
     localStorage.setItem(storageKey, String(deadline));
