@@ -198,7 +198,7 @@ function OfferContent({
               onClick={handleClaimClick}
               className="ff-sans mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-10 py-5 text-[18px] font-bold text-[#250009] shadow-[0_16px_40px_rgba(232,183,90,0.28)] transition-transform hover:-translate-y-0.5 sm:w-auto"
             >
-              Claim My ${OFFER_PRICE} Evaluation
+              Claim My ${OFFER_PRICE} Assessment
             </button>
           )}
           <p className="mt-3 text-[12px] font-medium text-[#8A2634]/80">
@@ -507,7 +507,7 @@ function LeadForm({
                 </>
               ) : (
                 <>
-                  Start My Love Success Evaluation
+                  Start My Love Success Assessment
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[17px] w-[17px]" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                   </svg>

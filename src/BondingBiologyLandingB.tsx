@@ -194,7 +194,7 @@ function Nav({ onJoinDesktop, onJoinMobile }: { onJoinDesktop: () => void; onJoi
               onClick={onJoinDesktop}
               className="ff-sans inline-flex items-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#F6D089_0%,#D99A35_100%)] px-5 py-2.5 text-[14px] font-bold text-[#250009] shadow-[0_10px_30px_rgba(232,183,90,0.25)] transition-transform hover:-translate-y-0.5"
             >
-              <span>Love Evaluation</span>
+              <span>Love Assessment</span>
             </button>
 
             {/* Mobile hamburger menu toggle */}
@@ -248,7 +248,7 @@ function Nav({ onJoinDesktop, onJoinMobile }: { onJoinDesktop: () => void; onJoi
               }}
               className="ff-sans mt-4 inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-8 py-4 text-[16px] font-bold text-[#250009] shadow-[0_16px_40px_rgba(232,183,90,0.25)] w-full max-w-xs"
             >
-              <span>Start My Love Success Evaluation</span>
+              <span>Start My Love Success Assessment</span>
               <ArrowRight className="h-[18px] w-[18px]" />
             </button>
           </div>
@@ -294,7 +294,7 @@ function Hero({ onJoin }: { onJoin: () => void }) {
             style={{ "--i": 3 } as React.CSSProperties}
             className="mt-9 flex flex-col items-start gap-4 w-full"
           >
-            <Cta onClick={onJoin} className="w-full sm:w-auto">Start My Love Success Evaluation</Cta>
+            <Cta onClick={onJoin} className="w-full sm:w-auto">Start My Love Success Assessment</Cta>
           </div>
           <p
             style={{ "--i": 4 } as React.CSSProperties}
@@ -469,7 +469,7 @@ function WhoFor({ onJoin }: { onJoin: () => void }) {
         {/* Centered CTA below grid */}
         <div className="mt-12 flex justify-center">
           <Cta onClick={onJoin} className="w-full sm:w-auto">
-            Start My Love Success Evaluation
+            Start My Love Success Assessment
           </Cta>
         </div>
       </div>
@@ -613,7 +613,7 @@ function OfferIntro({ onJoin }: { onJoin: () => void }) {
           </div>
 
           <Cta onClick={onJoin} variant="dark" className="w-full sm:w-auto mt-9">
-            Start My Love Success Evaluation
+            Start My Love Success Assessment
           </Cta>
         </div>
 
@@ -794,7 +794,7 @@ function Testimonials({ onJoin }: { onJoin: () => void }) {
         ))}
       </div>
       <div className="relative z-10 mt-10 flex justify-center px-5 sm:px-0" data-reveal>
-        <Cta onClick={onJoin} variant="dark" className="w-full sm:w-auto">Start My Love Success Evaluation</Cta>
+        <Cta onClick={onJoin} variant="dark" className="w-full sm:w-auto">Start My Love Success Assessment</Cta>
       </div>
     </section>
   );
@@ -820,7 +820,7 @@ function FinalCta({ onJoin }: { onJoin: () => void }) {
 
           <div className="mt-8 w-full max-w-md">
             <Cta onClick={onJoin} variant="dark" className="w-full">
-              Start My Love Success Evaluation
+              Start My Love Success Assessment
             </Cta>
           </div>
 
