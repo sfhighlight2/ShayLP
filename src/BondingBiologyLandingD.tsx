@@ -20,8 +20,14 @@
  *
  * The 4 testimonial quotes paired with real couple photos in the
  * Testimonials section were written by request as illustrative launch
- * copy, not sourced from verified clients — swap in real, verified quotes
+ * copy, not sourced from verified clients. Swap in real, verified quotes
  * (with consent from the people pictured) before running paid traffic.
+ *
+ * The per-item dollar values in the value-stack offer section (OfferStack)
+ * are illustrative figures chosen to sum to the summit's established $497
+ * total value, not confirmed standalone sale prices for each asset.
+ * Confirm with Shay before launch if that distinction matters for claims
+ * made in ads or on the page.
  * ------------------------------------------------------------------
  */
 
@@ -118,7 +124,7 @@ const Cta = ({
   className?: string;
 }) => {
   const base =
-    "ff-sans btn-shimmer group inline-flex items-center justify-center gap-2.5 rounded-none px-10 py-4 text-[15px] font-bold transition-all duration-300 will-change-transform";
+    "ff-sans btn-shimmer group inline-flex min-h-[52px] items-center justify-center gap-2.5 rounded-none px-10 py-4 text-[17px] font-bold transition-all duration-300 will-change-transform";
   const styles =
     variant === "gold"
       ? "bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] text-[#250009] shadow-[0_16px_40px_rgba(232,183,90,0.28)] hover:shadow-[0_22px_55px_rgba(232,183,90,0.42)] hover:-translate-y-0.5"
@@ -149,9 +155,9 @@ function Nav() {
         <a
           href={SUMMIT_CHECKOUT_URL}
           onClick={handleCtaClick}
-          className="ff-sans inline-flex items-center gap-2 rounded-none bg-[linear-gradient(135deg,#F6D089_0%,#D99A35_100%)] px-5 py-2.5 text-[13px] sm:text-[14px] font-bold text-[#250009] shadow-[0_10px_30px_rgba(232,183,90,0.25)] transition-transform hover:-translate-y-0.5"
+          className="ff-sans inline-flex min-h-[44px] items-center gap-2 rounded-none bg-[linear-gradient(135deg,#F6D089_0%,#D99A35_100%)] px-5 py-2.5 text-[15px] sm:text-[16px] font-bold text-[#250009] shadow-[0_10px_30px_rgba(232,183,90,0.25)] transition-transform hover:-translate-y-0.5"
         >
-          <span>Reserve My Spot</span>
+          <span>Get Instant Access</span>
         </a>
       </div>
     </header>
@@ -163,46 +169,52 @@ function Nav() {
 function Hero() {
   return (
     <section id="top" className="relative isolate overflow-hidden bg-[#170006] bg-[url('/hero-bg.png')] bg-cover bg-[position:left_25%] bg-no-repeat px-5 pb-14 pt-14 sm:px-8 sm:pb-16 sm:pt-16">
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,0,6,0.5)_0%,rgba(23,0,6,0.62)_60%,rgba(23,0,6,0.72)_100%)] z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,0,6,0.82)_0%,rgba(23,0,6,0.9)_60%,rgba(23,0,6,0.95)_100%)] sm:bg-[linear-gradient(180deg,rgba(23,0,6,0.5)_0%,rgba(23,0,6,0.62)_60%,rgba(23,0,6,0.72)_100%)] z-0 pointer-events-none" />
       <Glow className="h-[380px] w-[380px] -top-32 -right-32 z-0" />
       <div className="hero-stagger relative z-10 mx-auto max-w-3xl text-center">
         <div style={{ "--i": 0 } as React.CSSProperties}>
-          <Eyebrow>The Bonding Biology Summit</Eyebrow>
+          <Eyebrow>The 3-Day Bonding Biology Summit</Eyebrow>
         </div>
         <h1
           style={{ "--i": 1 } as React.CSSProperties}
-          className="ff-serif mt-6 text-[clamp(2.2rem,5.4vw,4rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-[#FFF7EE] [text-wrap:balance]"
+          className="ff-serif mt-6 text-[clamp(2.2rem,5.4vw,4rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-white [text-wrap:balance]"
         >
           You Have Built a Successful Life. Now It Is Time to Build the Love That Belongs in It.
         </h1>
         <p
           style={{ "--i": 2 } as React.CSSProperties}
-          className="mx-auto mt-6 max-w-2xl text-[clamp(1rem,1.4vw,1.18rem)] leading-[1.6] text-[#FFF7EE]/78 [text-wrap:balance]"
+          className="mx-auto mt-6 max-w-2xl text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6] text-[#FFF7EE]/95 [text-wrap:balance]"
         >
-          A transformational 3-day experience for accomplished women who are ready to understand why relationships keep stalling, break the patterns that interfere with commitment, and create the conditions for secure, lasting love.
+          Discover the hidden relationship patterns that may be interrupting attraction, emotional safety, attachment, and commitment.
+        </p>
+        <p
+          style={{ "--i": 2 } as React.CSSProperties}
+          className="mx-auto mt-3 max-w-2xl text-[15px] leading-[1.55] text-[#FFF7EE]/80 [text-wrap:balance]"
+        >
+          For accomplished, self-aware women ready to stop repeating emotionally exhausting relationship patterns and start creating love that feels mutual, secure, and lasting.
         </p>
         <div
           style={{ "--i": 3 } as React.CSSProperties}
           className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2"
         >
-          <span className="ff-sans text-[13px] font-bold uppercase tracking-[0.16em] text-[#FFF7EE]/45 line-through decoration-2">
+          <span className="ff-sans text-[14px] font-bold uppercase tracking-[0.16em] text-[#FFF7EE]/45 line-through decoration-2">
             Normally ${SUMMIT_VALUE}
           </span>
-          <span className="ff-sans text-[13px] font-bold uppercase tracking-[0.16em] text-[#E8B75A]">
+          <span className="ff-sans text-[14px] font-bold uppercase tracking-[0.16em] text-[#E8B75A]">
             Today Only ${SUMMIT_PRICE}
           </span>
-          <span className="ff-sans inline-flex items-center rounded-none bg-[#DC2626] px-3 py-1 text-[13px] font-black uppercase tracking-[0.08em] text-white shadow-[0_6px_18px_rgba(220,38,38,0.4)]">
+          <span className="ff-sans inline-flex items-center rounded-none bg-[#DC2626] px-3 py-1 text-[14px] font-black uppercase tracking-[0.08em] text-white shadow-[0_6px_18px_rgba(220,38,38,0.4)]">
             Save ${SAVINGS}
           </span>
         </div>
         <div style={{ "--i": 4 } as React.CSSProperties} className="mt-5 flex flex-col items-center gap-4">
-          <Cta className="w-full sm:w-auto">Reserve My Spot for ${SUMMIT_PRICE}</Cta>
+          <Cta className="w-full sm:w-auto">Get the Complete Summit for ${SUMMIT_PRICE}</Cta>
         </div>
-        <p style={{ "--i": 5 } as React.CSSProperties} className="mt-4 text-[13.5px] font-bold uppercase tracking-[0.12em] text-[#E8B75A]/90">
-          Limited-time launch price — the $97 rate won't last
+        <p style={{ "--i": 5 } as React.CSSProperties} className="mt-4 text-[14px] font-bold uppercase tracking-[0.12em] text-[#E8B75A]/90">
+          Limited-time launch price, the $97 rate won't last
         </p>
-        <p style={{ "--i": 5 } as React.CSSProperties} className="mt-2 text-[13.5px] font-medium text-[#FFF7EE]/60">
-          100% virtual — enroll and get instant access, watch anytime.
+        <p style={{ "--i": 5 } as React.CSSProperties} className="mt-2 text-[14px] font-medium text-[#FFF7EE]/60">
+          One-time payment. Includes three complete sessions, practical exercises, and two bonuses. 100% virtual, watch anytime.
         </p>
 
         <div
@@ -211,17 +223,17 @@ function Hero() {
         >
           <div className="flex flex-col items-center">
             <span className="ff-serif text-[22px] font-bold text-[#E8B75A] leading-none">8,000+</span>
-            <span className="mt-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#FFF7EE]/55">Women Coached</span>
+            <span className="mt-1 text-[11.5px] font-bold uppercase tracking-[0.14em] text-[#FFF7EE]/55">Women Coached</span>
           </div>
           <div className="h-6 w-[1px] bg-[#E8B75A]/20" />
           <div className="flex flex-col items-center">
             <span className="ff-serif text-[22px] font-bold text-[#E8B75A] leading-none">★★★★★</span>
-            <span className="mt-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#FFF7EE]/55">Top Rated</span>
+            <span className="mt-1 text-[11.5px] font-bold uppercase tracking-[0.14em] text-[#FFF7EE]/55">Top Rated</span>
           </div>
           <div className="h-6 w-[1px] bg-[#E8B75A]/20" />
           <div className="flex flex-col items-center">
             <span className="ff-serif text-[22px] font-bold text-[#E8B75A] leading-none">3 Days</span>
-            <span className="mt-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#FFF7EE]/55">Watch Anytime</span>
+            <span className="mt-1 text-[11.5px] font-bold uppercase tracking-[0.14em] text-[#FFF7EE]/55">Watch Anytime</span>
           </div>
         </div>
       </div>
@@ -235,6 +247,7 @@ function EmpathyReframe() {
   return (
     <section className="relative overflow-hidden px-5 py-16 sm:px-8 sm:py-20 bg-[#170006]">
       <SectionBg src="/offfer-banner-original.avif" opacity={0.1} />
+      <div className="absolute inset-0 bg-black/20 pointer-events-none" aria-hidden="true" />
       <div className="relative z-10 mx-auto max-w-3xl text-center" data-reveal>
         <Eyebrow>An honest look</Eyebrow>
         <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.3vw,3rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#FFF7EE] [text-wrap:balance]">
@@ -242,29 +255,49 @@ function EmpathyReframe() {
         </h2>
       </div>
 
-      <div className="relative z-10 mx-auto mt-8 max-w-2xl space-y-4 text-[16px] leading-[1.65] text-[#FFF7EE]/75" data-reveal>
-        <p>
-          You have built a life you are proud of. You have worked on yourself, raised your standards, and learned from past relationships. You promised yourself you would never ignore the warning signs again.
+      <div className="relative z-10 mx-auto mt-8 max-w-[680px]" data-reveal>
+        <p className="text-[17px] leading-[1.6] text-[#FFF7EE]/80">
+          You have built a life you are proud of. You have worked on yourself, raised your standards, and learned from past relationships. You promised yourself you would never ignore the warning signs again. Yet love still feels harder than it should.
         </p>
-        <p className="ff-serif text-[20px] font-medium text-[#F1C97A]">Yet love still feels harder than it should.</p>
-        <p>
-          The connection begins with chemistry, attention, and possibility. Then something changes — he becomes inconsistent, the relationship stops progressing, and you find yourself doing more, explaining more, or waiting for him to become certain.
+        <ul className="mt-5 space-y-3">
+          {[
+            "A connection begins with chemistry, attention, and possibility.",
+            "Then something changes: he becomes inconsistent, and the relationship stops progressing.",
+            "You find yourself doing more, explaining more, and waiting for him to become certain.",
+          ].map((line) => (
+            <li key={line} className="flex items-start gap-3 text-[17px] leading-[1.55] text-[#FFF7EE]/80">
+              <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#E8B75A]" />
+              <span>{line}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="ff-serif mt-6 text-[22px] italic font-medium text-[#FFF7EE]">
+          "Why does this keep happening when I have done so much work on myself?"
         </p>
-        <p className="ff-serif text-[21px] italic font-medium text-[#FFF7EE]">
-          “Why does this keep happening when I have done so much work on myself?”
-        </p>
-        <p>
+        <p className="mt-5 text-[17px] leading-[1.6] text-[#FFF7EE]/80">
           The answer may not be that you are choosing wrong every time. It may be that there are emotional, subconscious, and relational patterns operating beneath the surface that interrupt bonding before secure commitment has a chance to develop.
         </p>
       </div>
 
-      <div className="relative z-10 mx-auto mt-10 max-w-2xl rounded-lg border border-[#E8B75A]/25 bg-white/[0.04] p-7 sm:p-9" data-reveal>
+      <div className="relative z-10 mx-auto mt-10 max-w-[880px] rounded-lg border border-[#E8B75A]/25 bg-white/[0.04] p-6 sm:p-8" data-reveal>
         <Eyebrow className="text-[#E8B75A]">A different approach</Eyebrow>
         <h3 className="ff-serif mt-3 text-[clamp(1.5rem,3.2vw,2rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#FFF7EE] [text-wrap:balance]">
           Love Is Not Something You Should Have to Chase, Perform for, or Earn
         </h3>
-        <p className="mt-4 text-[15px] leading-[1.6] text-[#FFF7EE]/70">
-          Most dating advice focuses on what to say, how long to wait, or how to appear more desirable. But scripts cannot create emotional safety, and pretending to need less will never produce the connection you actually want. The Bonding Biology Summit gives you a different way to understand love — how attraction, emotional safety, subconscious conditioning, and relationship dynamics work together to support bonding or quietly interfere with it.
+        <ul className="mt-5 space-y-3">
+          {[
+            "Scripts cannot create emotional safety.",
+            "Games cannot create healthy attachment.",
+            "Pretending to need less cannot create the relationship you actually want.",
+          ].map((line) => (
+            <li key={line} className="ff-serif flex items-start gap-3 text-[19px] font-medium leading-[1.4] text-[#F1C97A]">
+              <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#E8B75A]" />
+              <span>{line}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-5 text-[17px] leading-[1.6] text-[#FFF7EE]/75">
+          The Bonding Biology Summit gives you a different way to understand love: how attraction, emotional safety, subconscious conditioning, and relationship dynamics work together to support bonding, or quietly interfere with it.
         </p>
         <p className="ff-serif mt-4 text-[17px] text-[#E8B75A]">
           This is not about controlling a man. It is about understanding yourself.
@@ -274,6 +307,47 @@ function EmpathyReframe() {
       <div className="relative z-10 mt-9 flex justify-center" data-reveal>
         <Cta className="w-full sm:w-auto">Show Me What Has Been Blocking Love</Cta>
       </div>
+    </section>
+  );
+}
+
+/* --------------------------- Unique mechanism --------------------------- */
+
+const MECHANISM_STAGES = [
+  { label: "Attraction", body: "Interest and chemistry begin the connection." },
+  { label: "Emotional Safety", body: "Consistency and trust allow openness." },
+  { label: "Attachment", body: "Mutual emotional investment develops." },
+  { label: "Commitment", body: "The relationship gains direction and stability." },
+];
+
+function Mechanism() {
+  return (
+    <section className="px-5 py-16 sm:px-8 sm:py-20 bg-[linear-gradient(180deg,#FFFDFB_0%,#F9E9E3_100%)] border-y border-[#E8B75A]/15">
+      <div className="mx-auto max-w-3xl text-center" data-reveal>
+        <Eyebrow className="text-[#8A2634]">How bonding actually works</Eyebrow>
+        <h2 className="ff-serif mt-5 text-[clamp(1.7rem,3.8vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#250009] [text-wrap:balance]">
+          Four Stages of Real Connection
+        </h2>
+      </div>
+
+      <div className="mx-auto mt-10 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-4" data-reveal>
+        {MECHANISM_STAGES.map((stage, i) => (
+          <div key={stage.label} className="relative flex flex-col items-center text-center">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-[#8A2634] bg-white text-[18px] font-black text-[#8A2634]">
+              {i + 1}
+            </div>
+            <h3 className="ff-serif mt-4 text-[18px] font-bold text-[#250009]">{stage.label}</h3>
+            <p className="mt-2 text-[15px] leading-[1.5] text-[#4C1119]/80">{stage.body}</p>
+            {i < MECHANISM_STAGES.length - 1 && (
+              <ArrowRight className="mt-4 hidden h-5 w-5 text-[#8A2634]/40 sm:block lg:absolute lg:right-[-26px] lg:top-3 lg:mt-0" />
+            )}
+          </div>
+        ))}
+      </div>
+
+      <p className="mx-auto mt-10 max-w-2xl text-center text-[16px] leading-[1.6] text-[#4C1119]/75" data-reveal>
+        Hidden emotional and relationship patterns can interrupt this progression at any stage, which is why the same dynamic can repeat across different relationships until the pattern itself is understood.
+      </p>
     </section>
   );
 }
@@ -301,18 +375,18 @@ function Intro() {
         <p className="ff-serif mt-3 text-[18px] italic text-[#F1C97A]">
           A 3-Day Relationship Transformation Experience With Shay, Your Love Diva
         </p>
-        <p className="mx-auto mt-5 max-w-2xl text-[15.5px] leading-[1.6] text-[#FFF7EE]/75">
-          Shay will guide you through her Bonding Biology framework so you can understand what has been happening beneath the surface of your relationships — and learn how to participate in love without chasing, overgiving, proving, or abandoning yourself.
+        <p className="mx-auto mt-5 max-w-2xl text-[17px] leading-[1.6] text-[#FFF7EE]/80">
+          Shay will guide you through her Bonding Biology framework so you can understand what has been happening beneath the surface of your relationships, and learn how to participate in love without chasing, overgiving, proving, or abandoning yourself.
         </p>
       </div>
 
       <div className="relative z-10 mx-auto mt-9 max-w-2xl" data-reveal>
-        <p className="ff-sans text-center text-[13px] font-bold uppercase tracking-[0.18em] text-[#E8B75A]">
+        <p className="ff-sans text-center text-[14px] font-bold uppercase tracking-[0.18em] text-[#E8B75A]">
           By the end of the summit, you will have greater clarity around:
         </p>
         <ul className="mt-5 grid gap-x-6 gap-y-3 sm:grid-cols-2">
           {CLARITY_POINTS.map((point) => (
-            <li key={point} className="flex items-start gap-2.5 text-[14.5px] leading-snug text-[#FFF7EE]/85">
+            <li key={point} className="flex items-start gap-2.5 text-[16px] leading-snug text-[#FFF7EE]/85">
               <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#E8B75A]" />
               <span>{point}</span>
             </li>
@@ -333,7 +407,6 @@ const CURRICULUM = [
   {
     day: "Day One",
     title: "Why Accomplished Women Keep Repeating the Same Relationship Pattern",
-    intro: "You will identify the hidden Love Blocks® and subconscious beliefs that can influence who you choose and how you respond when a relationship feels uncertain.",
     points: [
       "Why career success does not automatically translate into security in love",
       "How previous relationships may still be shaping your current decisions",
@@ -344,18 +417,16 @@ const CURRICULUM = [
   {
     day: "Day Two",
     title: "The Patterns That Interrupt Attraction, Safety, and Attachment",
-    intro: "You will explore how fear, overfunctioning, unmet emotional needs, and self-protective behavior affect the way connection develops.",
     points: [
       "Why you may become more anxious when a relationship matters",
       "How chasing, proving, overexplaining, or overgiving can begin",
       "What healthy emotional safety actually feels like in real life",
     ],
-    outcome: "You will understand what may be interrupting connection — and what to practice instead.",
+    outcome: "You will understand what may be interrupting connection and what to practice instead.",
   },
   {
     day: "Day Three",
     title: "How Healthy Bonding Becomes Lasting Commitment",
-    intro: "You will learn how attraction can grow into attachment, trust, and commitment when both people are emotionally available and relationally aligned.",
     points: [
       "The difference between attention, chemistry, attachment, and commitment",
       "How consistency, safety, and mutual investment support bonding",
@@ -385,18 +456,17 @@ function Curriculum() {
           >
             <span className="ff-sans text-[12px] font-bold uppercase tracking-[0.2em] text-[#8A2634]">{d.day}</span>
             <h3 className="ff-serif mt-3 text-[19px] font-bold leading-tight text-[#250009]">{d.title}</h3>
-            <p className="mt-3 text-[13.5px] leading-[1.5] text-[#4C1119]/80">{d.intro}</p>
-            <ul className="mt-4 space-y-2">
+            <ul className="mt-4 space-y-2.5">
               {d.points.map((p) => (
-                <li key={p} className="flex items-start gap-2 text-[13px] leading-snug text-[#4C1119]">
+                <li key={p} className="flex items-start gap-2 text-[16px] leading-snug text-[#4C1119]">
                   <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#8A2634]" />
                   <span>{p}</span>
                 </li>
               ))}
             </ul>
             <div className="mt-4 border-t border-[#8A2634]/15 pt-4">
-              <span className="ff-sans text-[11px] font-bold uppercase tracking-[0.14em] text-[#8A2634]">Outcome</span>
-              <p className="mt-1.5 text-[13px] leading-snug text-[#4C1119]/85">{d.outcome}</p>
+              <span className="ff-sans text-[12px] font-bold uppercase tracking-[0.14em] text-[#8A2634]">Outcome</span>
+              <p className="mt-1.5 text-[15px] leading-snug text-[#4C1119]/85">{d.outcome}</p>
             </div>
           </div>
         ))}
@@ -432,10 +502,10 @@ function WhoFor() {
             key={item}
             data-reveal
             style={{ transitionDelay: `${i * 60}ms` }}
-            className="flex items-start gap-3 border border-[#E8B75A]/25 bg-white/[0.04] p-4.5"
+            className="flex items-start gap-3 border border-[#E8B75A]/25 bg-white/[0.04] p-5"
           >
-            <CheckIcon className="mt-0.5 h-5 w-5 shrink-0 text-[#E8B75A]" />
-            <span className="text-[14.5px] leading-snug text-[#FFF7EE]/85">{item}</span>
+            <CheckIcon className="mt-0.5 h-6 w-6 shrink-0 text-[#E8B75A]" />
+            <span className="text-[16px] leading-snug text-[#FFF7EE]/85">{item}</span>
           </div>
         ))}
       </div>
@@ -446,17 +516,19 @@ function WhoFor() {
 /* ------------------------- Not this / Is this -------------------------- */
 
 const NOT_THIS = [
-  "A list of manipulative scripts",
-  "A strategy for pretending not to care",
-  "A promise that you can control another person",
-  "Another explanation that blames every relationship on your standards",
+  "Manipulative scripts",
+  "Playing hard to get",
+  "Making yourself smaller",
+  "Controlling another person",
+  "Generic advice to simply love yourself more",
 ];
 
 const IS_THIS = [
-  "A deeper understanding of your relationship patterns",
-  "A practical framework for attraction, safety, bonding, and commitment",
-  "A new way to recognize healthy versus unhealthy connection",
-  "A blueprint for approaching love with clarity, confidence, and self-respect",
+  "A framework for understanding relationship patterns",
+  "Better emotional discernment",
+  "Clarity around attraction and attachment",
+  "A healthier way to participate in relationships",
+  "A practical blueprint for lasting change",
 ];
 
 function NotThisIsThis() {
@@ -472,8 +544,8 @@ function NotThisIsThis() {
           <Eyebrow>This is not</Eyebrow>
           <ul className="mt-4 space-y-3">
             {NOT_THIS.map((item) => (
-              <li key={item} className="flex items-start gap-3 text-[14.5px] leading-snug text-[#FFF7EE]/65">
-                <XIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#FFF7EE]/40" />
+              <li key={item} className="flex items-start gap-3 text-[16px] leading-snug text-[#FFF7EE]/65">
+                <XIcon className="mt-0.5 h-5 w-5 shrink-0 text-[#FFF7EE]/40" />
                 <span>{item}</span>
               </li>
             ))}
@@ -483,8 +555,8 @@ function NotThisIsThis() {
           <Eyebrow>This is</Eyebrow>
           <ul className="mt-4 space-y-3">
             {IS_THIS.map((item) => (
-              <li key={item} className="flex items-start gap-3 text-[14.5px] leading-snug text-[#FFF7EE]/90">
-                <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#F8D896]" />
+              <li key={item} className="flex items-start gap-3 text-[16px] leading-snug text-[#FFF7EE]/90">
+                <CheckIcon className="mt-0.5 h-5 w-5 shrink-0 text-[#F8D896]" />
                 <span>{item}</span>
               </li>
             ))}
@@ -525,23 +597,23 @@ function BeforeAfter() {
         </h2>
       </div>
       <div className="relative z-10 mx-auto mt-9 grid max-w-5xl gap-6 md:grid-cols-2">
-        <div data-reveal className="border border-[#8A2634]/15 bg-white/60 p-7">
-          <span className="ff-sans text-[12px] font-bold uppercase tracking-[0.18em] text-[#8A2634]/70">Before the Summit</span>
-          <ul className="mt-4 space-y-2.5">
+        <div data-reveal className="border-2 border-[#8A2634]/25 bg-white/70 p-7">
+          <span className="ff-sans text-[13px] font-bold uppercase tracking-[0.18em] text-[#8A2634]/80">Before the Summit</span>
+          <ul className="mt-4 space-y-3">
             {BEFORE.map((item) => (
-              <li key={item} className="flex items-start gap-2.5 text-[14px] leading-snug text-[#4C1119]/85">
-                <XIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#8A2634]/50" />
+              <li key={item} className="flex items-start gap-2.5 text-[16px] leading-snug text-[#3A0D12]">
+                <XIcon className="mt-0.5 h-5 w-5 shrink-0 text-[#8A2634]/60" />
                 <span>{item}</span>
               </li>
             ))}
           </ul>
         </div>
-        <div data-reveal style={{ transitionDelay: "120ms" }} className="border border-[#E8B75A]/55 bg-[linear-gradient(145deg,rgba(232,183,90,0.2)_0%,rgba(255,242,234,0.7)_100%)] p-7">
-          <span className="ff-sans text-[12px] font-bold uppercase tracking-[0.18em] text-[#8A2634]">After the Summit</span>
-          <ul className="mt-4 space-y-2.5">
+        <div data-reveal style={{ transitionDelay: "120ms" }} className="border-2 border-[#8A2634] bg-[linear-gradient(145deg,rgba(232,183,90,0.25)_0%,rgba(255,242,234,0.8)_100%)] p-7">
+          <span className="ff-sans text-[13px] font-bold uppercase tracking-[0.18em] text-[#8A2634]">What You Can Begin Doing Differently</span>
+          <ul className="mt-4 space-y-3">
             {AFTER.map((item) => (
-              <li key={item} className="flex items-start gap-2.5 text-[14px] leading-snug text-[#250009] font-medium">
-                <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#8A2634]" />
+              <li key={item} className="flex items-start gap-2.5 text-[16px] leading-snug text-[#250009] font-medium">
+                <CheckIcon className="mt-0.5 h-5 w-5 shrink-0 text-[#8A2634]" />
                 <span>{item}</span>
               </li>
             ))}
@@ -557,33 +629,48 @@ function BeforeAfter() {
 
 /* ------------------------------ Offer stack ----------------------------- */
 
+// Per-item dollar values below are illustrative value-stack figures chosen
+// to sum to the summit's established $497 total value, not prices these
+// assets have separately sold for. Confirm with Shay before launch if
+// per-item pricing needs to reflect actual standalone sale prices.
 const INCLUDED = [
   {
     title: "The Complete 3-Day Bonding Biology Summit",
     body: "Three transformational training sessions to understand your patterns and build a healthier approach to love.",
+    value: 197,
   },
   {
     title: "The Love Blocks® Discovery Exercise",
     body: "A guided exercise to identify the subconscious beliefs and protective patterns influencing your relationships.",
+    value: 97,
   },
   {
-    title: "The Bonding Biology Workbook + Personal Blueprint",
-    body: "Reflection questions, exercises, and a step-by-step framework for recognizing patterns and creating healthier conditions for commitment.",
+    title: "The Bonding Biology Workbook",
+    body: "Reflection questions and a step-by-step framework for recognizing patterns as they show up in real relationships.",
+    value: 47,
   },
   {
-    title: "Summit Replays",
+    title: "Your Personal Bonding Blueprint",
+    body: "A clear, individualized plan for creating healthier conditions for commitment going forward.",
+    value: 97,
+  },
+  {
+    title: "Summit Replay Access",
     body: "Revisit every session and move through the material at your own pace.",
+    value: 37,
   },
 ];
 
 const BONUSES = [
   {
-    title: "BONUS: Attention or Attachment?",
+    title: "BONUS: Attention or Attachment? Guide",
     body: "Distinguish between a man who enjoys your attention and one who is genuinely emotionally invested.",
+    value: 12,
   },
   {
     title: "BONUS: The Healthy Commitment Checklist",
     body: "The behaviors and relationship conditions associated with emotional availability and forward movement.",
+    value: 10,
   },
 ];
 
@@ -596,19 +683,22 @@ function OfferStack() {
         <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.3vw,3rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#FFF7EE] [text-wrap:balance]">
           Your Bonding Biology Summit Experience
         </h2>
-        <p className="mx-auto mt-3 max-w-lg text-[15px] text-[#FFF7EE]/70">
+        <p className="mx-auto mt-3 max-w-lg text-[17px] text-[#FFF7EE]/75">
           When you reserve your place for ${SUMMIT_PRICE}, you receive:
         </p>
       </div>
 
-      <div className="relative z-10 mx-auto mt-9 max-w-2xl border border-[#E8B75A]/45 bg-[linear-gradient(180deg,rgba(255,242,234,0.97)_0%,rgba(255,229,218,0.92)_100%)] p-7 text-[#250009] sm:p-10" data-reveal>
+      <div className="relative z-10 mx-auto mt-9 max-w-[700px] border border-[#E8B75A]/45 bg-[linear-gradient(180deg,rgba(255,242,234,0.97)_0%,rgba(255,229,218,0.92)_100%)] p-6 text-[#250009] sm:p-10" data-reveal>
         <ul className="space-y-4">
           {INCLUDED.map((item) => (
             <li key={item.title} className="flex items-start gap-3.5">
               <CheckIcon className="mt-1 h-5 w-5 shrink-0 text-[#8A2634]" />
-              <div>
-                <h4 className="ff-serif text-[16px] font-bold text-[#250009]">{item.title}</h4>
-                <p className="mt-0.5 text-[13px] leading-snug text-[#4C1119]/80">{item.body}</p>
+              <div className="flex-1">
+                <div className="flex items-baseline justify-between gap-3">
+                  <h4 className="ff-serif text-[17px] font-bold text-[#250009]">{item.title}</h4>
+                  <span className="ff-sans shrink-0 text-[13px] font-bold text-[#8A2634]/60 line-through">${item.value}</span>
+                </div>
+                <p className="mt-0.5 text-[15px] leading-snug text-[#4C1119]/80">{item.body}</p>
               </div>
             </li>
           ))}
@@ -618,33 +708,46 @@ function OfferStack() {
           {BONUSES.map((item) => (
             <div key={item.title} className="flex items-start gap-3.5">
               <span className="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#8A2634] text-[10px] font-bold text-white">+</span>
-              <div>
-                <h4 className="ff-serif text-[16px] font-bold text-[#8A2634]">{item.title}</h4>
-                <p className="mt-0.5 text-[13px] leading-snug text-[#4C1119]/80">{item.body}</p>
+              <div className="flex-1">
+                <div className="flex items-baseline justify-between gap-3">
+                  <h4 className="ff-serif text-[17px] font-bold text-[#8A2634]">{item.title}</h4>
+                  <span className="ff-sans shrink-0 text-[13px] font-bold text-[#8A2634]/60 line-through">${item.value}</span>
+                </div>
+                <p className="mt-0.5 text-[15px] leading-snug text-[#4C1119]/80">{item.body}</p>
               </div>
             </div>
           ))}
         </div>
 
         <div className="mt-7 border-t border-[#8A2634]/15 pt-6 text-center">
-          <span className="ff-sans text-[13px] font-bold uppercase tracking-[0.14em] text-[#8A2634]/70 line-through">
+          <span className="ff-sans text-[14px] font-bold uppercase tracking-[0.14em] text-[#8A2634]/70 line-through">
             Total Value: ${SUMMIT_VALUE}
           </span>
           <p className="ff-sans mt-2 text-[14px] font-bold uppercase tracking-[0.14em] text-[#8A2634]">
             Join Today for Only
           </p>
-          <p className="ff-serif mt-1 text-[56px] font-black leading-none text-[#15803D]">${SUMMIT_PRICE}</p>
+          <p className="ff-serif mt-1 text-[64px] font-black leading-none text-[#15803D]">${SUMMIT_PRICE}</p>
           <span className="mt-3 inline-block bg-[#DC2626] px-5 py-2 text-[18px] font-black uppercase tracking-[0.04em] text-white shadow-[0_10px_26px_rgba(220,38,38,0.4)]">
             You Save ${SAVINGS}
           </span>
-          <p className="mt-2 text-[12px] font-bold uppercase tracking-[0.14em] text-[#8A2634]/70">
-            That's {Math.round((SAVINGS / SUMMIT_VALUE) * 100)}% off — limited-time launch pricing
+          <p className="mt-2 text-[14px] font-bold uppercase tracking-[0.14em] text-[#8A2634]/70">
+            That's {Math.round((SAVINGS / SUMMIT_VALUE) * 100)}% off, limited-time launch pricing
           </p>
 
           <div className="mt-6">
-            <Cta className="w-full sm:w-auto">Yes, I Want the Complete Summit</Cta>
+            <Cta className="w-full sm:w-auto">Get the Complete Summit for ${SUMMIT_PRICE}</Cta>
           </div>
-          <p className="mt-4 text-[12.5px] font-medium text-[#8A2634]/80">One payment. No recurring subscription.</p>
+          <p className="mt-4 text-[14px] font-medium text-[#8A2634]/80">One payment. No recurring subscription.</p>
+          <p className="mt-2 text-[14px] leading-snug text-[#8A2634]/80">
+            <TodoNote>Insert the accurate refund or satisfaction-guarantee policy.</TodoNote>
+          </p>
+          <p className="mt-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[14px] font-bold uppercase tracking-[0.08em] text-[#8A2634]/70">
+            <span>Secure checkout</span>
+            <span aria-hidden="true">&middot;</span>
+            <span>Instant access</span>
+            <span aria-hidden="true">&middot;</span>
+            <span>Watch anytime</span>
+          </p>
         </div>
       </div>
     </section>
@@ -662,20 +765,20 @@ function Founder() {
           <h2 className="ff-serif mt-4 text-[clamp(1.7rem,3.6vw,2.5rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#250009]">
             Shay, Your Love Diva
           </h2>
-          <div className="mt-4 space-y-3.5 text-[15px] leading-[1.6] text-[#250009]/75">
+          <div className="mt-4 space-y-4 text-[17px] leading-[1.6] text-[#250009]/80">
             <p>
               Shay has helped thousands of women better understand their relationship patterns, rebuild their confidence, and approach love from a place of greater clarity and emotional security.
             </p>
             <p>
-              Her Bonding Biology approach brings together relationship education, emotional pattern recognition, nervous-system awareness, and practical application — for women ready to stop repeating the past and become available for a different kind of relationship.
+              Her Bonding Biology approach brings together relationship education, emotional pattern recognition, nervous-system awareness, and practical application, for women ready to stop repeating the past and become available for a different kind of relationship.
             </p>
-            <p className="ff-serif text-[18px] font-medium text-[#8A2634]">
+            <p className="ff-serif text-[19px] font-medium text-[#8A2634]">
               You do not need to become less powerful to experience lasting love.
             </p>
           </div>
         </div>
         <div className="mt-8 lg:mt-0 lg:col-span-5 flex justify-center" data-reveal style={{ transitionDelay: "150ms" }}>
-          <div className="relative w-full max-w-[420px]">
+          <div className="relative w-full max-w-[480px]">
             <Glow className="h-[260px] w-[260px] sm:h-[320px] sm:w-[320px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" />
             <div className="relative z-10 aspect-video w-full overflow-hidden rounded-none border border-[#E8B75A]/35 bg-black shadow-2xl">
               <iframe
@@ -686,6 +789,9 @@ function Founder() {
                 title="Bonding Biology Workshop Video"
               ></iframe>
             </div>
+            <p className="relative z-10 mt-3 text-center text-[14px] font-medium text-[#250009]/60">
+              Watch: Why Shay Created the Bonding Biology Framework
+            </p>
           </div>
         </div>
       </div>
@@ -703,7 +809,7 @@ const SUCCESS_STORIES = [
   },
   {
     src: "/cards/tmpf6ufyorx.jpg",
-    quote: "I said yes to a man who actually shows up — consistently. Before the summit, I didn't think that was possible for me.",
+    quote: "I said yes to a man who actually shows up, consistently. Before the summit, I didn't think that was possible for me.",
     name: "Courtney L.",
   },
   {
@@ -728,7 +834,7 @@ function Testimonials() {
           Real Women. Real Relationship Transformations.
         </h2>
       </div>
-      <div className="relative z-10 mx-auto mt-9 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="relative z-10 mx-auto mt-9 grid max-w-5xl gap-5 sm:grid-cols-2">
         {SUCCESS_STORIES.map((story, i) => (
           <figure
             key={story.src}
@@ -736,14 +842,14 @@ function Testimonials() {
             style={{ transitionDelay: `${i * 90}ms` }}
             className="luxury-card overflow-hidden border border-[#E8B75A]/35 bg-white/[0.04]"
           >
-            <img src={story.src} alt={`${story.name} — Bonding Biology client success story`} className="h-56 w-full object-cover" />
-            <figcaption className="p-4">
-              <Stars className="text-[13px] text-[#D8962D]" />
-              <p className="ff-serif mt-2 text-[13.5px] italic leading-[1.35] text-[#FFF7EE]/70">
-                “{story.quote}”
+            <img src={story.src} alt={`${story.name}, Bonding Biology client success story`} className="h-72 w-full object-cover" />
+            <figcaption className="p-5">
+              <Stars className="text-[14px] text-[#D8962D]" />
+              <p className="ff-serif mt-2 text-[16px] italic leading-[1.45] text-[#FFF7EE]/85">
+                "{story.quote}"
               </p>
-              <p className="ff-sans mt-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-[#E8B75A]/80">
-                {story.name}
+              <p className="ff-sans mt-3 text-[13px] font-bold uppercase tracking-[0.1em] text-[#E8B75A]/90">
+                {story.name} <span className="text-[#FFF7EE]/40">&middot; Summit Participant</span>
               </p>
             </figcaption>
           </figure>
@@ -786,7 +892,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Why is the price only $97 right now?",
-    a: `$${SUMMIT_PRICE} is a limited-time launch price — the full value of the Summit is $${SUMMIT_VALUE}. This introductory rate won't be available indefinitely, so enrolling now locks in the savings.`,
+    a: `$${SUMMIT_PRICE} is a limited-time launch price. The full value of the Summit is $${SUMMIT_VALUE}, so enrolling now locks in the savings before this introductory rate goes away.`,
   },
   {
     q: `Is the $${SUMMIT_PRICE} a one-time payment?`,
@@ -798,20 +904,20 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
 ];
 
-function FaqItem({ q, a }: { q: string; a: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
+function FaqItem({ q, a, defaultOpen = false }: { q: string; a: React.ReactNode; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="border-b border-[#E8B75A]/15 py-4.5">
+    <div className="border-b border-[#E8B75A]/15 py-5">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="ff-sans flex w-full items-center justify-between gap-4 text-left text-[15px] font-bold text-[#FFF7EE]"
+        className="ff-sans flex w-full items-center justify-between gap-4 text-left text-[16px] sm:text-[18px] font-bold text-[#FFF7EE]"
         aria-expanded={open}
       >
         <span>{q}</span>
-        <ChevronDown className={`h-5 w-5 shrink-0 text-[#E8B75A] transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+        <ChevronDown className={`h-6 w-6 shrink-0 text-[#E8B75A] transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
       </button>
-      {open && <div className="mt-3 text-[14px] leading-[1.6] text-[#FFF7EE]/70">{a}</div>}
+      {open && <div className="mt-3 text-[16px] leading-[1.6] text-[#FFF7EE]/75">{a}</div>}
     </div>
   );
 }
@@ -819,7 +925,7 @@ function FaqItem({ q, a }: { q: string; a: React.ReactNode }) {
 function Faq() {
   return (
     <section className="px-5 py-16 sm:px-8 sm:py-20 bg-[linear-gradient(180deg,#170006_0%,#200008_100%)]">
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-[850px]">
         <div className="text-center" data-reveal>
           <Eyebrow>Questions</Eyebrow>
           <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.3vw,3rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#FFF7EE] [text-wrap:balance]">
@@ -827,8 +933,8 @@ function Faq() {
           </h2>
         </div>
         <div className="mt-9" data-reveal>
-          {FAQS.map((item) => (
-            <FaqItem key={item.q} q={item.q} a={item.a} />
+          {FAQS.map((item, i) => (
+            <FaqItem key={item.q} q={item.q} a={item.a} defaultOpen={i === 0} />
           ))}
         </div>
       </div>
@@ -853,18 +959,18 @@ function FinalCta() {
       <SectionBg src="/hero-bg.png" tone="light" opacity={0.05} />
       <div
         data-reveal
-        className="relative z-10 mx-auto max-w-xl border border-[#E8B75A]/45 bg-[#250009] p-8 text-center text-[#FFF7EE] sm:p-10"
+        className="relative z-10 mx-auto max-w-[700px] border border-[#E8B75A]/45 bg-[#250009] p-8 text-center text-[#FFF7EE] sm:p-10"
       >
-        <p className="ff-serif text-[21px] font-bold">The Bonding Biology Summit</p>
+        <p className="ff-serif text-[22px] font-bold">The Bonding Biology Summit</p>
         <ul className="mx-auto mt-4 max-w-xs space-y-2 text-left">
           {FINAL_INCLUDES.map((item) => (
-            <li key={item} className="flex items-center gap-2.5 text-[14px] text-[#FFF7EE]/85">
+            <li key={item} className="flex items-center gap-2.5 text-[16px] text-[#FFF7EE]/85">
               <CheckIcon className="h-4 w-4 shrink-0 text-[#E8B75A]" />
               <span>{item}</span>
             </li>
           ))}
         </ul>
-        <p className="mt-5 text-[13px] font-bold uppercase tracking-[0.14em] text-[#E8B75A]">
+        <p className="mt-5 text-[14px] font-bold uppercase tracking-[0.14em] text-[#E8B75A]">
           Join Today for ${SUMMIT_PRICE}
         </p>
         <span className="mt-2 inline-block bg-[#DC2626] px-4 py-1.5 text-[14px] font-black uppercase tracking-[0.04em] text-white shadow-[0_8px_20px_rgba(220,38,38,0.4)]">
@@ -873,9 +979,9 @@ function FinalCta() {
         <div className="mt-5">
           <Cta className="w-full sm:w-auto">Yes, I Am Ready for a Different Love Story</Cta>
         </div>
-        <p className="mt-4 text-[12.5px] font-medium text-[#FFF7EE]/60">One payment. No recurring subscription.</p>
-        <p className="mt-2 text-[12.5px] font-bold uppercase tracking-[0.1em] text-[#E8B75A]/80">
-          Limited-time launch price — enroll now before it increases
+        <p className="mt-4 text-[14px] font-medium text-[#FFF7EE]/60">One payment. No recurring subscription.</p>
+        <p className="mt-2 text-[14px] font-bold uppercase tracking-[0.1em] text-[#E8B75A]/80">
+          Limited-time launch price, enroll now before it increases
         </p>
       </div>
     </section>
@@ -886,13 +992,13 @@ function Footer() {
   return (
     <footer className="border-t border-[#E8B75A]/15 bg-[#170006] px-5 py-10 text-center sm:px-8">
       <p className="ff-serif text-[18px] font-semibold tracking-[-0.02em] text-[#FFF7EE]">Bonding Biology Institute</p>
-      <p className="mt-3 text-[13px] text-[#FFF7EE]/50">
+      <p className="mt-3 text-[14px] text-[#FFF7EE]/50">
         Questions? Contact <TodoNote>Insert support email.</TodoNote>
       </p>
-      <p className="mx-auto mt-4 max-w-xl text-[11.5px] leading-[1.5] text-[#FFF7EE]/35">
+      <p className="mx-auto mt-4 max-w-xl text-[12.5px] leading-[1.5] text-[#FFF7EE]/35">
         Results vary. The summit provides relationship education and personal-development tools. It does not guarantee a particular relationship outcome or the behavior or commitment of another person.
       </p>
-      <p className="mt-3 text-[13px] text-[#FFF7EE]/45">
+      <p className="mt-3 text-[14px] text-[#FFF7EE]/45">
         © {new Date().getFullYear()} Bonding Biology Institute. All rights reserved.
       </p>
     </footer>
@@ -907,14 +1013,14 @@ function MobileBar() {
       <div className="flex items-center justify-between gap-4">
         <div className="flex flex-col">
           <span className="ff-sans text-[15px] font-bold text-[#FFF7EE] tracking-tight">Bonding Biology Summit</span>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-[#E8B75A]/80">3 Days · Only ${SUMMIT_PRICE}</span>
+          <span className="text-[12px] font-bold uppercase tracking-wider text-[#E8B75A]/80">3 Days &middot; Only ${SUMMIT_PRICE}</span>
         </div>
         <a
           href={SUMMIT_CHECKOUT_URL}
           onClick={handleCtaClick}
-          className="ff-sans btn-shimmer rounded-none bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-3 text-[14px] font-bold text-[#250009] shadow-[0_8px_20px_rgba(232,183,90,0.25)] flex items-center gap-1.5 active:scale-95 transition-transform"
+          className="ff-sans btn-shimmer min-h-[48px] rounded-none bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-3 text-[16px] font-bold text-[#250009] shadow-[0_8px_20px_rgba(232,183,90,0.25)] flex items-center gap-1.5 active:scale-95 transition-transform"
         >
-          <span>Reserve</span>
+          <span>Get Access</span>
           <ArrowRight className="h-4 w-4" />
         </a>
       </div>
@@ -999,12 +1105,13 @@ export default function BondingBiologyLandingD() {
         <Nav />
         <Hero />
         <EmpathyReframe />
+        <Mechanism />
         <Intro />
-        <Testimonials />
         <Curriculum />
         <WhoFor />
         <NotThisIsThis />
         <BeforeAfter />
+        <Testimonials />
         <OfferStack />
         <Founder />
         <Faq />
