@@ -187,12 +187,6 @@ function Hero() {
         >
           Discover the hidden relationship patterns that may be interrupting attraction, emotional safety, attachment, and commitment.
         </p>
-        <p
-          style={{ "--i": 2 } as React.CSSProperties}
-          className="mx-auto mt-3 max-w-2xl text-[15px] leading-[1.55] text-[#FFF7EE]/80 [text-wrap:balance]"
-        >
-          For accomplished, self-aware women ready to stop repeating emotionally exhausting relationship patterns and start creating love that feels mutual, secure, and lasting.
-        </p>
         <div
           style={{ "--i": 3 } as React.CSSProperties}
           className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2"
@@ -208,7 +202,7 @@ function Hero() {
           </span>
         </div>
         <div style={{ "--i": 4 } as React.CSSProperties} className="mt-5 flex flex-col items-center gap-4">
-          <Cta className="w-full sm:w-auto">Get the Complete Summit for ${SUMMIT_PRICE}</Cta>
+          <Cta className="w-full cta-shake sm:w-auto">Get Bonding Biology for ${SUMMIT_PRICE}</Cta>
         </div>
         <p style={{ "--i": 5 } as React.CSSProperties} className="mt-4 text-[14px] font-bold uppercase tracking-[0.12em] text-[#E8B75A]/90">
           Limited-time launch price, the $97 rate won't last
@@ -1087,8 +1081,19 @@ function StyleTag() {
       }
       .btn-shimmer:hover::after { left: 150%; transition: left 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
 
+      .cta-shake { animation: ctaShake 4s ease-in-out infinite; }
+      @keyframes ctaShake {
+        0%, 92%, 100% { transform: translateX(0) rotate(0); }
+        93% { transform: translateX(-3px) rotate(-1deg); }
+        94.5% { transform: translateX(3px) rotate(1deg); }
+        96% { transform: translateX(-3px) rotate(-1deg); }
+        97.5% { transform: translateX(2px) rotate(0.5deg); }
+        99% { transform: translateX(0) rotate(0); }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         .hero-stagger > *, [data-reveal] { animation: none !important; opacity: 1 !important; transform: none !important; transition: none !important; }
+        .cta-shake { animation: none !important; }
       }
     `}</style>
     </>
