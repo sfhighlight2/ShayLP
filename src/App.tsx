@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import BondingBiologyLanding from "./BondingBiologyLanding";
 import BondingBiologyLandingB from "./BondingBiologyLandingB";
 import BondingBiologyLandingC from "./BondingBiologyLandingC";
+import BondingBiologyLandingD from "./BondingBiologyLandingD";
+import BondingBiologySummitThankYou from "./BondingBiologySummitThankYou";
 import BondingBiologyOfferB from "./BondingBiologyOfferB";
 import { captureUtmParams } from "./lib/utils";
 
@@ -13,6 +15,8 @@ function AppRoutes() {
       <Route path="/b" element={<BondingBiologyLandingB />} />
       <Route path="/b/offer" element={<BondingBiologyOfferB />} />
       <Route path="/c" element={<BondingBiologyLandingC />} />
+      <Route path="/d" element={<BondingBiologyLandingD />} />
+      <Route path="/d/thank-you" element={<BondingBiologySummitThankYou />} />
       <Route path="/quiz" element={<Navigate to="/" replace />} />
       <Route path="/results" element={<Navigate to="/" replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />
