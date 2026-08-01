@@ -37,12 +37,6 @@ const CheckIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-const TodoNote = ({ children }: { children: React.ReactNode }) => (
-  <span className="ff-sans inline-block rounded-md border border-dashed border-[#D8962D] bg-[#D8962D]/10 px-2 py-0.5 text-[12px] font-bold text-[#8A2634]">
-    TODO: {children}
-  </span>
-);
-
 const NEXT_STEPS = [
   "Check your email for your receipt and access details — it may take a few minutes to arrive.",
   "Add our email address to your contacts so nothing lands in spam.",
@@ -130,7 +124,13 @@ export default function BondingBiologySummitThankYou() {
         </div>
 
         <p className="mt-8 max-w-md text-[13px] leading-[1.6] text-[#FFF7EE]/55">
-          Questions about your order? Contact <TodoNote>Insert support email.</TodoNote>
+          Questions about your order? Contact{" "}
+          <a
+            href="mailto:Support@BondingBiology.com"
+            className="underline decoration-[#E8B75A]/40 underline-offset-2 hover:text-[#E8B75A]"
+          >
+            Support@BondingBiology.com
+          </a>
         </p>
       </div>
     </div>

@@ -31,8 +31,9 @@
  * ------------------------------------------------------------------
  */
 
-import { useEffect, useState } from "react";
-import { trackFacebookEvent } from "./lib/leadCapture";
+import { useEffect, useRef, useState } from "react";
+import { GHL_WEBHOOK_URL, formatPhoneNumber, trackFacebookEvent, triggerBlueprintDownload } from "./lib/leadCapture";
+import { getStoredUtmParams } from "./lib/utils";
 
 const SUMMIT_CHECKOUT_URL = "https://link.fastpaydirect.com/payment-link/6a5e81b2a655fa0b802a53e4";
 
@@ -47,6 +48,27 @@ const handleCtaClick = () => {
     currency: 'USD',
   });
 };
+
+// Appends the visitor's info to the external checkout link as query params
+// (fastpaydirect.com, not a route in this app) so it can prefill their
+// checkout. Single "Name" field is split on the first space into
+// firstName/lastName, matching the site-wide convention of one name input
+// (see buildCalendarSrc() in BondingBiologyOfferB.tsx for the same split).
+function buildCheckoutUrl(name: string, email: string, phone: string): string {
+  const trimmed = name.trim();
+  const spaceIndex = trimmed.indexOf(" ");
+  const firstName = spaceIndex === -1 ? trimmed : trimmed.slice(0, spaceIndex);
+  const lastName = spaceIndex === -1 ? "" : trimmed.slice(spaceIndex + 1);
+
+  const params = new URLSearchParams();
+  if (firstName) params.set("firstName", firstName);
+  if (lastName) params.set("lastName", lastName);
+  if (email) params.set("email", email.trim());
+  if (phone) params.set("phone", phone.replace(/\D/g, ""));
+
+  const query = params.toString();
+  return query ? `${SUMMIT_CHECKOUT_URL}?${query}` : SUMMIT_CHECKOUT_URL;
+}
 
 /* ----------------------------- Icons ----------------------------- */
 
@@ -179,7 +201,7 @@ function Hero() {
           style={{ "--i": 1 } as React.CSSProperties}
           className="ff-serif mt-6 text-[clamp(2.2rem,5.4vw,4rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-white [text-wrap:balance]"
         >
-          You Have Built a Successful Life. Now It Is Time to Build the Love That Belongs in It.
+          You've Built a Successful Life. Now It's Time to Build the Love That Belongs in It!
         </h1>
         <p
           style={{ "--i": 2 } as React.CSSProperties}
@@ -232,6 +254,25 @@ function Hero() {
         </div>
       </div>
     </section>
+  );
+}
+
+/* --------------------------- Credibility strip --------------------------- */
+
+function CredibilityStrip() {
+  return (
+    <div className="border-b border-[#E8B75A]/15 bg-[#170006] px-5 py-5 sm:px-8">
+      <div className="mx-auto flex max-w-2xl flex-col items-center gap-3 text-center sm:flex-row sm:gap-4 sm:text-left">
+        <img
+          src="/shay-know.png"
+          alt="Shay"
+          className="h-16 w-16 shrink-0 rounded-full border border-[#E8B75A]/40 object-cover object-top"
+        />
+        <p className="text-[14px] leading-snug text-[#FFF7EE]/80">
+          Created by Shay, relationship educator and founder of Bonding Biology, trusted by more than 8,000 women.
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -342,6 +383,10 @@ function Mechanism() {
       <p className="mx-auto mt-10 max-w-2xl text-center text-[16px] leading-[1.6] text-[#4C1119]/75" data-reveal>
         Hidden emotional and relationship patterns can interrupt this progression at any stage, which is why the same dynamic can repeat across different relationships until the pattern itself is understood.
       </p>
+
+      <div className="relative z-10 mt-9 flex justify-center" data-reveal>
+        <Cta variant="dark" className="w-full sm:w-auto">Get Bonding Biology for ${SUMMIT_PRICE}</Cta>
+      </div>
     </section>
   );
 }
@@ -465,6 +510,10 @@ function Curriculum() {
           </div>
         ))}
       </div>
+
+      <div className="relative z-10 mt-10 flex justify-center" data-reveal>
+        <Cta variant="dark" className="w-full sm:w-auto">Get Bonding Biology for ${SUMMIT_PRICE}</Cta>
+      </div>
     </section>
   );
 }
@@ -507,61 +556,6 @@ function WhoFor() {
   );
 }
 
-/* ------------------------- Not this / Is this -------------------------- */
-
-const NOT_THIS = [
-  "Manipulative scripts",
-  "Playing hard to get",
-  "Making yourself smaller",
-  "Controlling another person",
-  "Generic advice to simply love yourself more",
-];
-
-const IS_THIS = [
-  "A framework for understanding relationship patterns",
-  "Better emotional discernment",
-  "Clarity around attraction and attachment",
-  "A healthier way to participate in relationships",
-  "A practical blueprint for lasting change",
-];
-
-function NotThisIsThis() {
-  return (
-    <section className="px-5 pt-10 pb-0 sm:px-8 sm:pt-14 sm:pb-0 bg-[#170006]">
-      <div className="mx-auto max-w-3xl text-center" data-reveal>
-        <h2 className="ff-serif text-[clamp(1.7rem,3.8vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#FFF7EE] [text-wrap:balance]">
-          This Is Not Another Collection of Dating Rules
-        </h2>
-      </div>
-      <div className="relative mx-auto mt-9 grid max-w-6xl overflow-hidden border border-[#E8B75A]/35 bg-[#FFF2EA]/[0.05] md:grid-cols-2">
-        <div data-reveal className="border-b border-[#E8B75A]/20 bg-black/15 p-8 md:border-b-0 md:border-r">
-          <Eyebrow>This is not</Eyebrow>
-          <ul className="mt-4 space-y-3">
-            {NOT_THIS.map((item) => (
-              <li key={item} className="flex items-start gap-3 text-[16px] leading-snug text-[#FFF7EE]/65">
-                <XIcon className="mt-0.5 h-5 w-5 shrink-0 text-[#FFF7EE]/40" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div data-reveal style={{ transitionDelay: "120ms" }} className="bg-[linear-gradient(135deg,rgba(255,242,234,0.14)_0%,rgba(232,183,90,0.1)_100%)] p-8">
-          <Eyebrow>This is</Eyebrow>
-          <ul className="mt-4 space-y-3">
-            {IS_THIS.map((item) => (
-              <li key={item} className="flex items-start gap-3 text-[16px] leading-snug text-[#FFF7EE]/90">
-                <CheckIcon className="mt-0.5 h-5 w-5 shrink-0 text-[#F8D896]" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div className="h-12" />
-    </section>
-  );
-}
-
 /* --------------------------- Before / After ----------------------------- */
 
 const BEFORE = [
@@ -589,6 +583,9 @@ function BeforeAfter() {
         <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.3vw,3rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#250009] [text-wrap:balance]">
           What Changes When You Finally Understand the Pattern?
         </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-[17px] leading-[1.6] text-[#4C1119]/75">
+          This isn't manipulative scripts, playing hard to get, or making yourself smaller. It's a real framework for understanding your patterns, better emotional discernment, and a practical blueprint for lasting change.
+        </p>
       </div>
       <div className="relative z-10 mx-auto mt-9 grid max-w-5xl gap-6 md:grid-cols-2">
         <div data-reveal className="border-2 border-[#8A2634]/25 bg-white/70 p-7">
@@ -682,8 +679,8 @@ function OfferStack() {
         </p>
       </div>
 
-      <div className="relative z-10 mx-auto mt-9 max-w-[700px] border border-[#E8B75A]/45 bg-[linear-gradient(180deg,rgba(255,242,234,0.97)_0%,rgba(255,229,218,0.92)_100%)] p-6 text-[#250009] sm:p-10" data-reveal>
-        <ul className="space-y-4">
+      <div className="relative z-10 mx-auto mt-9 max-w-[780px] border border-[#E8B75A]/45 bg-[linear-gradient(180deg,rgba(255,242,234,0.97)_0%,rgba(255,229,218,0.92)_100%)] p-7 text-[#250009] sm:p-12" data-reveal>
+        <ul className="space-y-6">
           {INCLUDED.map((item) => (
             <li key={item.title} className="flex items-start gap-3.5">
               <CheckIcon className="mt-1 h-5 w-5 shrink-0 text-[#8A2634]" />
@@ -698,7 +695,7 @@ function OfferStack() {
           ))}
         </ul>
 
-        <div className="mt-6 border-t border-dashed border-[#8A2634]/30 pt-5 space-y-4">
+        <div className="mt-7 border-t border-dashed border-[#8A2634]/30 pt-6 space-y-6">
           {BONUSES.map((item) => (
             <div key={item.title} className="flex items-start gap-3.5">
               <span className="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#8A2634] text-[10px] font-bold text-white">+</span>
@@ -713,22 +710,21 @@ function OfferStack() {
           ))}
         </div>
 
-        <div className="mt-7 border-t border-[#8A2634]/15 pt-6 text-center">
+        <div className="mt-8 border-t border-[#8A2634]/15 pt-7 text-center">
           <span className="ff-sans text-[14px] font-bold uppercase tracking-[0.14em] text-[#8A2634]/70 line-through">
             Total Value: ${SUMMIT_VALUE}
           </span>
-          <p className="ff-sans mt-2 text-[14px] font-bold uppercase tracking-[0.14em] text-[#8A2634]">
+          <div className="mt-2">
+            <span className="inline-block bg-[#DC2626] px-5 py-2 text-[18px] font-black uppercase tracking-[0.04em] text-white shadow-[0_10px_26px_rgba(220,38,38,0.4)]">
+              You Save ${SAVINGS} ({Math.round((SAVINGS / SUMMIT_VALUE) * 100)}% off)
+            </span>
+          </div>
+          <p className="ff-sans mt-4 text-[14px] font-bold uppercase tracking-[0.14em] text-[#8A2634]">
             Join Today for Only
           </p>
           <p className="ff-serif mt-1 text-[64px] font-black leading-none text-[#15803D]">${SUMMIT_PRICE}</p>
-          <span className="mt-3 inline-block bg-[#DC2626] px-5 py-2 text-[18px] font-black uppercase tracking-[0.04em] text-white shadow-[0_10px_26px_rgba(220,38,38,0.4)]">
-            You Save ${SAVINGS}
-          </span>
-          <p className="mt-2 text-[14px] font-bold uppercase tracking-[0.14em] text-[#8A2634]/70">
-            That's {Math.round((SAVINGS / SUMMIT_VALUE) * 100)}% off, limited-time launch pricing
-          </p>
 
-          <div className="mt-6">
+          <div className="mt-5">
             <Cta className="w-full sm:w-auto">Get the Complete Summit for ${SUMMIT_PRICE}</Cta>
           </div>
           <p className="mt-4 text-[14px] font-medium text-[#8A2634]/80">One payment. No recurring subscription.</p>
@@ -849,6 +845,10 @@ function Testimonials() {
           </figure>
         ))}
       </div>
+
+      <div className="relative z-10 mt-9 flex justify-center" data-reveal>
+        <Cta className="w-full sm:w-auto">Get Bonding Biology for ${SUMMIT_PRICE}</Cta>
+      </div>
     </section>
   );
 }
@@ -931,6 +931,10 @@ function Faq() {
             <FaqItem key={item.q} q={item.q} a={item.a} defaultOpen={i === 0} />
           ))}
         </div>
+
+        <div className="mt-10 flex justify-center" data-reveal>
+          <Cta className="w-full sm:w-auto">Get Bonding Biology for ${SUMMIT_PRICE}</Cta>
+        </div>
       </div>
     </section>
   );
@@ -987,7 +991,13 @@ function Footer() {
     <footer className="border-t border-[#E8B75A]/15 bg-[#170006] px-5 py-10 text-center sm:px-8">
       <p className="ff-serif text-[18px] font-semibold tracking-[-0.02em] text-[#FFF7EE]">Bonding Biology Institute</p>
       <p className="mt-3 text-[14px] text-[#FFF7EE]/50">
-        Questions? Contact <TodoNote>Insert support email.</TodoNote>
+        Questions? Contact{" "}
+        <a
+          href="mailto:Support@BondingBiology.com"
+          className="underline decoration-[#E8B75A]/40 underline-offset-2 hover:text-[#E8B75A]"
+        >
+          Support@BondingBiology.com
+        </a>
       </p>
       <p className="mx-auto mt-4 max-w-xl text-[12.5px] leading-[1.5] text-[#FFF7EE]/35">
         Results vary. The summit provides relationship education and personal-development tools. It does not guarantee a particular relationship outcome or the behavior or commitment of another person.
@@ -1017,6 +1027,199 @@ function MobileBar() {
           <span>Get Access</span>
           <ArrowRight className="h-4 w-4" />
         </a>
+      </div>
+    </div>
+  );
+}
+
+/* --------------------------- Exit-intent form -------------------------------- */
+
+function trapFocus(e: KeyboardEvent, container: HTMLElement | null) {
+  if (!container) return;
+  const focusable = container.querySelectorAll<HTMLElement>(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  if (focusable.length === 0) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
+}
+
+function ExitIntentForm({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading">("idle");
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const firstFieldRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!open) {
+      const t = setTimeout(() => {
+        setStatus("idle");
+        setName("");
+        setEmail("");
+        setPhone("");
+        setEmailError("");
+      }, 250);
+      return () => clearTimeout(t);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "Tab") trapFocus(e, dialogRef.current);
+    };
+    document.addEventListener("keydown", onKey);
+    const t = setTimeout(() => firstFieldRef.current?.focus(), 60);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      clearTimeout(t);
+    };
+  }, [open, onClose]);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.includes("@")) {
+      setEmailError("Please enter a valid email address containing '@'.");
+      return;
+    }
+    setEmailError("");
+    if (status === "loading") return;
+    setStatus("loading");
+
+    try {
+      await fetch(GHL_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          formSource: "exit_intent_modal_d",
+          ...getStoredUtmParams(),
+        }),
+      });
+    } catch {
+      // Fail forward — still send the visitor to checkout even if the webhook fails.
+    }
+
+    trackFacebookEvent('Lead', { content_name: 'Bonding Biology Summit', content_category: 'Exit Intent' });
+    triggerBlueprintDownload();
+    handleCtaClick();
+    window.location.href = buildCheckoutUrl(name, email, phone);
+  };
+
+  if (!open) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="exit-intent-title"
+    >
+      <div className="absolute inset-0 bg-[#0E0004]/85 backdrop-blur-sm" onClick={onClose} />
+      <div
+        ref={dialogRef}
+        className="relative w-full max-w-lg border border-[#E8B75A]/60 bg-[linear-gradient(135deg,#1D0008_0%,#3C0816_100%)] p-7 text-[#FFF7EE] shadow-[0_40px_120px_rgba(0,0,0,0.85)] sm:p-9"
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute right-4 top-4 grid h-9 w-9 place-items-center text-[#E8B75A]/70 transition-colors hover:bg-white/10 hover:text-[#E8B75A]"
+        >
+          <XIcon className="h-5 w-5" />
+        </button>
+
+        <Eyebrow>Wait, Before You Go</Eyebrow>
+        <h3
+          id="exit-intent-title"
+          className="ff-serif mt-4 text-[clamp(1.6rem,4.5vw,2.1rem)] font-bold leading-[1.1] tracking-[-0.03em] text-white"
+        >
+          Save ${SAVINGS} - Get Access + Free Love Guide
+        </h3>
+        <p className="mt-3 text-[15.5px] leading-[1.55] text-[#FFF7EE]/75">
+          Enter your info and we'll send you your free Love Guide and take you straight to secure checkout. The ${SUMMIT_PRICE} launch price won't be here much longer.
+        </p>
+
+        <form onSubmit={handleSubmit} className="mt-7 space-y-4">
+          <div>
+            <label htmlFor="exit-d-name" className="sr-only">Full name</label>
+            <input
+              ref={firstFieldRef}
+              id="exit-d-name"
+              type="text"
+              required
+              placeholder="Your Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
+            />
+          </div>
+          <div>
+            <label htmlFor="exit-d-email" className="sr-only">Email address</label>
+            <input
+              id="exit-d-email"
+              type="email"
+              required
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
+            />
+            {emailError && (
+              <p className="mt-1.5 text-[13px] font-medium text-[#FF5D73]">{emailError}</p>
+            )}
+          </div>
+          <div>
+            <label htmlFor="exit-d-phone" className="sr-only">Phone number</label>
+            <input
+              id="exit-d-phone"
+              type="tel"
+              required
+              placeholder="Phone Number"
+              value={phone}
+              onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
+              className="w-full border border-[#E8B75A]/20 bg-white/[0.04] px-4 py-3.5 text-[15px] text-[#FFF7EE] outline-none transition-all placeholder:text-[#FFF7EE]/30 focus:border-[#E8B75A] focus:bg-white/[0.07] focus:ring-1 focus:ring-[#E8B75A]/50"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={status === "loading"}
+            className="ff-sans btn-shimmer flex min-h-[52px] w-full items-center justify-center gap-2 rounded-none bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-4 text-[17px] font-bold text-[#250009] shadow-[0_16px_40px_rgba(232,183,90,0.28)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {status === "loading" ? (
+              "Redirecting..."
+            ) : (
+              <>
+                Get Bonding Biology for ${SUMMIT_PRICE}
+                <ArrowRight className="h-[18px] w-[18px]" />
+              </>
+            )}
+          </button>
+        </form>
+
+        <p className="mt-5 text-center text-[12.5px] font-medium text-[#FFF7EE]/60">
+          Secure checkout &middot; Instant access &middot; Watch anytime
+        </p>
       </div>
     </div>
   );
@@ -1103,18 +1306,34 @@ function StyleTag() {
 /* ============================== Page ================================= */
 
 export default function BondingBiologyLandingD() {
+  const [exitIntentOpen, setExitIntentOpen] = useState(false);
+
+  useEffect(() => {
+    const handleMouseLeave = (e: MouseEvent) => {
+      if (e.clientY < 20) {
+        const hasShown = sessionStorage.getItem("exit_intent_shown_d");
+        if (!hasShown) {
+          setExitIntentOpen(true);
+          sessionStorage.setItem("exit_intent_shown_d", "true");
+        }
+      }
+    };
+    document.addEventListener("mouseleave", handleMouseLeave);
+    return () => document.removeEventListener("mouseleave", handleMouseLeave);
+  }, []);
+
   return (
     <RevealScope>
       <div className="bb-landing-d ff-sans relative min-h-screen overflow-x-clip bg-[#170006] text-[#FFF7EE] antialiased [scroll-behavior:smooth]">
         <StyleTag />
         <Nav />
         <Hero />
+        <CredibilityStrip />
         <EmpathyReframe />
         <Mechanism />
         <Intro />
         <Curriculum />
         <WhoFor />
-        <NotThisIsThis />
         <BeforeAfter />
         <Testimonials />
         <OfferStack />
@@ -1123,6 +1342,7 @@ export default function BondingBiologyLandingD() {
         <FinalCta />
         <Footer />
         <MobileBar />
+        <ExitIntentForm open={exitIntentOpen} onClose={() => setExitIntentOpen(false)} />
       </div>
     </RevealScope>
   );
