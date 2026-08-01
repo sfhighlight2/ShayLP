@@ -205,7 +205,7 @@ function Hero() {
           <Cta className="w-full cta-shake sm:w-auto">Get Bonding Biology for ${SUMMIT_PRICE}</Cta>
         </div>
         <p style={{ "--i": 5 } as React.CSSProperties} className="mt-4 text-[14px] font-bold uppercase tracking-[0.12em] text-[#E8B75A]/90">
-          Limited-time launch price, the $97 rate won't last
+          Limited Time Price Expires Soon
         </p>
         <p style={{ "--i": 5 } as React.CSSProperties} className="mt-2 text-[14px] font-medium text-[#FFF7EE]/60">
           One-time payment. Includes three complete sessions, practical exercises, and two bonuses. 100% virtual, watch anytime.
