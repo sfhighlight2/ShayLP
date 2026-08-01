@@ -36,25 +36,22 @@ import { useEffect, useRef, useState } from "react";
 import { GHL_WEBHOOK_URL, formatPhoneNumber, trackFacebookEvent, triggerBlueprintDownload } from "./lib/leadCapture";
 import { getStoredUtmParams } from "./lib/utils";
 
-const SUMMIT_CHECKOUT_URL = "https://link.fastpaydirect.com/payment-link/6a5e81b2a655fa0b802a53e4";
+// Every CTA/link on this page points here instead of straight to the real
+// external payment link (fastpaydirect.com). That link now only lives in
+// BondingBiologySummitCheckout.tsx, embedded in an iframe behind this
+// route, so visitors stay on-site and see the announcement bar.
+const CHECKOUT_PAGE_PATH = "/d/checkout";
 
 const SUMMIT_VALUE = 497;
 const SUMMIT_PRICE = 97;
 const SAVINGS = SUMMIT_VALUE - SUMMIT_PRICE;
 
-const handleCtaClick = () => {
-  trackFacebookEvent('InitiateCheckout', {
-    content_name: 'Bonding Biology Summit',
-    value: SUMMIT_PRICE,
-    currency: 'USD',
-  });
-};
-
-// Appends the visitor's info to the external checkout link as query params
-// (fastpaydirect.com, not a route in this app) so it can prefill their
-// checkout. Single "Name" field is split on the first space into
-// firstName/lastName, matching the site-wide convention of one name input
-// (see buildCalendarSrc() in BondingBiologyOfferB.tsx for the same split).
+// Appends the visitor's info to our own checkout page as query params
+// (BondingBiologySummitCheckout.tsx reads and forwards them into the
+// embedded iframe's src). Single "Name" field is split on the first space
+// into firstName/lastName, matching the site-wide convention of one name
+// input (see buildCalendarSrc() in BondingBiologyOfferB.tsx for the same
+// split).
 function buildCheckoutUrl(name: string, email: string, phone: string): string {
   const trimmed = name.trim();
   const spaceIndex = trimmed.indexOf(" ");
@@ -68,7 +65,7 @@ function buildCheckoutUrl(name: string, email: string, phone: string): string {
   if (phone) params.set("phone", phone.replace(/\D/g, ""));
 
   const query = params.toString();
-  return query ? `${SUMMIT_CHECKOUT_URL}?${query}` : SUMMIT_CHECKOUT_URL;
+  return query ? `${CHECKOUT_PAGE_PATH}?${query}` : CHECKOUT_PAGE_PATH;
 }
 
 /* ----------------------------- Icons ----------------------------- */
@@ -136,7 +133,7 @@ const Glow = ({ className = "" }: { className?: string }) => (
 );
 
 const Cta = ({
-  href = SUMMIT_CHECKOUT_URL,
+  href = CHECKOUT_PAGE_PATH,
   children,
   variant = "gold",
   className = "",
@@ -153,7 +150,7 @@ const Cta = ({
       ? "bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] text-[#250009] shadow-[0_16px_40px_rgba(232,183,90,0.28)] hover:shadow-[0_22px_55px_rgba(232,183,90,0.42)] hover:-translate-y-0.5"
       : "bg-[#250009] text-[#FFF2EA] shadow-[0_14px_36px_rgba(0,0,0,0.4)] hover:-translate-y-0.5 hover:bg-[#310010]";
   return (
-    <a href={href} onClick={handleCtaClick} className={`${base} ${styles} ${className}`}>
+    <a href={href} className={`${base} ${styles} ${className}`}>
       {children}
       <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover:translate-x-1" />
     </a>
@@ -170,8 +167,7 @@ function Nav() {
           <img src="/Mainlogo.png" alt="Bonding Biology Institute Logo" className="h-8 md:h-10 w-auto object-contain" />
         </a>
         <a
-          href={SUMMIT_CHECKOUT_URL}
-          onClick={handleCtaClick}
+          href={CHECKOUT_PAGE_PATH}
           className="ff-sans inline-flex min-h-[44px] items-center gap-2 rounded-none bg-[linear-gradient(135deg,#F6D089_0%,#D99A35_100%)] px-5 py-2.5 text-[15px] sm:text-[16px] font-bold text-[#250009] shadow-[0_10px_30px_rgba(232,183,90,0.25)] transition-transform hover:-translate-y-0.5"
         >
           <span>Get Instant Access</span>
@@ -1008,8 +1004,7 @@ function MobileBar() {
           <span className="text-[12px] font-bold uppercase tracking-wider text-[#E8B75A]/80">3 Days &middot; Only ${SUMMIT_PRICE}</span>
         </div>
         <a
-          href={SUMMIT_CHECKOUT_URL}
-          onClick={handleCtaClick}
+          href={CHECKOUT_PAGE_PATH}
           className="ff-sans btn-shimmer min-h-[48px] rounded-none bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-3 text-[16px] font-bold text-[#250009] shadow-[0_8px_20px_rgba(232,183,90,0.25)] flex items-center gap-1.5 active:scale-95 transition-transform"
         >
           <span>Get Access</span>
@@ -1110,7 +1105,6 @@ function ExitIntentForm({ open, onClose }: { open: boolean; onClose: () => void 
 
     trackFacebookEvent('Lead', { content_name: 'Bonding Biology Summit', content_category: 'Exit Intent' });
     triggerBlueprintDownload();
-    handleCtaClick();
     window.location.href = buildCheckoutUrl(name, email, phone);
   };
 

@@ -4,6 +4,7 @@ import BondingBiologyLanding from "./BondingBiologyLanding";
 import BondingBiologyLandingB from "./BondingBiologyLandingB";
 import BondingBiologyLandingC from "./BondingBiologyLandingC";
 import BondingBiologyLandingD from "./BondingBiologyLandingD";
+import BondingBiologySummitCheckout from "./BondingBiologySummitCheckout";
 import BondingBiologySummitThankYou from "./BondingBiologySummitThankYou";
 import BondingBiologyOfferB from "./BondingBiologyOfferB";
 import { captureUtmParams } from "./lib/utils";
@@ -16,6 +17,7 @@ function AppRoutes() {
       <Route path="/b/offer" element={<BondingBiologyOfferB />} />
       <Route path="/c" element={<BondingBiologyLandingC />} />
       <Route path="/d" element={<BondingBiologyLandingD />} />
+      <Route path="/d/checkout" element={<BondingBiologySummitCheckout />} />
       <Route path="/d/thank-you" element={<BondingBiologySummitThankYou />} />
       <Route path="/quiz" element={<Navigate to="/" replace />} />
       <Route path="/results" element={<Navigate to="/" replace />} />
