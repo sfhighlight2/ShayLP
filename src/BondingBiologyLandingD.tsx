@@ -13,10 +13,11 @@
  * date/time — enroll and get instant access, watch anytime), so there is
  * no event date/timezone/replay-policy placeholder to fill in.
  *
- * REMAINING PLACEHOLDERS — search for "TODO:" in this file before sending
- * traffic here. They're also rendered visibly on the page itself (in
- * amber) so they can't be missed in a preview: the refund/guarantee
- * policy and the support email in the footer.
+ * The page currently states no refund/guarantee policy anywhere (the
+ * "What is the refund policy?" FAQ item and the risk-reversal line under
+ * the offer-stack CTA were removed rather than shipped with a fabricated
+ * policy). Add real policy copy back into OfferStack and FAQS in this
+ * file once Shay confirms the actual terms.
  *
  * The 4 testimonial quotes paired with real couple photos in the
  * Testimonials section were written by request as illustrative launch
@@ -158,12 +159,6 @@ const Cta = ({
     </a>
   );
 };
-
-const TodoNote = ({ children }: { children: React.ReactNode }) => (
-  <span className="ff-sans inline-block rounded-md border border-dashed border-[#D8962D] bg-[#D8962D]/10 px-2 py-0.5 text-[12px] font-bold text-[#8A2634]">
-    TODO: {children}
-  </span>
-);
 
 /* ------------------------------ Nav -------------------------------- */
 
@@ -728,9 +723,6 @@ function OfferStack() {
             <Cta className="w-full sm:w-auto">Get the Complete Summit for ${SUMMIT_PRICE}</Cta>
           </div>
           <p className="mt-4 text-[14px] font-medium text-[#8A2634]/80">One payment. No recurring subscription.</p>
-          <p className="mt-2 text-[14px] leading-snug text-[#8A2634]/80">
-            <TodoNote>Insert the accurate refund or satisfaction-guarantee policy.</TodoNote>
-          </p>
           <p className="mt-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[14px] font-bold uppercase tracking-[0.08em] text-[#8A2634]/70">
             <span>Secure checkout</span>
             <span aria-hidden="true">&middot;</span>
@@ -891,10 +883,6 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   {
     q: `Is the $${SUMMIT_PRICE} a one-time payment?`,
     a: `Yes. Your enrollment is a one-time payment of $${SUMMIT_PRICE} with no recurring subscription.`,
-  },
-  {
-    q: "What is the refund policy?",
-    a: <TodoNote>Insert the accurate refund or satisfaction-guarantee policy.</TodoNote>,
   },
 ];
 
