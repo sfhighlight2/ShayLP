@@ -237,7 +237,7 @@ function Hero() {
         </h1>
         <p
           style={{ "--i": 2 } as React.CSSProperties}
-          className="mx-auto mt-4 max-w-2xl text-left text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6] text-[#FFF7EE]/95 sm:text-center [text-wrap:balance]"
+          className="mx-auto mt-4 w-full max-w-2xl text-left text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6] text-[#FFF7EE]/95 sm:text-center sm:[text-wrap:balance]"
         >
           Identify the pattern creating the wrong relationship dynamics, and how to attract commitment-ready men without chasing or overgiving.
         </p>
