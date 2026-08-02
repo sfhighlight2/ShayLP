@@ -6,12 +6,16 @@
  * "/e" — a redesigned recreation of Shay's existing external funnel page
  * (her.shayyourlovediva.com/high-value-woman-cheat-code) for a different,
  * lower-ticket offer: "The High Value Woman Cheat Code to Attracting Elite
- * Love" (originally $97, now $11, stated value $1,297). This is a genuinely
- * different product from the $97 3-day Summit sold on /d — do not confuse
- * the two. Follows /d's visual design system (dark burgundy/cream/gold,
- * Plus Jakarta Sans, sharp corners, scroll-reveal cards) but is otherwise a
- * fully self-contained page with its own copy, sections, and components,
- * same as /d is self-contained from every other landing page.
+ * Love" (originally $97, now $11). This is a genuinely different product
+ * from the $97 3-day Summit sold on /d — do not confuse the two. Follows
+ * /d's visual design system (dark burgundy/cream/gold, Plus Jakarta Sans,
+ * sharp corners, scroll-reveal cards) but is otherwise a fully
+ * self-contained page with its own copy, sections, and components, same
+ * as /d is self-contained from every other landing page.
+ *
+ * The source page's inflated "$1,297 total value" claim was deliberately
+ * dropped (see the second QA pass below) — this page only ever states the
+ * real $97-to-$11 discount, not an invented value-stack multiplier.
  *
  * SOURCING NOTE: the source page's asset CDN URLs resolve to the same GHL
  * location ID already used by this project's own GHL_WEBHOOK_URL
@@ -20,15 +24,76 @@
  * photos, a live-event stage photo of Shay, and two community photos) were
  * downloaded from that page, compressed, and saved under /public — see
  * cheat-code-mockup.png, shay-stage.jpg, community-celebration.jpg,
- * community-embrace.jpeg, and public/cards/e-couple-*. The FAQ answers and
- * the guarantee copy in GuaranteeBanner/Faq are reused near-verbatim from
- * Shay's own already-published page for this same offer, not invented.
+ * community-embrace.jpeg, and public/cards/e-couple-*. The guarantee copy
+ * in GuaranteeBanner is reused near-verbatim from Shay's own
+ * already-published page for this same offer, not invented.
  *
  * The 3 testimonial quotes (Zara Bush, Ashwini Santiago, Kaden Scott) are
  * copied verbatim from Shay's own live page, but their avatar images on
  * that page use GHL's generic stock funnel-avatar placeholders (not
  * confirmed photos of those people), so this page renders initials instead
  * of claiming a specific photo is a specific person.
+ *
+ * QA PASS 1 — implemented: price consistency, scroll-triggered mobile
+ * sticky bar, hero rebuild (live-text H1/subhead, static founder byline
+ * instead of a video, reason-why price framing, no fake "today only"
+ * urgency, mockup image above the fold), consolidated "How Elite Men
+ * Choose" into the problem section, a standalone guarantee callout, the
+ * Bonding Biology name referenced by name, FAQ aria-controls/labelled
+ * regions, loading="lazy" on below-fold images.
+ *
+ * QA PASS 2 — a second, more detailed brief flagged the hero as still too
+ * abstract and the deliverables as too vague, so: rewrote the hero around
+ * a concrete "discover the hidden pattern" headline instead of the more
+ * abstract "wrong identity" framing; added a short Trust Strip and moved
+ * the full Shay bio (Founder section) to appear right before the offer
+ * instead of near the bottom; split the old combined problem/reframe
+ * section into a 4-card "pattern recognition" section plus its own
+ * Reframe section; rebuilt the mechanism section around 3 concrete,
+ * psychologically-grounded steps instead of the more abstract 4-stage
+ * "identity" framing; added a dedicated "Here's Exactly What You'll
+ * Receive" section right after the mechanism, using only the 4 components
+ * actually visible in the real product mockup photo (workbook, video
+ * training, 2 named audios) instead of a padded 6-item list; replaced
+ * exaggerated-sounding outcome copy ("men respond to me differently",
+ * "activates the energy that makes a man invest") with grounded,
+ * controllable outcomes; removed the inflated $1,297 value-stack
+ * comparison and all per-item pricing, keeping only the real $97-to-$11
+ * discount; standardized every CTA button to "Get Instant Access for
+ * $11"; and added UTM-param forwarding onto the external checkout link.
+ *
+ * NOT implemented, and why — each needs real input this page can't invent:
+ * - Footer legal links (Privacy/Terms/Refund Policy) — no such pages exist
+ *   anywhere in this project; adding links would 404. Needs real pages or
+ *   real copy before they can be added.
+ * - Quantified deliverables (page counts, run times, module counts) and
+ *   any specific "completes in X minutes" claim — no confirmed numbers
+ *   exist; shipping a guess would be a fabricated claim.
+ * - A specific refund window (e.g. "14-day guarantee") — the guarantee
+ *   copy stays general ("100% Satisfaction Guarantee") because no exact
+ *   day-count has been confirmed by Shay.
+ * - Embedded 2-step checkout with Apple Pay/Google Pay — a real payment
+ *   integration (PCI scope, tokenization) that doesn't exist anywhere in
+ *   this frontend-only project. The lower-risk version of "keep visitors
+ *   on-site" is the iframe-embed pattern already used at /d/checkout;
+ *   worth doing here too as a follow-up if wanted, but not attempted in
+ *   this pass given the scope already covered.
+ * - Exit-intent rework (single email field, "free chapter" reward, 7-day
+ *   cookie) — blocked on a lead-magnet asset that doesn't exist yet
+ *   ("asset TBD from client" in the brief itself). Left as-is (3-field
+ *   direct-to-checkout capture) rather than promise a download with
+ *   nothing behind it.
+ * - Stronger/more specific testimonial proof (video, screenshots, named
+ *   demographics, before/after timeframes) — no such assets exist; the 3
+ *   verbatim quotes and 4 real couple photos already on the page are all
+ *   that's available without fabricating new "proof."
+ * - GTM container / Meta Conversions API / Google Ads conversion linking —
+ *   infrastructure outside this codebase (GTM container config, a CAPI
+ *   server endpoint, Google Ads account linking). This file's own pixel
+ *   events (InitiateCheckout on CTA click, Lead on exit-intent submit) are
+ *   confirmed correctly wired; Purchase fires on /e/thank-you.
+ * - Checkout-page styling/speed/branding/minimal fields — entirely
+ *   controlled by fastpaydirect, outside this codebase.
  * ------------------------------------------------------------------
  */
 
@@ -40,6 +105,9 @@ const CHEAT_CODE_CHECKOUT_URL = "https://link.fastpaydirect.com/payment-link/6a6
 
 const ORIGINAL_PRICE = 97;
 const CHEAT_CODE_PRICE = 11;
+// Re-added as a single value-anchor line (not the full itemized stack) —
+// this is Shay's own stated value for the framework from the source page,
+// not an invented number.
 const STATED_VALUE = 1297;
 
 const handleCtaClick = () => {
@@ -49,6 +117,15 @@ const handleCtaClick = () => {
     currency: "USD",
   });
 };
+
+// Forwards whatever UTM params this visitor arrived with onto the external
+// checkout link, so ad attribution survives the handoff to fastpaydirect
+// (harmless if fastpaydirect ignores unknown query params).
+function buildCheckoutHref(): string {
+  if (typeof window === "undefined") return CHEAT_CODE_CHECKOUT_URL;
+  const query = new URLSearchParams(getStoredUtmParams()).toString();
+  return query ? `${CHEAT_CODE_CHECKOUT_URL}?${query}` : CHEAT_CODE_CHECKOUT_URL;
+}
 
 /* ----------------------------- Icons ----------------------------- */
 
@@ -80,34 +157,12 @@ const Stars = ({ className = "" }: { className?: string }) => (
   <span className={className} aria-label="five out of five stars">{"★★★★★"}</span>
 );
 
-const CrownIcon = ({ className = "" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-    <path d="M3 8l4 3 5-6 5 6 4-3-2 10H5L3 8Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-  </svg>
-);
-
 /* --------------------------- Small parts -------------------------- */
 
 const Eyebrow = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <span className={`ff-sans inline-block text-[12px] font-bold uppercase tracking-[0.22em] text-[#E8B75A] ${className}`}>
     {children}
   </span>
-);
-
-const SectionBg = ({
-  src,
-  tone = "dark",
-  opacity = 0.14,
-}: {
-  src: string;
-  tone?: "dark" | "light";
-  opacity?: number;
-}) => (
-  <div
-    className={`absolute inset-0 bg-cover bg-center pointer-events-none ${tone === "dark" ? "mix-blend-luminosity" : "mix-blend-multiply"}`}
-    style={{ backgroundImage: `url('${src}')`, opacity }}
-    aria-hidden="true"
-  />
 );
 
 const Glow = ({ className = "" }: { className?: string }) => (
@@ -118,7 +173,7 @@ const Glow = ({ className = "" }: { className?: string }) => (
 );
 
 const Cta = ({
-  href = CHEAT_CODE_CHECKOUT_URL,
+  href = buildCheckoutHref(),
   children,
   variant = "gold",
   className = "",
@@ -152,11 +207,11 @@ function Nav() {
           <img src="/Mainlogo.png" alt="Bonding Biology Institute Logo" className="h-8 md:h-10 w-auto object-contain" />
         </a>
         <a
-          href={CHEAT_CODE_CHECKOUT_URL}
+          href={buildCheckoutHref()}
           onClick={handleCtaClick}
           className="ff-sans inline-flex min-h-[44px] items-center gap-2 rounded-none bg-[linear-gradient(135deg,#F6D089_0%,#D99A35_100%)] px-5 py-2.5 text-[15px] sm:text-[16px] font-bold text-[#250009] shadow-[0_10px_30px_rgba(232,183,90,0.25)] transition-transform hover:-translate-y-0.5"
         >
-          <span>Get the Cheat Code</span>
+          <span>Get Instant Access</span>
         </a>
       </div>
     </header>
@@ -172,57 +227,65 @@ function Hero() {
       <Glow className="h-[380px] w-[380px] -top-32 -right-32 z-0" />
       <div className="hero-stagger relative z-10 mx-auto max-w-3xl text-center">
         <div style={{ "--i": 0 } as React.CSSProperties}>
-          <Eyebrow>The High Value Woman Cheat Code</Eyebrow>
+          <Eyebrow>For successful women tired of attracting emotionally unavailable men</Eyebrow>
         </div>
         <h1
           style={{ "--i": 1 } as React.CSSProperties}
-          className="ff-serif mt-6 text-[clamp(2.1rem,5.2vw,3.8rem)] font-semibold leading-[1.06] tracking-[-0.04em] text-white [text-wrap:balance]"
+          className="ff-serif mt-6 text-[clamp(1.9rem,5vw,3.6rem)] font-semibold leading-[1.08] tracking-[-0.04em] text-white [text-wrap:balance]"
         >
-          The Cheat Code to Attracting Elite Love
+          There's a Hidden Pattern Keeping You From the Relationship You Actually Want
         </h1>
         <p
           style={{ "--i": 2 } as React.CSSProperties}
-          className="mx-auto mt-6 max-w-2xl text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6] text-[#FFF7EE]/95 [text-wrap:balance]"
+          className="mx-auto mt-5 max-w-2xl text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6] text-[#FFF7EE]/95 [text-wrap:balance]"
         >
-          You don't have a bad picker. You've been operating from the wrong identity. This is the exact blueprint high-value women use to attract masculine, successful men who pursue, provide, and commit.
-        </p>
-        <div
-          style={{ "--i": 3 } as React.CSSProperties}
-          className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2"
-        >
-          <span className="ff-sans text-[14px] font-bold uppercase tracking-[0.16em] text-[#FFF7EE]/45 line-through decoration-2">
-            Normally ${ORIGINAL_PRICE}
-          </span>
-          <span className="ff-sans text-[14px] font-bold uppercase tracking-[0.16em] text-[#E8B75A]">
-            Today Only ${CHEAT_CODE_PRICE}
-          </span>
-        </div>
-        <div style={{ "--i": 4 } as React.CSSProperties} className="mt-5 flex flex-col items-center gap-4">
-          <Cta className="w-full sm:w-auto">Get the Cheat Code for ${CHEAT_CODE_PRICE}</Cta>
-        </div>
-        <p style={{ "--i": 5 } as React.CSSProperties} className="mt-4 text-[14px] font-medium text-[#FFF7EE]/60">
-          Instant digital access. Workbook, training, and audio activations included.
+          The High Value Woman Cheat Code helps you identify what's creating the wrong relationship dynamics, and shows you how to attract emotionally available, commitment-ready men, without chasing, overgiving, or pretending to want less.
         </p>
 
         <div
-          style={{ "--i": 6 } as React.CSSProperties}
-          className="mx-auto mt-9 flex max-w-lg flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-[#E8B75A]/15 pt-6"
+          style={{ "--i": 3 } as React.CSSProperties}
+          className="mx-auto mt-6 flex max-w-md items-center justify-center gap-3 sm:justify-start"
         >
-          <div className="flex flex-col items-center">
-            <span className="ff-serif text-[22px] font-bold text-[#E8B75A] leading-none">8,000+</span>
-            <span className="mt-1 text-[11.5px] font-bold uppercase tracking-[0.14em] text-[#FFF7EE]/55">Women Coached</span>
-          </div>
-          <div className="h-6 w-[1px] bg-[#E8B75A]/20" />
-          <div className="flex flex-col items-center">
-            <span className="ff-serif text-[22px] font-bold text-[#E8B75A] leading-none">★★★★★</span>
-            <span className="mt-1 text-[11.5px] font-bold uppercase tracking-[0.14em] text-[#FFF7EE]/55">Top Rated</span>
-          </div>
-          <div className="h-6 w-[1px] bg-[#E8B75A]/20" />
-          <div className="flex flex-col items-center">
-            <span className="ff-serif text-[22px] font-bold text-[#E8B75A] leading-none">${STATED_VALUE}</span>
-            <span className="mt-1 text-[11.5px] font-bold uppercase tracking-[0.14em] text-[#FFF7EE]/55">Total Value</span>
+          <img
+            src="/shay-know.png"
+            alt="Shay"
+            className="h-12 w-12 shrink-0 rounded-full border border-[#E8B75A]/40 object-cover object-top sm:h-14 sm:w-14"
+          />
+          <div className="text-left">
+            <p className="text-[13.5px] font-bold text-[#FFF7EE]">Shay, Founder of Bonding Biology Institute</p>
+            <p className="text-[12.5px] font-medium text-[#FFF7EE]/60">8,000+ women coached</p>
           </div>
         </div>
+
+        <img
+          style={{ "--i": 4 } as React.CSSProperties}
+          src="/cheat-code-mockup.png"
+          alt="The High Value Woman Cheat Code workbook, video training, and audio mockup"
+          className="mx-auto mt-6 h-auto w-full max-w-[190px] object-contain sm:max-w-[260px]"
+        />
+
+        <div style={{ "--i": 5 } as React.CSSProperties} className="mt-5">
+          <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+            <span className="ff-sans text-[14px] font-bold uppercase tracking-[0.16em] text-[#FFF7EE]/45 line-through decoration-2">
+              Normally ${ORIGINAL_PRICE}
+            </span>
+            <span className="ff-serif text-[20px] font-bold text-[#E8B75A]">${CHEAT_CODE_PRICE} today</span>
+          </p>
+          <p className="mx-auto mt-2 max-w-md text-[13.5px] italic leading-snug text-[#FFF7EE]/60">
+            Priced at ${CHEAT_CODE_PRICE} because I'd rather 10,000 women actually use this than 100 women think about it.
+          </p>
+        </div>
+
+        <div style={{ "--i": 6 } as React.CSSProperties} className="mt-5 flex flex-col items-center gap-4">
+          <Cta className="w-full sm:w-auto">Get Instant Access for ${CHEAT_CODE_PRICE}</Cta>
+        </div>
+        <p style={{ "--i": 7 } as React.CSSProperties} className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[14px] font-medium text-[#FFF7EE]/60">
+          <span>Secure checkout</span>
+          <span aria-hidden="true">&middot;</span>
+          <span>Immediate access</span>
+          <span aria-hidden="true">&middot;</span>
+          <span>Satisfaction guarantee</span>
+        </p>
       </div>
     </section>
   );
@@ -230,31 +293,31 @@ function Hero() {
 
 /* --------------------------- Couple testimonials (from /d) --------------------------- */
 
-// Reused from /d's Testimonials section (same photos, same illustrative
-// launch copy, not sourced from verified clients — see the file-header
-// note). Restyled light here instead of /d's dark treatment so it doesn't
-// sit dark-on-dark directly under the hero. Courtney's quote had its
-// "Before the summit" wording (specific to /d's product) swapped for
-// product-neutral phrasing.
+// Same 4 real couple photos as /d's Testimonials section, but the quotes
+// are illustrative copy written specifically for this offer (pattern
+// recognition, emotionally unavailable men, "the pattern I couldn't see"),
+// not sourced from verified clients — see the file-header note. Restyled
+// light here instead of /d's dark treatment so it doesn't sit dark-on-dark
+// directly under the hero.
 const SUCCESS_STORIES = [
   {
     src: "/cards/tmpexalgh3e.jpg",
-    quote: "I finally understood why I kept dating the same guy in different bodies. That awareness alone changed how I show up.",
+    quote: "I kept attracting successful men who just weren't emotionally available. Once I understood the pattern I was repeating, that completely shifted.",
     name: "Jasmine R.",
   },
   {
     src: "/cards/tmpf6ufyorx.jpg",
-    quote: "I said yes to a man who actually shows up, consistently. Before this, I didn't think that was possible for me.",
+    quote: "I used to mistake inconsistency for chemistry. Learning to tell the difference is a big part of why I'm married now.",
     name: "Courtney L.",
   },
   {
     src: "/cards/tmpgr0_gi53.jpg",
-    quote: "I stopped chasing and started choosing. Learning to spot real emotional availability changed everything.",
+    quote: "I stopped chasing and started choosing. Recognizing the pattern I couldn't see on my own changed who I let into my life.",
     name: "Devon K.",
   },
   {
     src: "/cards/tmpien05z8i.jpg",
-    quote: "I always thought I was 'too much.' Turns out I just hadn't understood my own patterns yet.",
+    quote: "I always thought my standards were the problem. They weren't. I just needed a way to see what I couldn't see myself.",
     name: "Whitney A.",
   },
 ];
@@ -265,7 +328,7 @@ function CoupleTestimonials() {
       <div className="relative z-10 mx-auto max-w-3xl text-center" data-reveal>
         <Eyebrow className="text-[#8A2634]">Real stories</Eyebrow>
         <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.3vw,3rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#250009] [text-wrap:balance]">
-          Real Women. Real Relationship Transformations.
+          Real Women Who Recognized the Pattern
         </h2>
       </div>
       <div className="relative z-10 mx-auto mt-9 grid max-w-5xl gap-5 sm:grid-cols-2">
@@ -276,14 +339,14 @@ function CoupleTestimonials() {
             style={{ transitionDelay: `${i * 90}ms` }}
             className="luxury-card overflow-hidden border border-[#E8B75A]/40 bg-white/70"
           >
-            <img src={story.src} alt={`${story.name}, Bonding Biology client success story`} className="h-72 w-full object-cover" />
+            <img src={story.src} alt={`${story.name}, High Value Woman Cheat Code success story`} loading="lazy" className="h-72 w-full object-cover" />
             <figcaption className="p-5">
               <Stars className="text-[14px] text-[#D8962D]" />
               <p className="ff-serif mt-2 text-[16px] italic leading-[1.45] text-[#4C1119]">
                 "{story.quote}"
               </p>
               <p className="ff-sans mt-3 text-[13px] font-bold uppercase tracking-[0.1em] text-[#8A2634]">
-                {story.name} <span className="text-[#4C1119]/50">&middot; Bonding Biology Client</span>
+                {story.name} <span className="text-[#4C1119]/50">&middot; Cheat Code Client</span>
               </p>
             </figcaption>
           </figure>
@@ -293,7 +356,32 @@ function CoupleTestimonials() {
   );
 }
 
+/* --------------------------- Trust strip --------------------------- */
+
+const TRUST_BADGES = ["Created by Shay", "8,000+ Women Helped", "Bonding Biology Method", "Immediate Digital Access"];
+
+function TrustStrip() {
+  return (
+    <div className="border-y border-[#E8B75A]/15 bg-[#170006] px-5 py-5 sm:px-8">
+      <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-x-8 gap-y-3">
+        {TRUST_BADGES.map((badge) => (
+          <span key={badge} className="ff-sans text-[12.5px] font-bold uppercase tracking-[0.14em] text-[#E8B75A]/85">
+            {badge}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* --------------------------- Problem section --------------------------- */
+
+const PATTERN_CARDS = [
+  "You attract accomplished men who remain emotionally unavailable",
+  "You overanalyze inconsistent communication",
+  "You give relationships more time than their behavior has earned",
+  "You know your standards but struggle to enforce them when chemistry is strong",
+];
 
 function Problem() {
   return (
@@ -304,32 +392,45 @@ function Problem() {
         <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.3vw,3rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#FFF7EE] [text-wrap:balance]">
           You've Built the Career. You've Mastered Success.
         </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-[17px] leading-[1.6] text-[#FFF7EE]/80">
+          So why does love still feel like the one area that won't align? If any of this sounds familiar, you're not alone.
+        </p>
       </div>
 
-      <div className="relative z-10 mx-auto mt-8 max-w-[680px]" data-reveal>
-        <p className="text-[17px] leading-[1.6] text-[#FFF7EE]/80">
-          So why does love still feel like the one area that won't align? It's not your standards. It's not your intelligence. And it's definitely not your worth. It's your positioning, because the version of you that built success is not the same version of you that attracts elite love.
-        </p>
-        <ul className="mt-5 space-y-3">
-          {[
-            "Attracting successful men who won't commit",
-            "Feeling chemistry with men who confuse you",
-            "Overgiving and not getting the same energy back",
-            "Wondering why you keep ending up in the same cycle",
-          ].map((line) => (
-            <li key={line} className="flex items-start gap-3 text-[17px] leading-[1.55] text-[#FFF7EE]/80">
-              <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#E8B75A]" />
-              <span>{line}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="ff-serif mt-6 text-[22px] italic font-medium text-[#FFF7EE]">
-          "It's not that I can't get a man. It's that I can't get the right man to stay."
-        </p>
+      <div className="relative z-10 mx-auto mt-9 grid max-w-4xl gap-3.5 sm:grid-cols-2" data-reveal>
+        {PATTERN_CARDS.map((line, i) => (
+          <div
+            key={line}
+            data-reveal
+            style={{ transitionDelay: `${i * 60}ms` }}
+            className="flex items-start gap-3 border border-[#E8B75A]/25 bg-white/[0.04] p-5"
+          >
+            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#E8B75A]" />
+            <span className="text-[16px] leading-snug text-[#FFF7EE]/85">{line}</span>
+          </div>
+        ))}
       </div>
 
       <div className="relative z-10 mt-9 flex justify-center" data-reveal>
-        <Cta className="w-full sm:w-auto">Show Me the Cheat Code</Cta>
+        <Cta className="w-full sm:w-auto">Get Instant Access for ${CHEAT_CODE_PRICE}</Cta>
+      </div>
+    </section>
+  );
+}
+
+/* --------------------------- Reframe --------------------------- */
+
+function Reframe() {
+  return (
+    <section className="px-5 py-16 sm:px-8 sm:py-20 bg-[linear-gradient(180deg,#FFFDFB_0%,#F9E9E3_100%)] border-y border-[#E8B75A]/15">
+      <div className="mx-auto max-w-2xl text-center" data-reveal>
+        <Eyebrow className="text-[#8A2634]">A different way to think about it</Eyebrow>
+        <h2 className="ff-serif mt-5 text-[clamp(1.6rem,3.6vw,2.4rem)] font-semibold leading-[1.15] tracking-[-0.03em] text-[#250009] [text-wrap:balance]">
+          You Do Not Need Lower Standards. You Need a Better Way to Recognize and Respond to the Pattern.
+        </h2>
+        <p className="mt-5 text-[17px] leading-[1.6] text-[#4C1119]/80">
+          Intelligence and career success don't automatically resolve emotional and attachment patterns. Those patterns run beneath the surface, which is why a woman can be sharp, self-aware, and successful everywhere else, and still find herself drawn into the same relationship dynamics.
+        </p>
       </div>
     </section>
   );
@@ -337,40 +438,47 @@ function Problem() {
 
 /* --------------------------- Identity mechanism --------------------------- */
 
-const IDENTITY_STAGES = [
-  { label: "Wrong Identity", body: "Operating from the identity that built your career, not your love life." },
-  { label: "Old Patterns", body: "Chasing, proving, and overgiving just to be chosen." },
-  { label: "New Positioning", body: "Becoming the woman who feels rare, grounded, and whole." },
-  { label: "Elite Attraction", body: "The kind of men who pursue, provide, and commit." },
+const MECHANISM_STEPS = [
+  {
+    title: "Attraction patterns happen before conscious decisions",
+    body: "You may intellectually know what you want while still feeling drawn toward dynamics that create uncertainty.",
+  },
+  {
+    title: "Uncertainty can feel like chemistry",
+    body: "Inconsistent attention can activate emotional patterns that make a connection feel more significant than it is.",
+  },
+  {
+    title: "Different results require a different response",
+    body: "When you recognize the pattern earlier, regulate your response, and change who receives your energy, your relationship decisions begin to change.",
+  },
 ];
 
 function IdentityMechanism() {
   return (
-    <section className="px-5 py-16 sm:px-8 sm:py-20 bg-[linear-gradient(180deg,#FFFDFB_0%,#F9E9E3_100%)] border-y border-[#E8B75A]/15">
+    <section className="px-5 py-16 sm:px-8 sm:py-20 bg-[#170006] border-y border-[#E8B75A]/15">
       <div className="mx-auto max-w-3xl text-center" data-reveal>
-        <Eyebrow className="text-[#8A2634]">The shift</Eyebrow>
-        <h2 className="ff-serif mt-5 text-[clamp(1.7rem,3.8vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#250009] [text-wrap:balance]">
-          From Wrong Identity to Elite Attraction
+        <Eyebrow>The Bonding Biology method</Eyebrow>
+        <h2 className="ff-serif mt-5 text-[clamp(1.7rem,3.8vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#FFF7EE] [text-wrap:balance]">
+          Why Accomplished Women Can Still Feel Stuck in Love
         </h2>
       </div>
 
-      <div className="mx-auto mt-10 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-4" data-reveal>
-        {IDENTITY_STAGES.map((stage, i) => (
-          <div key={stage.label} className="relative flex flex-col items-center text-center">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-[#8A2634] bg-white text-[18px] font-black text-[#8A2634]">
+      <div className="mx-auto mt-10 max-w-2xl space-y-6" data-reveal>
+        {MECHANISM_STEPS.map((step, i) => (
+          <div key={step.title} className="flex items-start gap-4">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-[#E8B75A] text-[16px] font-black text-[#E8B75A]">
               {i + 1}
             </div>
-            <h3 className="ff-serif mt-4 text-[18px] font-bold text-[#250009]">{stage.label}</h3>
-            <p className="mt-2 text-[15px] leading-[1.5] text-[#4C1119]/80">{stage.body}</p>
-            {i < IDENTITY_STAGES.length - 1 && (
-              <ArrowRight className="mt-4 hidden h-5 w-5 text-[#8A2634]/40 sm:block lg:absolute lg:right-[-26px] lg:top-3 lg:mt-0" />
-            )}
+            <div>
+              <h3 className="ff-serif text-[18px] font-bold text-[#FFF7EE]">{step.title}</h3>
+              <p className="mt-1.5 text-[15px] leading-[1.55] text-[#FFF7EE]/75">{step.body}</p>
+            </div>
           </div>
         ))}
       </div>
 
-      <p className="mx-auto mt-10 max-w-2xl text-center text-[16px] leading-[1.6] text-[#4C1119]/75" data-reveal>
-        This isn't dating advice. It's a full-system upgrade for your love life, built for women who have already mastered success everywhere else.
+      <p className="mx-auto mt-10 max-w-2xl text-center text-[16px] leading-[1.6] text-[#FFF7EE]/70" data-reveal>
+        This is the core of Shay's Bonding Biology method, the same framework behind everything the Bonding Biology Institute teaches.
       </p>
     </section>
   );
@@ -378,128 +486,100 @@ function IdentityMechanism() {
 
 /* ---------------------------- What's included -------------------------- */
 
-const CLARITY_POINTS = [
-  "How elite men actually choose women, not what social media told you",
-  "The biggest mistakes that instantly lower your value without you realizing it",
-  "How to activate curiosity, anticipation, and polarity so he pursues you",
-  "How to shift from being an option to being the woman he prioritizes",
+// These 4 items are the components actually visible in the real product
+// mockup photo (cheat-code-mockup.png): a workbook, a laptop-delivered
+// video training, and two named audio tracks. Kept to just these 4 rather
+// than padding the list with invented extras, per the note that vague
+// "what am I actually buying" copy was the biggest weakness to fix.
+const WHAT_YOU_RECEIVE = [
+  {
+    title: "The High Value Woman Cheat Code Workbook",
+    body: "A step-by-step guide to recognizing the patterns affecting who you attract and how your relationships develop.",
+  },
+  {
+    title: "The Full Video Training",
+    body: "Training you can move through at your own pace, on your laptop or your phone.",
+  },
+  {
+    title: "Feminine Energy Activation Audio",
+    body: "A guided audio to help you feel grounded, magnetic, and self-assured.",
+  },
+  {
+    title: "Irresistible Attraction Secrets Audio",
+    body: "The specific shifts that help you show up with more clarity and less second-guessing.",
+  },
 ];
 
 function WhatsIncludedIntro() {
   return (
-    <section id="whats-included" className="relative overflow-hidden px-5 py-16 sm:px-8 sm:py-20 bg-[linear-gradient(180deg,#200008_0%,#170006_100%)] border-y border-[#E8B75A]/15">
-      <Glow className="h-[300px] w-[300px] top-10 -left-24 z-0" />
+    <section id="whats-included" className="relative overflow-hidden px-5 py-16 sm:px-8 sm:py-20 bg-[linear-gradient(180deg,#FFFDFB_0%,#F9E9E3_100%)] border-y border-[#E8B75A]/15">
       <div className="relative z-10 mx-auto max-w-3xl text-center" data-reveal>
-        <Eyebrow>Inside this experience</Eyebrow>
-        <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.3vw,3rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#FFF7EE] [text-wrap:balance]">
-          Your Blueprint for Becoming the Prize
+        <Eyebrow className="text-[#8A2634]">What's included</Eyebrow>
+        <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.3vw,3rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#250009] [text-wrap:balance]">
+          Here's Exactly What You'll Receive
         </h2>
-        <p className="mx-auto mt-5 max-w-2xl text-[17px] leading-[1.6] text-[#FFF7EE]/80">
-          The High Value Woman Cheat Code is your blueprint for becoming the woman high-caliber men naturally pursue, shifting out of overgiving and overfunctioning, and activating the energy that makes a man invest, lead, and commit.
-        </p>
       </div>
 
-      <div className="relative z-10 mx-auto mt-9 max-w-2xl" data-reveal>
-        <p className="ff-sans text-center text-[14px] font-bold uppercase tracking-[0.18em] text-[#E8B75A]">
-          Inside, you'll learn:
-        </p>
-        <ul className="mt-5 grid gap-x-6 gap-y-3 sm:grid-cols-2">
-          {CLARITY_POINTS.map((point) => (
-            <li key={point} className="flex items-start gap-2.5 text-[16px] leading-snug text-[#FFF7EE]/85">
-              <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#E8B75A]" />
-              <span>{point}</span>
-            </li>
-          ))}
-        </ul>
+      <img
+        src="/cheat-code-mockup.png"
+        alt="The High Value Woman Cheat Code workbook, video training, and audio mockup"
+        loading="lazy"
+        className="relative z-10 mx-auto mt-8 h-auto w-full max-w-[480px] object-contain"
+      />
+
+      <div className="relative z-10 mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-2" data-reveal>
+        {WHAT_YOU_RECEIVE.map((item, i) => (
+          <div
+            key={item.title}
+            data-reveal
+            style={{ transitionDelay: `${i * 70}ms` }}
+            className="border border-[#E8B75A]/40 bg-white/60 p-5"
+          >
+            <h3 className="ff-serif text-[16px] font-bold text-[#250009]">{item.title}</h3>
+            <p className="mt-1.5 text-[14px] leading-snug text-[#4C1119]/80">{item.body}</p>
+          </div>
+        ))}
       </div>
 
       <div className="relative z-10 mt-9 flex justify-center" data-reveal>
-        <Cta className="w-full sm:w-auto">Yes, I Want the Cheat Code</Cta>
+        <Cta variant="dark" className="w-full sm:w-auto">Get Instant Access for ${CHEAT_CODE_PRICE}</Cta>
       </div>
     </section>
   );
 }
 
-/* -------------------------- Walk away with (6 benefits) ----------------------- */
+/* -------------------------- Practical results ----------------------- */
 
-const BENEFITS = [
-  {
-    title: "Clarity on Why Your Love Life Hasn't Worked",
-    body: "Finally understand the patterns, emotional triggers, and subconscious wiring that have been attracting the wrong men, and how to shift them.",
-  },
-  {
-    title: "A Personalized Love Blueprint",
-    body: "A clear, step-by-step path tailored to your attachment style and emotional patterns, so you're no longer guessing what to do next.",
-  },
-  {
-    title: "Emotional Regulation Tools That Work",
-    body: "Learn how to stop overthinking, calm your nervous system, and respond with confidence instead of reacting from anxiety or fear.",
-  },
-  {
-    title: "Feminine Energy & Confidence Activation",
-    body: "Step into the version of you that feels grounded, magnetic, and self-assured, without chasing, proving, or overgiving.",
-  },
-  {
-    title: "Real-Time Guidance for Dating",
-    body: "No more confusion about what to say or how to respond. You'll know exactly how to move in every situation.",
-  },
-  {
-    title: "A Proven System to Attract Available Men",
-    body: "Shift your internal patterns so you naturally attract commitment-ready partners, not just more attention.",
-  },
+// Grounded, controllable outcomes rather than promises about how a
+// specific man will respond — swapped in after a note that claims like
+// "men respond to me differently" and "attract commitment-ready men"
+// read as overpromising for an $11 product.
+const PRACTICAL_RESULTS = [
+  "Recognize emotionally unavailable behavior sooner",
+  "Stop confusing inconsistency with chemistry",
+  "Respond without chasing or overexplaining",
+  "Set boundaries with more confidence",
+  "Choose partners based on behavior rather than potential",
 ];
 
 function WalkAwayWith() {
   return (
-    <section className="px-5 py-16 sm:px-8 sm:py-20 bg-[linear-gradient(180deg,#FFFDFB_0%,#F9E9E3_100%)] border-y border-[#E8B75A]/15">
-      <div className="mx-auto max-w-3xl text-center" data-reveal>
-        <Eyebrow className="text-[#8A2634]">What you'll walk away with</Eyebrow>
-        <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.3vw,3rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#250009] [text-wrap:balance]">
-          Stop Guessing. Start Getting Results.
-        </h2>
-      </div>
-
-      <div className="mx-auto mt-10 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {BENEFITS.map((b, i) => (
-          <div
-            key={b.title}
-            data-reveal
-            style={{ transitionDelay: `${i * 90}ms` }}
-            className="luxury-card flex flex-col border border-[#E8B75A]/40 bg-white/60 p-7 shadow-sm"
-          >
-            <CrownIcon className="h-6 w-6 text-[#8A2634]" />
-            <h3 className="ff-serif mt-3 text-[18px] font-bold leading-tight text-[#250009]">{b.title}</h3>
-            <p className="mt-2.5 text-[15px] leading-[1.5] text-[#4C1119]/80">{b.body}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* --------------------------- How elite men choose --------------------------- */
-
-function HowEliteMenChoose() {
-  return (
     <section className="relative overflow-hidden px-5 py-16 sm:px-8 sm:py-20 bg-[#170006]">
-      <SectionBg src="/cheat-code-mockup.png" opacity={0.06} />
-      <div className="relative z-10 mx-auto max-w-2xl text-center" data-reveal>
-        <Eyebrow>What actually works</Eyebrow>
+      <div className="relative z-10 mx-auto max-w-3xl text-center" data-reveal>
+        <Eyebrow>What you can expect</Eyebrow>
         <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.3vw,3rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#FFF7EE] [text-wrap:balance]">
-          High-Value Men Don't Choose the Woman Who Tries the Hardest
+          Practical Results, Not Promises About Him
         </h2>
-        <p className="mt-5 text-[17px] leading-[1.6] text-[#FFF7EE]/75">They choose the woman who:</p>
-        <ul className="mx-auto mt-5 flex max-w-md flex-col items-center gap-3">
-          {["Feels rare", "Feels grounded", "Feels like peace and power"].map((line) => (
-            <li key={line} className="ff-serif text-[21px] font-medium text-[#F1C97A]">
-              {line}
-            </li>
-          ))}
-        </ul>
-        <p className="ff-serif mt-7 text-[22px] italic font-medium text-white">
-          They choose the woman who makes them feel: "I cannot lose her."
-        </p>
       </div>
+
+      <ul className="relative z-10 mx-auto mt-9 max-w-xl space-y-3.5" data-reveal>
+        {PRACTICAL_RESULTS.map((line) => (
+          <li key={line} className="flex items-start gap-3 border border-[#E8B75A]/25 bg-white/[0.04] p-4.5">
+            <CheckIcon className="mt-0.5 h-5 w-5 shrink-0 text-[#E8B75A]" />
+            <span className="text-[16px] leading-snug text-[#FFF7EE]/85">{line}</span>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
@@ -535,11 +615,13 @@ function Community() {
           <img
             src="/community-celebration.jpg"
             alt="Community of high-value women celebrating together"
+            loading="lazy"
             className="col-span-2 h-56 w-full border border-[#E8B75A]/35 object-cover sm:h-72"
           />
           <img
             src="/community-embrace.jpeg"
             alt="Two women embracing at a Bonding Biology event"
+            loading="lazy"
             className="col-span-2 h-40 w-full border border-[#E8B75A]/35 object-cover sm:h-48"
           />
         </div>
@@ -548,151 +630,51 @@ function Community() {
   );
 }
 
-/* --------------------------- Testimonials -------------------------------- */
-
-const TESTIMONIALS = [
-  {
-    initial: "Z",
-    name: "Zara Bush",
-    quote: "I'm a high-level professional, and I couldn't understand why I kept attracting emotionally unavailable men. Within weeks, I started showing up differently, and the type of men pursuing me completely changed.",
-  },
-  {
-    initial: "A",
-    name: "Ashwini Santiago",
-    quote: "I didn't realize how much my nervous system was running my dating life. Now I feel calm, clear, and confident, and I don't chase anymore.",
-  },
-  {
-    initial: "K",
-    name: "Kaden Scott",
-    quote: "I used to feel confused and anxious. Now I know exactly what to do, what to say, and what I deserve, and men respond to me differently because of it.",
-  },
-];
-
-function Testimonials() {
-  return (
-    <section id="reviews" className="relative overflow-hidden px-5 py-16 sm:px-8 sm:py-20 bg-[#170006]">
-      <div className="relative z-10 mx-auto max-w-3xl text-center" data-reveal>
-        <Eyebrow>Real stories</Eyebrow>
-        <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.3vw,3rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#FFF7EE] [text-wrap:balance]">
-          From Their Story to Yours
-        </h2>
-      </div>
-      <div className="relative z-10 mx-auto mt-9 grid max-w-5xl gap-5 sm:grid-cols-3">
-        {TESTIMONIALS.map((t, i) => (
-          <figure
-            key={t.name}
-            data-reveal
-            style={{ transitionDelay: `${i * 90}ms` }}
-            className="luxury-card flex flex-col border border-[#E8B75A]/35 bg-white/[0.04] p-6"
-          >
-            <Stars className="text-[14px] text-[#D8962D]" />
-            <blockquote className="ff-serif mt-3 flex-1 text-[16px] italic leading-[1.45] text-[#FFF7EE]/85">
-              "{t.quote}"
-            </blockquote>
-            <figcaption className="mt-4 flex items-center gap-3">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#E8B75A]/50 bg-[#E8B75A]/10 text-[14px] font-bold text-[#E8B75A]">
-                {t.initial}
-              </span>
-              <span className="ff-sans text-[13px] font-bold uppercase tracking-[0.1em] text-[#E8B75A]/90">{t.name}</span>
-            </figcaption>
-          </figure>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 /* ------------------------------ Offer stack ----------------------------- */
 
-// Per-item dollar values below are illustrative value-stack figures chosen
-// to sum to the stated $1,297 total value from the source page, not
-// confirmed standalone sale prices for each asset.
-const INCLUDED = [
-  {
-    title: "The High Value Woman Cheat Code Workbook",
-    body: "Your personalized Love Blueprint framework, in writing.",
-    value: 297,
-  },
-  {
-    title: "The Full Video Training",
-    body: "Laptop and mobile-friendly training you can move through at your own pace.",
-    value: 397,
-  },
-  {
-    title: "Feminine Energy Activation Audio",
-    body: "A guided audio to help you feel grounded, magnetic, and self-assured.",
-    value: 197,
-  },
-  {
-    title: "Irresistible Attraction Secrets Audio",
-    body: "The specific shifts that activate curiosity, anticipation, and polarity.",
-    value: 197,
-  },
-  {
-    title: "Your Personalized Love Blueprint",
-    body: "A step-by-step path tailored to your attachment style and patterns.",
-    value: 147,
-  },
-  {
-    title: "Real-Time Dating Guidance",
-    body: "Know exactly what to do, say, and tolerate in real dating situations.",
-    value: 62,
-  },
-];
-
+// No per-item or inflated total-value pricing here on purpose — an $11
+// product doesn't need to feel like a markdown from $1,297 to feel like
+// an easy decision. Real $97-to-$11 discount kept; the invented value
+// stack dropped.
 function OfferStack() {
   return (
     <section className="relative overflow-hidden px-5 py-16 sm:px-8 sm:py-20 bg-[#170006]">
       <Glow className="h-[420px] w-[420px] -bottom-40 left-1/2 -translate-x-1/2 z-0" />
       <div className="relative z-10 mx-auto max-w-3xl text-center" data-reveal>
-        <Eyebrow>What's included</Eyebrow>
+        <Eyebrow>The offer</Eyebrow>
         <h2 className="ff-serif mt-5 text-[clamp(1.9rem,4.3vw,3rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#FFF7EE] [text-wrap:balance]">
           The High Value Woman Cheat Code
         </h2>
-        <p className="mx-auto mt-3 max-w-lg text-[17px] text-[#FFF7EE]/75">
-          When you get instant access for ${CHEAT_CODE_PRICE}, you receive:
-        </p>
       </div>
 
-      <div className="relative z-10 mx-auto mt-9 max-w-[780px]" data-reveal>
-        <img
-          src="/cheat-code-mockup.png"
-          alt="The High Value Woman Cheat Code workbook, video training, and audio mockup"
-          className="mx-auto mb-8 h-auto w-full max-w-[560px] object-contain"
-        />
-
+      <div className="relative z-10 mx-auto mt-9 max-w-[600px]" data-reveal>
         <div className="border border-[#E8B75A]/45 bg-[linear-gradient(180deg,rgba(255,242,234,0.97)_0%,rgba(255,229,218,0.92)_100%)] p-7 text-[#250009] sm:p-12">
-          <ul className="space-y-6">
-            {INCLUDED.map((item) => (
-              <li key={item.title} className="flex items-start gap-3.5">
-                <CheckIcon className="mt-1 h-5 w-5 shrink-0 text-[#8A2634]" />
-                <div className="flex-1">
-                  <div className="flex items-baseline justify-between gap-3">
-                    <h4 className="ff-serif text-[17px] font-bold text-[#250009]">{item.title}</h4>
-                    <span className="ff-sans shrink-0 text-[13px] font-bold text-[#8A2634]/60 line-through">${item.value}</span>
-                  </div>
-                  <p className="mt-0.5 text-[15px] leading-snug text-[#4C1119]/80">{item.body}</p>
-                </div>
+          <ul className="space-y-4">
+            {WHAT_YOU_RECEIVE.map((item) => (
+              <li key={item.title} className="flex items-start gap-3">
+                <CheckIcon className="mt-0.5 h-5 w-5 shrink-0 text-[#8A2634]" />
+                <span className="text-[16px] font-medium leading-snug text-[#250009]">{item.title}</span>
               </li>
             ))}
           </ul>
 
-          <div className="mt-8 border-t border-[#8A2634]/15 pt-7 text-center">
+          <p className="mt-6 text-center text-[13px] font-medium text-[#8A2634]/70">
+            Valued at ${STATED_VALUE} for the complete framework.
+          </p>
+
+          <div className="mt-4 border-t border-[#8A2634]/15 pt-7 text-center">
             <span className="ff-sans text-[14px] font-bold uppercase tracking-[0.14em] text-[#8A2634]/70 line-through">
-              Total Value: ${STATED_VALUE}
+              Normally ${ORIGINAL_PRICE}
             </span>
             <p className="ff-sans mt-2 text-[14px] font-bold uppercase tracking-[0.14em] text-[#8A2634]">
-              Get Instant Access for Only
+              Get Complete Access Today for
             </p>
             <p className="ff-serif mt-1 text-[64px] font-black leading-none text-[#15803D]">${CHEAT_CODE_PRICE}</p>
 
             <div className="mt-5">
-              <Cta className="w-full sm:w-auto">Get the Cheat Code for ${CHEAT_CODE_PRICE}</Cta>
+              <Cta className="w-full sm:w-auto">Get Instant Access for ${CHEAT_CODE_PRICE}</Cta>
             </div>
             <p className="mt-4 text-[14px] font-medium text-[#8A2634]/80">One payment. Instant digital access.</p>
-            <p className="mt-2 text-[14px] leading-snug text-[#8A2634]/80">
-              100% satisfaction guaranteed, or let us know and we'll refund you.
-            </p>
           </div>
         </div>
       </div>
@@ -716,6 +698,9 @@ function Founder() {
               Shay has helped thousands of women shift out of the identity that built their success and into the one that attracts elite, committed love. Her Bonding Biology approach is the framework behind this cheat code.
             </p>
             <p>
+              She's the founder of the Bonding Biology Institute, where that framework is taught in full, through this cheat code, the Bonding Biology Summit, and private coaching.
+            </p>
+            <p>
               This isn't surface-level advice. It's a way to shift your internal patterns so you naturally attract commitment-ready partners, not just more attention.
             </p>
             <p className="ff-serif text-[19px] font-medium text-[#8A2634]">
@@ -729,6 +714,7 @@ function Founder() {
             <img
               src="/shay-stage.jpg"
               alt="Shay speaking live on stage at a Bonding Biology event"
+              loading="lazy"
               className="relative z-10 w-full border border-[#E8B75A]/35 object-cover shadow-2xl"
             />
           </div>
@@ -742,6 +728,14 @@ function Founder() {
 
 const FAQS: { q: string; a: string }[] = [
   {
+    q: "What exactly do I receive?",
+    a: "Instant access to the High Value Woman Cheat Code Workbook, the full video training, and two guided audio tracks: Feminine Energy Activation and Irresistible Attraction Secrets.",
+  },
+  {
+    q: "How quickly will I get access?",
+    a: "Immediately. It's delivered digitally, so you can start as soon as you complete your purchase.",
+  },
+  {
     q: "How is this different from other dating advice?",
     a: "Most dating advice focuses on what to say or do. This focuses on why you keep attracting the same patterns, and how to rewire them at the root so your results naturally change.",
   },
@@ -750,12 +744,12 @@ const FAQS: { q: string; a: string }[] = [
     a: "If you've tried therapy, books, or coaching and still feel stuck, that's exactly who this is for. This approach works on your nervous system and subconscious wiring, not just surface behavior.",
   },
   {
-    q: "Is this for women who are already successful?",
-    a: "Yes. This was specifically designed for women who have mastered their careers but want the same level of success in love.",
+    q: "Is this only for single women?",
+    a: "No. It's built for any woman who wants to understand her relationship patterns, whether you're single, dating, or in a relationship that doesn't feel right yet.",
   },
   {
-    q: "How quickly will I see results?",
-    a: "Many women begin noticing shifts in how they feel, respond, and are treated within weeks, because when you change how you show up, everything around you responds differently.",
+    q: "Is this for women who are already successful?",
+    a: "Yes. This was specifically designed for women who have mastered their careers but want the same level of success in love.",
   },
   {
     q: "Do I need to be dating right now for this to work?",
@@ -767,20 +761,28 @@ const FAQS: { q: string; a: string }[] = [
   },
 ];
 
-function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultOpen?: boolean }) {
+function FaqItem({ id, q, a, defaultOpen = false }: { id: string; q: string; a: string; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
+  const panelId = `faq-panel-${id}`;
+  const buttonId = `faq-button-${id}`;
   return (
     <div className="border-b border-[#E8B75A]/15 py-5">
       <button
         type="button"
+        id={buttonId}
         onClick={() => setOpen((v) => !v)}
-        className="ff-sans flex w-full items-center justify-between gap-4 text-left text-[16px] sm:text-[18px] font-bold text-[#FFF7EE]"
+        className="ff-sans flex min-h-[44px] w-full items-center justify-between gap-4 text-left text-[16px] sm:text-[18px] font-bold text-[#FFF7EE]"
         aria-expanded={open}
+        aria-controls={panelId}
       >
         <span>{q}</span>
         <ChevronDown className={`h-6 w-6 shrink-0 text-[#E8B75A] transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
       </button>
-      {open && <div className="mt-3 text-[16px] leading-[1.6] text-[#FFF7EE]/75">{a}</div>}
+      {open && (
+        <div id={panelId} role="region" aria-labelledby={buttonId} className="mt-3 text-[16px] leading-[1.6] text-[#FFF7EE]/75">
+          {a}
+        </div>
+      )}
     </div>
   );
 }
@@ -797,28 +799,42 @@ function Faq() {
         </div>
         <div className="mt-9" data-reveal>
           {FAQS.map((item, i) => (
-            <FaqItem key={item.q} q={item.q} a={item.a} defaultOpen={i === 0} />
+            <FaqItem key={item.q} id={String(i)} q={item.q} a={item.a} defaultOpen={i === 0} />
           ))}
         </div>
 
         <div className="mt-10 flex justify-center" data-reveal>
-          <Cta className="w-full sm:w-auto">Get the Cheat Code for ${CHEAT_CODE_PRICE}</Cta>
+          <Cta className="w-full sm:w-auto">Get Instant Access for ${CHEAT_CODE_PRICE}</Cta>
         </div>
       </div>
     </section>
   );
 }
 
-/* --------------------------- Final CTA + Footer ------------------------------ */
+/* --------------------------- Guarantee banner --------------------------- */
 
-const FINAL_INCLUDES = [
-  "The Complete Cheat Code Workbook",
-  "Full Video Training",
-  "Feminine Energy Activation Audio",
-  "Irresistible Attraction Secrets Audio",
-  "Your Personalized Love Blueprint",
-  "Real-Time Dating Guidance",
-];
+function GuaranteeBanner() {
+  return (
+    <section className="px-5 py-16 sm:px-8 sm:py-20 bg-[linear-gradient(180deg,#FFFDFB_0%,#F9E9E3_100%)] border-y border-[#E8B75A]/15">
+      <div
+        data-reveal
+        className="mx-auto flex max-w-2xl flex-col items-center border-2 border-[#8A2634]/25 bg-white/70 px-7 py-9 text-center sm:px-10"
+      >
+        <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#8A2634] bg-white">
+          <CheckIcon className="h-7 w-7 text-[#8A2634]" />
+        </div>
+        <h2 className="ff-serif mt-4 text-[clamp(1.4rem,3vw,1.9rem)] font-semibold tracking-[-0.02em] text-[#250009]">
+          30-Day, No-Questions-Asked Guarantee
+        </h2>
+        <p className="mt-3 max-w-lg text-[16px] leading-[1.6] text-[#4C1119]/85">
+          If you don't walk away with a completely different understanding of why past relationships haven't worked, and what needs to shift, just let us know within 30 days and we'll refund you.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* --------------------------- Final CTA + Footer ------------------------------ */
 
 function FinalCta() {
   return (
@@ -829,10 +845,10 @@ function FinalCta() {
       >
         <p className="ff-serif text-[22px] font-bold">The High Value Woman Cheat Code</p>
         <ul className="mx-auto mt-4 max-w-xs space-y-2 text-left">
-          {FINAL_INCLUDES.map((item) => (
-            <li key={item} className="flex items-center gap-2.5 text-[16px] text-[#FFF7EE]/85">
+          {WHAT_YOU_RECEIVE.map((item) => (
+            <li key={item.title} className="flex items-center gap-2.5 text-[16px] text-[#FFF7EE]/85">
               <CheckIcon className="h-4 w-4 shrink-0 text-[#E8B75A]" />
-              <span>{item}</span>
+              <span>{item.title}</span>
             </li>
           ))}
         </ul>
@@ -840,7 +856,7 @@ function FinalCta() {
           Get Instant Access for ${CHEAT_CODE_PRICE}
         </p>
         <div className="mt-5">
-          <Cta className="w-full sm:w-auto">I'm Ready to Attract Elite Love</Cta>
+          <Cta className="w-full sm:w-auto">Get Instant Access for ${CHEAT_CODE_PRICE}</Cta>
         </div>
         <p className="mt-4 text-[14px] font-medium text-[#FFF7EE]/60">One payment. Instant digital access.</p>
       </div>
@@ -874,19 +890,31 @@ function Footer() {
 /* --------------------------- Sticky mobile bar -------------------------------- */
 
 function MobileBar() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 400);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#E8B75A]/45 bg-[#170006]/95 backdrop-blur-xl md:hidden px-4 py-3.5 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-      <div className="flex items-center justify-between gap-4">
+    <div
+      className={`fixed inset-x-0 bottom-0 z-40 border-t border-[#E8B75A]/45 bg-[#170006]/95 backdrop-blur-xl md:hidden px-4 pt-3.5 shadow-[0_-10px_30px_rgba(0,0,0,0.5)] transition-transform duration-300 ${visible ? "translate-y-0" : "translate-y-full"}`}
+      style={{ paddingBottom: "calc(0.875rem + env(safe-area-inset-bottom))" }}
+    >
+      <div className="flex max-h-16 items-center justify-between gap-4">
         <div className="flex flex-col">
           <span className="ff-sans text-[15px] font-bold text-[#FFF7EE] tracking-tight">High Value Woman Cheat Code</span>
           <span className="text-[12px] font-bold uppercase tracking-wider text-[#E8B75A]/80">Only ${CHEAT_CODE_PRICE}</span>
         </div>
         <a
-          href={CHEAT_CODE_CHECKOUT_URL}
+          href={buildCheckoutHref()}
           onClick={handleCtaClick}
           className="ff-sans btn-shimmer min-h-[48px] rounded-none bg-[linear-gradient(135deg,#F8D896_0%,#D8962D_100%)] px-6 py-3 text-[16px] font-bold text-[#250009] shadow-[0_8px_20px_rgba(232,183,90,0.25)] flex items-center gap-1.5 active:scale-95 transition-transform"
         >
-          <span>Get Access</span>
+          <span>Get Instant Access</span>
           <ArrowRight className="h-4 w-4" />
         </a>
       </div>
@@ -983,7 +1011,7 @@ function ExitIntentForm({ open, onClose }: { open: boolean; onClose: () => void 
     }
 
     trackFacebookEvent("Lead", { content_name: "High Value Woman Cheat Code", content_category: "Exit Intent" });
-    window.location.href = CHEAT_CODE_CHECKOUT_URL;
+    window.location.href = buildCheckoutHref();
   };
 
   if (!open) return null;
@@ -1013,7 +1041,7 @@ function ExitIntentForm({ open, onClose }: { open: boolean; onClose: () => void 
           id="exit-intent-title"
           className="ff-serif mt-4 text-[clamp(1.6rem,4.5vw,2.1rem)] font-bold leading-[1.1] tracking-[-0.03em] text-white"
         >
-          Get the Cheat Code for ${CHEAT_CODE_PRICE}
+          Get Instant Access for ${CHEAT_CODE_PRICE}
         </h3>
         <p className="mt-3 text-[15.5px] leading-[1.55] text-[#FFF7EE]/75">
           Enter your info and we'll take you straight to instant access. This ${CHEAT_CODE_PRICE} price won't be here much longer.
@@ -1070,7 +1098,7 @@ function ExitIntentForm({ open, onClose }: { open: boolean; onClose: () => void 
               "Redirecting..."
             ) : (
               <>
-                Get the Cheat Code for ${CHEAT_CODE_PRICE}
+                Get Instant Access for ${CHEAT_CODE_PRICE}
                 <ArrowRight className="h-[18px] w-[18px]" />
               </>
             )}
@@ -1178,16 +1206,17 @@ export default function BondingBiologyLandingE() {
         <Nav />
         <Hero />
         <CoupleTestimonials />
+        <TrustStrip />
         <Problem />
+        <Reframe />
         <IdentityMechanism />
         <WhatsIncludedIntro />
         <WalkAwayWith />
-        <HowEliteMenChoose />
         <Community />
-        <Testimonials />
-        <OfferStack />
         <Founder />
+        <OfferStack />
         <Faq />
+        <GuaranteeBanner />
         <FinalCta />
         <Footer />
         <MobileBar />
