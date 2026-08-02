@@ -211,7 +211,7 @@ function Nav() {
           onClick={handleCtaClick}
           className="ff-sans inline-flex min-h-[44px] items-center gap-2 rounded-none bg-[linear-gradient(135deg,#F6D089_0%,#D99A35_100%)] px-5 py-2.5 text-[15px] sm:text-[16px] font-bold text-[#250009] shadow-[0_10px_30px_rgba(232,183,90,0.25)] transition-transform hover:-translate-y-0.5"
         >
-          <span>Get Instant Access</span>
+          <span>Get Instant Access for ${CHEAT_CODE_PRICE}</span>
         </a>
       </div>
     </header>
@@ -227,44 +227,22 @@ function Hero() {
       <Glow className="h-[380px] w-[380px] -top-32 -right-32 z-0" />
       <div className="hero-stagger relative z-10 mx-auto max-w-3xl text-center">
         <div style={{ "--i": 0 } as React.CSSProperties}>
-          <Eyebrow>For successful women tired of attracting emotionally unavailable men</Eyebrow>
+          <Eyebrow>For successful women tired of emotionally unavailable men</Eyebrow>
         </div>
         <h1
           style={{ "--i": 1 } as React.CSSProperties}
-          className="ff-serif mt-6 text-[clamp(1.9rem,5vw,3.6rem)] font-semibold leading-[1.08] tracking-[-0.04em] text-white [text-wrap:balance]"
+          className="ff-serif mt-5 text-[clamp(1.65rem,5vw,3.6rem)] font-semibold leading-[1.15] tracking-[-0.04em] text-white [text-wrap:balance]"
         >
           There's a Hidden Pattern Keeping You From the Relationship You Actually Want
         </h1>
         <p
           style={{ "--i": 2 } as React.CSSProperties}
-          className="mx-auto mt-5 max-w-2xl text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6] text-[#FFF7EE]/95 [text-wrap:balance]"
+          className="mx-auto mt-4 max-w-2xl text-left text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6] text-[#FFF7EE]/95 sm:text-center [text-wrap:balance]"
         >
-          The High Value Woman Cheat Code helps you identify what's creating the wrong relationship dynamics, and shows you how to attract emotionally available, commitment-ready men, without chasing, overgiving, or pretending to want less.
+          Identify the pattern creating the wrong relationship dynamics, and how to attract commitment-ready men without chasing or overgiving.
         </p>
 
-        <div
-          style={{ "--i": 3 } as React.CSSProperties}
-          className="mx-auto mt-6 flex max-w-md items-center justify-center gap-3 sm:justify-start"
-        >
-          <img
-            src="/shay-know.png"
-            alt="Shay"
-            className="h-12 w-12 shrink-0 rounded-full border border-[#E8B75A]/40 object-cover object-top sm:h-14 sm:w-14"
-          />
-          <div className="text-left">
-            <p className="text-[13.5px] font-bold text-[#FFF7EE]">Shay, Founder of Bonding Biology Institute</p>
-            <p className="text-[12.5px] font-medium text-[#FFF7EE]/60">8,000+ women coached</p>
-          </div>
-        </div>
-
-        <img
-          style={{ "--i": 4 } as React.CSSProperties}
-          src="/cheat-code-mockup.png"
-          alt="The High Value Woman Cheat Code workbook, video training, and audio mockup"
-          className="mx-auto mt-6 h-auto w-full max-w-[190px] object-contain sm:max-w-[260px]"
-        />
-
-        <div style={{ "--i": 5 } as React.CSSProperties} className="mt-5">
+        <div style={{ "--i": 3 } as React.CSSProperties} className="mt-6">
           <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
             <span className="ff-sans text-[14px] font-bold uppercase tracking-[0.16em] text-[#FFF7EE]/45 line-through decoration-2">
               Normally ${ORIGINAL_PRICE}
@@ -276,16 +254,38 @@ function Hero() {
           </p>
         </div>
 
-        <div style={{ "--i": 6 } as React.CSSProperties} className="mt-5 flex flex-col items-center gap-4">
+        <div style={{ "--i": 4 } as React.CSSProperties} className="mt-5 flex flex-col items-center gap-4">
           <Cta className="w-full sm:w-auto">Get Instant Access for ${CHEAT_CODE_PRICE}</Cta>
         </div>
-        <p style={{ "--i": 7 } as React.CSSProperties} className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[14px] font-medium text-[#FFF7EE]/60">
+        <p style={{ "--i": 5 } as React.CSSProperties} className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[14px] font-medium text-[#FFF7EE]/60">
           <span>Secure checkout</span>
           <span aria-hidden="true">&middot;</span>
           <span>Immediate access</span>
           <span aria-hidden="true">&middot;</span>
           <span>Satisfaction guarantee</span>
         </p>
+
+        <img
+          style={{ "--i": 6 } as React.CSSProperties}
+          src="/cheat-code-mockup.png"
+          alt="The High Value Woman Cheat Code workbook, video training, and audio mockup"
+          className="mx-auto mt-7 h-auto w-full max-w-[220px] object-contain sm:max-w-[280px]"
+        />
+
+        <div
+          style={{ "--i": 7 } as React.CSSProperties}
+          className="mx-auto mt-7 flex max-w-md items-center justify-center gap-3 border-t border-[#E8B75A]/15 pt-6 sm:justify-start"
+        >
+          <img
+            src="/shay-know.png"
+            alt="Shay"
+            className="h-12 w-12 shrink-0 rounded-full border border-[#E8B75A]/40 object-cover object-top sm:h-14 sm:w-14"
+          />
+          <div className="text-left">
+            <p className="text-[13.5px] font-bold text-[#FFF7EE]">Shay, Founder of Bonding Biology Institute</p>
+            <p className="text-[12.5px] font-medium text-[#FFF7EE]/60">8,000+ women coached</p>
+          </div>
+        </div>
       </div>
     </section>
   );
