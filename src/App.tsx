@@ -4,6 +4,8 @@ import BondingBiologyLanding from "./BondingBiologyLanding";
 import BondingBiologyLandingB from "./BondingBiologyLandingB";
 import BondingBiologyLandingC from "./BondingBiologyLandingC";
 import BondingBiologyLandingD from "./BondingBiologyLandingD";
+import BondingBiologyLandingE from "./BondingBiologyLandingE";
+import BondingBiologyCheatCodeThankYou from "./BondingBiologyCheatCodeThankYou";
 import BondingBiologySummitCheckout from "./BondingBiologySummitCheckout";
 import BondingBiologySummitThankYou from "./BondingBiologySummitThankYou";
 import BondingBiologyOfferB from "./BondingBiologyOfferB";
@@ -19,6 +21,8 @@ function AppRoutes() {
       <Route path="/d" element={<BondingBiologyLandingD />} />
       <Route path="/d/checkout" element={<BondingBiologySummitCheckout />} />
       <Route path="/d/thank-you" element={<BondingBiologySummitThankYou />} />
+      <Route path="/e" element={<BondingBiologyLandingE />} />
+      <Route path="/e/thank-you" element={<BondingBiologyCheatCodeThankYou />} />
       <Route path="/quiz" element={<Navigate to="/" replace />} />
       <Route path="/results" element={<Navigate to="/" replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />
