@@ -24,12 +24,6 @@
  * the guarantee copy in GuaranteeBanner/Faq are reused near-verbatim from
  * Shay's own already-published page for this same offer, not invented.
  *
- * BLOCKING TODO — this page has NO real checkout link. The source page's
- * actual payment/order flow was never located during research (it may be a
- * native GHL order form on a URL not visible from the marketing page
- * alone). CHEAT_CODE_CHECKOUT_URL below is a placeholder — every CTA on
- * this page is non-functional until it's replaced with the real link.
- *
  * The 3 testimonial quotes (Zara Bush, Ashwini Santiago, Kaden Scott) are
  * copied verbatim from Shay's own live page, but their avatar images on
  * that page use GHL's generic stock funnel-avatar placeholders (not
@@ -42,8 +36,7 @@ import { useEffect, useRef, useState } from "react";
 import { GHL_WEBHOOK_URL, formatPhoneNumber, trackFacebookEvent } from "./lib/leadCapture";
 import { getStoredUtmParams } from "./lib/utils";
 
-// TODO: replace with the real checkout/order link before sending traffic.
-const CHEAT_CODE_CHECKOUT_URL = "https://example.com/REPLACE-ME-cheat-code-checkout-link";
+const CHEAT_CODE_CHECKOUT_URL = "https://link.fastpaydirect.com/payment-link/6a6f8a727b99151a54041cfd";
 
 const ORIGINAL_PRICE = 97;
 const CHEAT_CODE_PRICE = 11;
@@ -148,12 +141,6 @@ const Cta = ({
     </a>
   );
 };
-
-const TodoNote = ({ children }: { children: React.ReactNode }) => (
-  <span className="ff-sans inline-block rounded-md border border-dashed border-[#D8962D] bg-[#D8962D]/10 px-2 py-0.5 text-[12px] font-bold text-[#8A2634]">
-    TODO: {children}
-  </span>
-);
 
 /* ------------------------------ Nav -------------------------------- */
 
@@ -705,9 +692,6 @@ function OfferStack() {
             <p className="mt-4 text-[14px] font-medium text-[#8A2634]/80">One payment. Instant digital access.</p>
             <p className="mt-2 text-[14px] leading-snug text-[#8A2634]/80">
               100% satisfaction guaranteed, or let us know and we'll refund you.
-            </p>
-            <p className="mt-3 text-[13px]">
-              <TodoNote>Every CTA on this page needs the real checkout link before launch.</TodoNote>
             </p>
           </div>
         </div>

@@ -4,12 +4,13 @@
  * BondingBiologyCheatCodeThankYou.tsx
  * ------------------------------------------------------------------
  * "/e/thank-you" — the page a buyer lands on after paying for the High
- * Value Woman Cheat Code via the external checkout. That checkout must be
- * configured to redirect here on successful payment — this app has no
- * other way to know a purchase happened, since the payment itself never
- * touches this codebase. Right now CHEAT_CODE_CHECKOUT_URL in
- * BondingBiologyLandingE.tsx is still a placeholder, so this redirect
- * can't be configured or tested until a real checkout link exists.
+ * Value Woman Cheat Code via the external checkout (fastpaydirect.com,
+ * same provider as /d). That checkout must be configured to redirect here
+ * on successful payment — this app has no other way to know a purchase
+ * happened, since the payment itself never touches this codebase. This
+ * redirect has not yet been confirmed as configured on fastpaydirect's
+ * side — verify with a real (or sandbox) purchase before relying on this
+ * for ad optimization.
  *
  * Fires the Meta Pixel `Purchase` event once per page load (guarded by
  * sessionStorage so a refresh doesn't double-count it in Ads Manager).
